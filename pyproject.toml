@@ -18,7 +18,7 @@ packages = ["."]
 
 [dependency-groups]
 pipeline = [
-    "dlt>=1.24.0",
+    "dlt[postgres]>=1.24.0",
 ]
 web_app = [
     "flask>=3.1.3",
