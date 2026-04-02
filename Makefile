@@ -5,3 +5,6 @@ ruff:
 
 mypy:
 	@uv run mypy src/
+
+pytest:
+	@uv run pytest -v tests/
