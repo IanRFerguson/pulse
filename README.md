@@ -1,4 +1,5 @@
-# Engineering Manager Productivity Portal
+# Pulse
+## An Engineering Manager's Productivity Portal
 This app provides a clean, centralized overview of your team's productivity by measuring IC's sprint load, outstanding PRs, and assigned Freshdesk tickets in one panel.
 
 | Codebase | Description | Docs |
