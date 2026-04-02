@@ -1,0 +1,47 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    paths:
+      - "src/web-app/frontend/**"
+
+jobs:
+  build:
+    name: Typing + Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: src/web-app/frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+          cache-dependency-path: src/web-app/frontend/package-lock.json
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+              **/*.js
+              **/*.jsx
+              **/*.ts
+              **/*.tsx
+              
+
+      - name: Install dependencies
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: npm ci
+
+      - name: Type-check
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: npx tsc --noEmit
+
+      - name: Build
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: npm run build
