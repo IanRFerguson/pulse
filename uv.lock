@@ -686,6 +686,7 @@ development = [
     { name = "ruff" },
 ]
 pipeline = [
+    { name = "click" },
     { name = "dlt", extra = ["postgres"] },
 ]
 web-app = [
@@ -703,7 +704,10 @@ development = [
     { name = "mypy", specifier = ">=1.20.0" },
     { name = "ruff", specifier = ">=0.15.8" },
 ]
-pipeline = [{ name = "dlt", extras = ["postgres"], specifier = ">=1.24.0" }]
+pipeline = [
+    { name = "click", specifier = ">=8.3.1" },
+    { name = "dlt", extras = ["postgres"], specifier = ">=1.24.0" },
+]
 web-app = [{ name = "flask", specifier = ">=3.1.3" }]
 
 [[package]]

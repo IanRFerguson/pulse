@@ -3,7 +3,8 @@ from typing import List
 
 import dlt
 import requests
-from base import DltSource
+
+from .base import DltSource
 
 #####
 
