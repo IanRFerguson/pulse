@@ -1,4 +1,4 @@
-from sources import GithubSource, AsanaSource, FreshdeskSource
+from sources import AsanaSource, FreshdeskSource, GithubSource
 
 #####
 

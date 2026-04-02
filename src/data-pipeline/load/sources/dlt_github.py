@@ -1,25 +1,13 @@
-from base import DltSource
 import os
-import requests
+from typing import List
+
 import dlt
+import requests
+from base import DltSource
 
 #####
 
 GITHUB_TOKEN = os.environ["SOURCES__GITHUB__ACCESS_TOKEN"]
-
-
-@dlt.resource(write_disposition="replace")
-def pull_requests(repo_owner: str, repo_name: str):
-    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/pulls"
-    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    yield response.json()
-
-
-@dlt.source
-def github_source():
-    yield pull_requests(repo_owner="move-coop", repo_name="dbt-tmc")
 
 
 class GithubSource(DltSource):
@@ -27,14 +15,39 @@ class GithubSource(DltSource):
     DLT source for GitHub data.
     """
 
-    def __init__(self, pipeline_name: str, destination_name: str, dataset_name: str):
-        super().__init__(
-            pipeline_name=pipeline_name,
-            destination_name=destination_name,
-            dataset_name=dataset_name,
-        )
+    full_refresh: bool = False
 
-    def load(self, source_data):
+    def sources(self) -> List[dlt.resource]:
+        write_disposition = "replace" if self.full_refresh else "merge"
+
+        @dlt.resource(write_disposition=write_disposition, primary_key="id")
+        def pull_requests(repo_owner: str, repo_name: str):
+            url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/pulls"
+            headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            yield response.json()
+
+        @dlt.source
+        def dbt_tmc_pulls():  # type: ignore[no-untyped-def]
+            yield pull_requests(repo_owner="move-coop", repo_name="dbt-tmc")
+
+        @dlt.source
+        def canales_pulls():  # type: ignore[no-untyped-def]
+            yield pull_requests(repo_owner="move-coop", repo_name="canales")
+
+        @dlt.source
+        def terraform_pulls():  # type: ignore[no-untyped-def]
+            yield pull_requests(repo_owner="move-coop", repo_name="terraform")
+
+        @dlt.source
+        def pipelines_pulls():  # type: ignore[no-untyped-def]
+            yield pull_requests(repo_owner="move-coop", repo_name="pipelines")
+
+        return [dbt_tmc_pulls(), canales_pulls(), terraform_pulls(), pipelines_pulls()]
+
+    def load(self):
+        source_data = self.sources()
         return super().load(source_data)
 
 
@@ -46,4 +59,4 @@ if __name__ == "__main__":
         destination_name="postgres",
         dataset_name="github_data",
     )
-    source.load(source_data=github_source())
+    source.load()
