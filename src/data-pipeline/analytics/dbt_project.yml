@@ -1,6 +1,6 @@
-name: admin-panel
+name: pulse
 
-profile: admin-panel
+profile: pulse
 
 model-paths: ["models"]
 macro-paths: ["macros"]
@@ -8,5 +8,13 @@ clean-targets:
   - "target"
   - "dbt_packages"
 
-
-
+models:
+  pulse:
+    +materialized: table
+    00_base:
+      +materialized: view
+      +schema: base
+    01_staging:
+      +schema: staging
+    02_marts:
+      +schema: marts

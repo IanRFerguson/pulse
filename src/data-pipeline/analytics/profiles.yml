@@ -1,4 +1,4 @@
-admin-panel:
+pulse:
   target: dev
   outputs:
     dev:

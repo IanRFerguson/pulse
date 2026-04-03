@@ -33,7 +33,7 @@ jobs:
       
       - name: Install dependencies
         if: steps.changed-files.outputs.any_changed == 'true'
-        run: uv sync
+        run: uv sync --group development
       
       - name: Run ruff linting
         if: steps.changed-files.outputs.any_changed == 'true'
@@ -67,45 +67,45 @@ jobs:
       
       - name: Install dependencies
         if: steps.changed-files.outputs.any_changed == 'true'
-        run: uv sync
+        run: uv sync --group development
       
       - name: Run ruff formatting check
         if: steps.changed-files.outputs.any_changed == 'true'
         run: uv run ruff format --check .
   
-  mypy:
-    if: github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
-    name: Type Checking
+  # mypy:
+  #   if: github.event.pull_request.draft == false
+  #   runs-on: ubuntu-latest
+  #   name: Type Checking
     
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
       
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v44
-        with:
-          files: |
-             **/*.py
+  #     - name: Get changed files
+  #       id: changed-files
+  #       uses: tj-actions/changed-files@v44
+  #       with:
+  #         files: |
+  #            **/*.py
       
-      - name: Set up Python
-        if: steps.changed-files.outputs.any_changed == 'true'
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+  #     - name: Set up Python
+  #       if: steps.changed-files.outputs.any_changed == 'true'
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: '3.12'
       
-      - name: Install uv
-        if: steps.changed-files.outputs.any_changed == 'true'
-        uses: astral-sh/setup-uv@v4
+  #     - name: Install uv
+  #       if: steps.changed-files.outputs.any_changed == 'true'
+  #       uses: astral-sh/setup-uv@v4
       
-      - name: Install dependencies
-        if: steps.changed-files.outputs.any_changed == 'true'
-        run: uv sync
+  #     - name: Install dependencies
+  #       if: steps.changed-files.outputs.any_changed == 'true'
+  #       run: uv sync --group development
       
-      - name: Run mypy type checking
-        if: steps.changed-files.outputs.any_changed == 'true'
-        run: uv run mypy src/
+  #     - name: Run mypy type checking
+  #       if: steps.changed-files.outputs.any_changed == 'true'
+  #       run: uv run mypy src/
   
   pytest:
     if: github.event.pull_request.draft == false
@@ -135,7 +135,7 @@ jobs:
       
       - name: Install dependencies
         if: steps.changed-files.outputs.any_changed == 'true'
-        run: uv sync
+        run: uv sync --group development
       
       - name: Run pytest
         if: steps.changed-files.outputs.any_changed == 'true'

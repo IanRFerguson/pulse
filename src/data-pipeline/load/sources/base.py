@@ -32,4 +32,4 @@ class DltSource(BaseModel):
         """
 
         load_info = self._pipeline.run(source_data)
-        metrics_logger.info(load_info)
+        metrics_logger.debug(load_info)
