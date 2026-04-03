@@ -9,7 +9,7 @@ services:
       - .local/local.env
     environment:
       - DB_DRIVER=postgresql
-      - DB_HOST=docker.host.internal
+      - DB_HOST=host.docker.internal
       - DB_PORT=5432
       - DB_NAME=tmcadmin
       - DB_USERNAME=postgres
