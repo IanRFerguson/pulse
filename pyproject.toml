@@ -38,6 +38,7 @@ web_app = [
 development = [
     "dotenv>=0.9.9",
     "mypy>=1.20.0",
+    "pre-commit>=4.5.1",
     "ruff>=0.15.8",
 ]
 
