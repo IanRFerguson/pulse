@@ -1,0 +1,27 @@
+sources:
+  - name: github
+    schema: github_data
+    tables:
+      - name: pull_requests
+      - name: pull_requests__assignees
+      - name: pull_requests__labels
+      - name: pull_requests__requested_reviewers
+  
+  - name: asana
+    schema: asana_data
+    tables:
+      - name: project_tasks
+      - name: project_tasks__custom_fields
+      - name: project_tasks__custom_fields__enum_options
+      - name: project_tasks__custom_fields__multi_enum_values
+  
+  - name: freshdesk
+    schema: freshdesk_data
+    tables:
+      - name: tickets
+      - name: tickets__cc_emails
+      - name: tickets__fwd_emails
+      - name: tickets__reply_cc_emails
+      - name: tickets__tags
+      - name: tickets__ticket_cc_emails
+      - name: tickets__to_emails
