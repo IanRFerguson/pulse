@@ -15,6 +15,14 @@ WITH
             author_association AS github_author_association,
             assignee__login AS github_assignee_login,
             assignee__id AS github_assignee_id,
+            CASE
+                WHEN merge_commit_sha IS NOT NULL THEN TRUE
+                ELSE FALSE
+            END AS is_merged,
+            CASE
+                WHEN state = 'closed' AND merge_commit_sha IS NULL THEN TRUE
+                ELSE FALSE
+            END AS is_closed_unmerged,
 
             -- For joining purposes only
             _dlt_id
@@ -46,6 +54,8 @@ SELECT
     github_repo_name,
     branch_name,
     is_draft,
+    is_merged,
+    is_closed_unmerged,
     github_author_association,
     github_assignee_login,
     github_assignee_id,

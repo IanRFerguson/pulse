@@ -8,3 +8,6 @@ models:
       - unique:
           column_name: surrogate_pull_request_id
   - name: stg__01__freshdesk
+    tests:
+      - unique:
+          column_name: surrogate_ticket_id

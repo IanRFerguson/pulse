@@ -33,7 +33,7 @@ jobs:
       
       - name: Install dependencies
         if: steps.changed-files.outputs.any_changed == 'true'
-        run: uv sync
+        run: uv sync --all-groups
       
       - name: Run ruff linting
         if: steps.changed-files.outputs.any_changed == 'true'

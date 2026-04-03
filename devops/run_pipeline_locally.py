@@ -1,7 +1,9 @@
-import click
-import subprocess
-from dotenv import load_dotenv
 import os
+import subprocess
+
+import click
+from dotenv import load_dotenv
+
 from src.common import metrics_logger
 
 #####

@@ -33,6 +33,8 @@ SELECT DISTINCT
     github_repo_name,
     branch_name,
     is_draft,
+    is_merged,
+    is_closed_unmerged,
     github_author_association,
     github_assignee_login,
     github_assignee_id,

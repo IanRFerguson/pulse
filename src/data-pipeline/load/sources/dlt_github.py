@@ -42,8 +42,9 @@ class GithubSource(DltSource):
         def pull_requests(repo_owner: str, repo_name: str):
             url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/pulls"
             headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
+            params = {"state": "all", "per_page": 100}
             session = _get_session()
-            response = session.get(url, headers=headers)
+            response = session.get(url, headers=headers, params=params)
             response.raise_for_status()
             yield response.json()
 
