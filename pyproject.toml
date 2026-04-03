@@ -15,12 +15,6 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 override-dependencies = ["psycopg2>=2.9"]
-conflicts = [
-  [
-    { group = "pipeline" },
-    { group = "development" },
-  ],
-]
 
 [tool.hatch.build.targets.wheel]
 packages = ["."]
@@ -37,7 +31,7 @@ web_app = [
 ]
 development = [
     "dotenv>=0.9.9",
-    "mypy>=1.20.0",
+    "mypy>=1.15.0,<1.20.0",
     "pre-commit>=4.5.1",
     "ruff>=0.15.8",
 ]
