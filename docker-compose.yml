@@ -1,0 +1,16 @@
+services:
+  web-app:
+    build:
+      context: .
+      dockerfile: ./devops/docker/Dockerfile.app
+    ports:
+      - "5000:5000"
+    env_file:
+      - .local/local.env
+    environment:
+      - DB_DRIVER=postgresql
+      - DB_HOST=host.docker.internal
+      - DB_PORT=5432
+      - DB_NAME=tmcadmin
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
