@@ -1200,6 +1200,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "colorlog" },
+    { name = "pre-commit" },
     { name = "psycopg2-binary" },
     { name = "pydantic" },
 ]
@@ -1208,7 +1209,6 @@ dependencies = [
 development = [
     { name = "dotenv" },
     { name = "mypy" },
-    { name = "pre-commit" },
     { name = "pytest" },
     { name = "ruff" },
 ]
@@ -1226,6 +1226,7 @@ web-app = [
 [package.metadata]
 requires-dist = [
     { name = "colorlog", specifier = ">=6.10.1" },
+    { name = "pre-commit", specifier = ">=4.5.1" },
     { name = "psycopg2-binary", specifier = ">=2.9.11" },
     { name = "pydantic", specifier = ">=2.12.5" },
 ]
@@ -1234,7 +1235,6 @@ requires-dist = [
 development = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "mypy", specifier = ">=1.15.0,<1.20.0" },
-    { name = "pre-commit", specifier = ">=4.5.1" },
     { name = "pytest", specifier = ">=9.0.2" },
     { name = "ruff", specifier = ">=0.15.8" },
 ]

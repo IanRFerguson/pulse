@@ -8,6 +8,7 @@ dependencies = [
     "colorlog>=6.10.1",
     "pydantic>=2.12.5",
     "psycopg2-binary>=2.9.11",
+    "pre-commit>=4.5.1",
 ]
 
 [build-system]
@@ -34,7 +35,6 @@ web_app = [
 development = [
     "dotenv>=0.9.9",
     "mypy>=1.15.0,<1.20.0",
-    "pre-commit>=4.5.1",
     "pytest>=9.0.2",
     "ruff>=0.15.8",
 ]
