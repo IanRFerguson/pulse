@@ -34,7 +34,7 @@ class TeamMember(db.Model):
     __tablename__ = "team_members"
 
     id = db.Column(db.Uuid, primary_key=True, default=uuid.uuid4)
-    user_id = db.Column(db.Uuid, db.ForeignKey("users.id"), nullable=False)
+    user_name = db.Column(db.String(80), nullable=False)
     team_id = db.Column(db.Uuid, db.ForeignKey("teams.id"), nullable=False)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
@@ -44,6 +44,7 @@ class TeamMember(db.Model):
         onupdate=db.func.now(),
         nullable=False,
     )
+    active = db.Column(db.Boolean, default=True, nullable=False)
 
     github_fk = db.Column(db.String(80), nullable=True)
     asana_fk = db.Column(db.String(80), nullable=True)
@@ -52,7 +53,7 @@ class TeamMember(db.Model):
     team = db.relationship("Team", backref=db.backref("members", lazy=True))
 
     def __repr__(self):
-        return f"<TeamMember user_id={self.user_id} team_id={self.team_id}>"
+        return f"<TeamMember user_name={self.user_name} team_id={self.team_id}>"
 
 
 class Team(db.Model):
@@ -62,6 +63,13 @@ class Team(db.Model):
 
     id = db.Column(db.Uuid, primary_key=True, default=uuid.uuid4)
     name = db.Column(db.String(80), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    modified_at = db.Column(
+        db.DateTime,
+        server_default=db.func.now(),
+        onupdate=db.func.now(),
+        nullable=False,
+    )
 
     def __repr__(self):
         return f"<Team {self.name}>"

@@ -11,3 +11,7 @@ models:
     tests:
       - unique:
           column_name: surrogate_ticket_id
+  - name: stg__01__team_members
+    tests:
+      - unique:
+          column_name: surrogate_team_member_id
