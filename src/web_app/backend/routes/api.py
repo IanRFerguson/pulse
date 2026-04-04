@@ -18,29 +18,24 @@ from .helpers import (
 #####
 
 
-@bp.route("/api/config")
+@bp.route("/config")
 def get_config():
+    """Endpoint to retrieve application configuration, including theme settings."""
     return jsonify(load_theme())
 
 
-# ---------------------------------------------------------------------------
-# Routes – teams
-# ---------------------------------------------------------------------------
-
-
-@bp.route("/api/teams")
+@bp.route("/teams")
 def list_teams():
+    """Endpoint to list all teams."""
+
     teams = db.session.execute(select(Team)).scalars().all()
     return jsonify([{"id": str(t.id), "name": t.name} for t in teams])
 
 
-# ---------------------------------------------------------------------------
-# Routes – team members
-# ---------------------------------------------------------------------------
-
-
-@bp.route("/api/team-members")
+@bp.route("/team-members")
 def list_team_members():
+    """Endpoint to list all team members."""
+
     rows = db.session.execute(
         select(TeamMember, User, Team)
         .join(User, TeamMember.user_id == User.id)
@@ -59,13 +54,15 @@ def list_team_members():
         d["asana_task_count"] = (
             _count_active_tasks(member.asana_fk) if member.asana_fk else 0
         )
-        result.bpend(d)
+        result.append(d)
 
     return jsonify(result)
 
 
-@bp.route("/api/team-members/<member_id>")
+@bp.route("/team-members/<member_id>")
 def get_team_member(member_id: str):
+    """Endpoint to retrieve details for a specific team member, including their GitHub PRs, Freshdesk tickets, and Asana tasks."""
+
     try:
         uid = uuid_mod.UUID(member_id)
     except ValueError:
@@ -174,8 +171,10 @@ def get_team_member(member_id: str):
     return jsonify(d)
 
 
-@bp.route("/api/team-members", methods=["POST"])
+@bp.route("/team-members", methods=["POST"])
 def create_team_member():
+    """Endpoint to create a new team member and associate them with a team."""
+
     data = request.get_json(silent=True)
     if not data:
         return jsonify({"error": "Request body must be JSON"}), 400
