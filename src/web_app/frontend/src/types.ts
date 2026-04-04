@@ -8,9 +8,12 @@ export interface ThemeConfig {
 
 export interface GithubPR {
   pr_id: number;
+  pr_title: string;
+  pr_number: number;
   github_username: string;
   github_repo_name: string;
   branch_name: string;
+  created_at: string | null;
   is_draft: boolean;
   is_merged: boolean;
   is_closed_unmerged: boolean;

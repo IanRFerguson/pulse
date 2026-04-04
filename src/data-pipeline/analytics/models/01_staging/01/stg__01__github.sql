@@ -27,6 +27,7 @@ SELECT DISTINCT
 
     id,
     title,
+    number,
     github_username,
     github_user_id,
     created_at,

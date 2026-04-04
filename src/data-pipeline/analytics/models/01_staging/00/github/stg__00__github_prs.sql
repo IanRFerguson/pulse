@@ -13,6 +13,7 @@ WITH
             head__ref AS branch_name,
             draft AS is_draft,
             title,
+            number,
             author_association AS github_author_association,
             assignee__login AS github_assignee_login,
             assignee__id AS github_assignee_id,
@@ -47,6 +48,7 @@ SELECT
     
     id,
     title,
+    number,
     github_username,
     github_user_id,
 

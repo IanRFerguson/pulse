@@ -41,17 +41,20 @@ export default function ExpandedPanel({ category, member }: Props) {
             {prs.map((pr) => (
               <li key={pr.pr_id} className="expanded-item">
                 <a
-                  href={`https://github.com/${pr.github_repo_name}/pull/${pr.pr_id}`}
+                  href={`https://github.com/${pr.github_repo_name}/pull/${pr.pr_number}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="expanded-link"
                 >
                   <span className="pr-repo">{pr.github_repo_name}</span>
                   <span className="pr-separator">#</span>
-                  <span className="pr-number">{pr.pr_id}</span>
-                  <span className="pr-title">{pr.branch_name}</span>
+                  <span className="pr-number">{pr.pr_number}</span>
+                  <span className="pr-title">{pr.pr_title}</span>
                 </a>
                 {pr.is_draft && <span className="badge badge-neutral">Draft</span>}
+                <span className="pr-created">
+                  Opened {pr.created_at ? new Date(pr.created_at).toLocaleDateString() : 'N/A'}
+                </span>
               </li>
             ))}
           </ul>
@@ -74,8 +77,13 @@ export default function ExpandedPanel({ category, member }: Props) {
               const priorityLabel = PRIORITY_LABELS[t.priority] ?? String(t.priority);
               return (
                 <li key={t.ticket_id} className="expanded-item">
-                  <span className="ticket-id">#{t.ticket_id}</span>
-                  <span className="ticket-subject">{t.ticket_subject}</span>
+                  <a href={`https://movementcooperative.freshdesk.com/a/tickets/${t.ticket_id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="expanded-link">
+                    <span className="ticket-id">#{t.ticket_id}</span>
+                    <span className="ticket-subject">{t.ticket_subject}</span>
+                  </a>
                   <span className={`badge ${PRIORITY_CLASS[priorityLabel] ?? 'badge-neutral'}`}>
                     {priorityLabel}
                   </span>
@@ -101,7 +109,14 @@ export default function ExpandedPanel({ category, member }: Props) {
         <ul className="expanded-list">
           {tasks.map((task) => (
             <li key={task.task_id} className="expanded-item">
-              <span className="task-name">{task.name}</span>
+              {/* TODO - If other teams are going to use this we'll need to make the URL dynamic */}
+              <a href={`https://app.asana.com/1/506377617206170/project/1200839284702516/task/${task.task_id}?focus=true`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="expanded-link">
+                <span className="task-name">{task.name}</span>
+              </a>
+              
               {task.due_on && (
                 <span className="task-due">
                   Due {new Date(task.due_on).toLocaleDateString()}
