@@ -1,7 +1,6 @@
 import type {
   CreateTeamMemberPayload,
   Team,
-  TeamMemberDetail,
   TeamMemberSummary,
   ThemeConfig,
 } from './types';
@@ -22,9 +21,6 @@ export const api = {
   getConfig: () => apiFetch<ThemeConfig>('/api/config'),
 
   getTeamMembers: () => apiFetch<TeamMemberSummary[]>('/api/team-members'),
-
-  getTeamMember: (id: string) =>
-    apiFetch<TeamMemberDetail>(`/api/team-members/${id}`),
 
   createTeamMember: (payload: CreateTeamMemberPayload) =>
     apiFetch<{ id: string; username: string; email: string; team: string }>(

@@ -1,7 +1,6 @@
 import type {
   ActiveExpansion,
   MetricCategory,
-  TeamMemberDetail,
   TeamMemberSummary,
 } from '../types';
 import ExpandedPanel from './ExpandedPanel';
@@ -9,8 +8,6 @@ import ExpandedPanel from './ExpandedPanel';
 interface Props {
   member: TeamMemberSummary;
   activeExpansion: ActiveExpansion | null;
-  detail: TeamMemberDetail | null;
-  detailLoading: boolean;
   onBadgeClick: (memberId: string, category: MetricCategory) => void;
 }
 
@@ -40,12 +37,20 @@ function MetricBadge({ label, count, category, active, onClick }: BadgeProps) {
 export default function TeamMemberRow({
   member,
   activeExpansion,
-  detail,
-  detailLoading,
   onBadgeClick,
 }: Props) {
   const isExpanded = activeExpansion?.memberId === member.id;
   const expandedCategory = isExpanded ? activeExpansion!.category : null;
+
+  const openPrCount = (member.github_data ?? []).filter(
+    (pr) => !pr.is_merged && !pr.is_closed_unmerged,
+  ).length;
+  const openTicketCount = (member.freshdesk_data ?? []).filter(
+    (t) => [2, 3, 6].includes(t.status),
+  ).length;
+  const activeTaskCount = (member.asana_data ?? []).filter(
+    (t) => !t.completed,
+  ).length;
 
   return (
     <>
@@ -57,7 +62,7 @@ export default function TeamMemberRow({
         <td>
           <MetricBadge
             label="GitHub"
-            count={member.github_pr_count}
+            count={openPrCount}
             category="github"
             active={isExpanded && expandedCategory === 'github'}
             onClick={() => onBadgeClick(member.id, 'github')}
@@ -66,7 +71,7 @@ export default function TeamMemberRow({
         <td>
           <MetricBadge
             label="Freshdesk"
-            count={member.freshdesk_ticket_count}
+            count={openTicketCount}
             category="freshdesk"
             active={isExpanded && expandedCategory === 'freshdesk'}
             onClick={() => onBadgeClick(member.id, 'freshdesk')}
@@ -75,7 +80,7 @@ export default function TeamMemberRow({
         <td>
           <MetricBadge
             label="Asana"
-            count={member.asana_task_count}
+            count={activeTaskCount}
             category="asana"
             active={isExpanded && expandedCategory === 'asana'}
             onClick={() => onBadgeClick(member.id, 'asana')}
@@ -88,8 +93,7 @@ export default function TeamMemberRow({
           <td colSpan={4}>
             <ExpandedPanel
               category={expandedCategory}
-              detail={detail}
-              loading={detailLoading}
+              member={member}
             />
           </td>
         </tr>

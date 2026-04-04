@@ -6,53 +6,44 @@ export interface ThemeConfig {
   colors: Record<string, string>;
 }
 
-export interface TeamMemberSummary {
-  id: string;
-  username: string;
-  email: string;
-  team: string;
-  github_fk: string | null;
-  asana_fk: string | null;
-  freshdesk_fk: string | null;
-  github_pr_count: number;
-  freshdesk_ticket_count: number;
-  asana_task_count: number;
-}
-
 export interface GithubPR {
-  id: number;
-  title: string;
-  repo: string;
-  branch: string;
+  pr_id: number;
+  github_username: string;
+  github_repo_name: string;
+  branch_name: string;
   is_draft: boolean;
-  url: string;
+  is_merged: boolean;
+  is_closed_unmerged: boolean;
+  github_author_association: string | null;
+  github_assignee_login: string | null;
 }
 
 export interface FreshdeskTicket {
-  id: number;
-  subject: string;
-  status: string;
-  priority: string;
+  ticket_id: number;
+  ticket_subject: string;
+  status: number;
+  priority: number;
+  created_at: string | null;
+  updated_at: string | null;
+  due_by_date: string | null;
 }
 
 export interface AsanaTask {
-  id: string;
+  task_id: string;
   name: string;
+  completed: boolean;
   due_on: string | null;
-  url: string | null;
+  priority: string | null;
+  sprint_points: number | null;
 }
 
-export interface TeamMemberDetail {
+export interface TeamMemberSummary {
   id: string;
   username: string;
-  email: string;
   team: string;
-  github_fk: string | null;
-  asana_fk: string | null;
-  freshdesk_fk: string | null;
-  github_prs: GithubPR[];
-  freshdesk_tickets: FreshdeskTicket[];
-  asana_tasks: AsanaTask[];
+  github_data: GithubPR[] | null;
+  asana_data: AsanaTask[] | null;
+  freshdesk_data: FreshdeskTicket[] | null;
 }
 
 export interface Team {

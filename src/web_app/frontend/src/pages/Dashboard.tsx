@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { api } from '../api';
 import TeamMemberRow from '../components/TeamMemberRow';
 import type {
   ActiveExpansion,
   MetricCategory,
-  TeamMemberDetail,
   TeamMemberSummary,
 } from '../types';
 
@@ -14,8 +13,6 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
 
   const [activeExpansion, setActiveExpansion] = useState<ActiveExpansion | null>(null);
-  const [detailLoading, setDetailLoading] = useState(false);
-  const detailCache = useRef<Map<string, TeamMemberDetail>>(new Map());
 
   useEffect(() => {
     api
@@ -28,7 +25,7 @@ export default function Dashboard() {
   }, []);
 
   const handleBadgeClick = useCallback(
-    async (memberId: string, category: MetricCategory) => {
+    (memberId: string, category: MetricCategory) => {
       // Toggle off if already showing this exact panel
       if (
         activeExpansion?.memberId === memberId &&
@@ -39,18 +36,6 @@ export default function Dashboard() {
       }
 
       setActiveExpansion({ memberId, category });
-
-      if (!detailCache.current.has(memberId)) {
-        setDetailLoading(true);
-        try {
-          const detail = await api.getTeamMember(memberId);
-          detailCache.current.set(memberId, detail);
-        } catch {
-          // Keep panel open with empty/error state; ExpandedPanel handles null
-        } finally {
-          setDetailLoading(false);
-        }
-      }
     },
     [activeExpansion],
   );
@@ -105,10 +90,6 @@ export default function Dashboard() {
                   member={member}
                   activeExpansion={
                     activeExpansion?.memberId === member.id ? activeExpansion : null
-                  }
-                  detail={detailCache.current.get(member.id) ?? null}
-                  detailLoading={
-                    detailLoading && activeExpansion?.memberId === member.id
                   }
                   onBadgeClick={handleBadgeClick}
                 />
