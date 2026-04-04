@@ -17,4 +17,3 @@ models:
     01_staging:
       +schema: staging
     02_marts:
-      +schema: marts

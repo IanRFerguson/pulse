@@ -25,3 +25,10 @@ sources:
       - name: tickets__tags
       - name: tickets__ticket_cc_emails
       - name: tickets__to_emails
+
+  - name: backend
+    schema: public
+    tables:
+      - name: users
+      - name: team_members
+      - name: teams
