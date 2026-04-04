@@ -2,6 +2,7 @@ WITH
     team_members AS (
         SELECT
             
+            team_member_id,
             team_name,
             user_name,
             github_fk,

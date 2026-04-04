@@ -3,16 +3,15 @@ import uuid as uuid_mod
 from flask import jsonify, request
 from sqlalchemy import select, text
 
-from backend.config import load_theme
-from backend.models import Team, TeamMember, User, db
 from common import metrics_logger
 
+from ..config import load_theme
+from ..models import Team, TeamMember, User, db
 from . import bp
 from .helpers import (
     _count_active_tasks,
     _count_open_prs,
     _count_open_tickets,
-    _member_to_dict,
 )
 
 #####
@@ -28,31 +27,51 @@ def get_config():
 def list_teams():
     """Endpoint to list all teams."""
 
-    teams = db.session.execute(select(Team)).scalars().all()
-    return jsonify([{"id": str(t.id), "name": t.name} for t in teams])
+    rows = (
+        db.session.execute(
+            text(
+                "SELECT DISTINCT team_id, team_name"
+                " FROM dbt_dev.ic_metrics"
+                " ORDER BY team_name"
+            )
+        )
+        .mappings()
+        .all()
+    )
+    return jsonify([{"id": str(r["team_id"]), "name": r["team_name"]} for r in rows])
 
 
 @bp.route("/team-members")
 def list_team_members():
     """Endpoint to list all team members."""
 
-    rows = db.session.execute(
-        select(TeamMember, User, Team)
-        .join(User, TeamMember.user_id == User.id)
-        .join(Team, TeamMember.team_id == Team.id)
-    ).all()
+    rows = (
+        db.session.execute(
+            text(
+                "SELECT"
+                " team_member_id AS id,"
+                " user_name AS username,"
+                " team_name AS team,"
+                " github_fk,"
+                " asana_fk,"
+                " freshdesk_fk"
+                " FROM dbt_dev.ic_metrics"
+            )
+        )
+        .mappings()
+        .all()
+    )
 
     result = []
-    for member, user, team in rows:
-        d = _member_to_dict(member, user, team)
-        d["github_pr_count"] = (
-            _count_open_prs(member.github_fk) if member.github_fk else 0
-        )
+    for row in rows:
+        d = dict(row)
+        d["id"] = str(d["id"])
+        d["github_pr_count"] = _count_open_prs(d["github_fk"]) if d["github_fk"] else 0
         d["freshdesk_ticket_count"] = (
-            _count_open_tickets(member.freshdesk_fk) if member.freshdesk_fk else 0
+            _count_open_tickets(d["freshdesk_fk"]) if d["freshdesk_fk"] else 0
         )
         d["asana_task_count"] = (
-            _count_active_tasks(member.asana_fk) if member.asana_fk else 0
+            _count_active_tasks(d["asana_fk"]) if d["asana_fk"] else 0
         )
         result.append(d)
 
@@ -68,40 +87,56 @@ def get_team_member(member_id: str):
     except ValueError:
         return jsonify({"error": "Invalid member ID"}), 400
 
-    row = db.session.execute(
-        select(TeamMember, User, Team)
-        .join(User, TeamMember.user_id == User.id)
-        .join(Team, TeamMember.team_id == Team.id)
-        .where(TeamMember.id == uid)
-    ).first()
+    row = (
+        db.session.execute(
+            text(
+                "SELECT"
+                " team_member_id AS id,"
+                " user_name AS username,"
+                " team_name AS team,"
+                " github_fk,"
+                " asana_fk,"
+                " freshdesk_fk"
+                " FROM dbt_dev.ic_metrics"
+                " WHERE team_member_id = :id"
+            ),
+            {"id": str(uid)},
+        )
+        .mappings()
+        .first()
+    )
 
     if row is None:
         return jsonify({"error": "Team member not found"}), 404
 
-    member, user, team = row
-    d = _member_to_dict(member, user, team)
+    d = dict(row)
+    d["id"] = str(d["id"])
 
     # GitHub PRs -------------------------------------------------------
     github_prs: list[dict] = []
-    if member.github_fk:
+    if d["github_fk"]:
         try:
-            pr_rows = db.session.execute(
-                text(
-                    "SELECT id, title, base__repo__full_name, head__ref, draft"
-                    " FROM github.pull_requests"
-                    " WHERE user__login = :login AND state = 'open'"
-                    " ORDER BY created_at DESC"
-                ),
-                {"login": member.github_fk},
-            ).fetchall()
+            pr_rows = (
+                db.session.execute(
+                    text(
+                        "SELECT id, github_repo_name, branch_name, is_draft"
+                        " FROM dbt_dev_staging.stg__01__github"
+                        " WHERE github_username = :login"
+                        " AND is_merged = false AND is_closed_unmerged = false"
+                        " ORDER BY created_at DESC"
+                    ),
+                    {"login": d["github_fk"]},
+                )
+                .mappings()
+                .fetchall()
+            )
             github_prs = [
                 {
-                    "id": r[0],
-                    "title": r[1],
-                    "repo": r[2],
-                    "branch": r[3],
-                    "is_draft": bool(r[4]),
-                    "url": f"https://github.com/{r[2]}/pull/{r[0]}",
+                    "id": r["id"],
+                    "repo": r["github_repo_name"],
+                    "branch": r["branch_name"],
+                    "is_draft": bool(r["is_draft"]),
+                    "url": f"https://github.com/{r['github_repo_name']}/pull/{r['id']}",
                 }
                 for r in pr_rows
             ]
@@ -113,23 +148,27 @@ def get_team_member(member_id: str):
     PRIORITY_LABELS = {1: "Low", 2: "Medium", 3: "High", 4: "Urgent"}
 
     freshdesk_tickets: list[dict] = []
-    if member.freshdesk_fk:
+    if d["freshdesk_fk"]:
         try:
-            ticket_rows = db.session.execute(
-                text(
-                    "SELECT id, subject, status, priority"
-                    " FROM freshdesk.tickets"
-                    " WHERE assigned_agent_name = :agent AND status IN (2, 3, 6)"
-                    " ORDER BY created_at DESC"
-                ),
-                {"agent": member.freshdesk_fk},
-            ).fetchall()
+            ticket_rows = (
+                db.session.execute(
+                    text(
+                        "SELECT ticket_id, ticket_subject, status, priority"
+                        " FROM dbt_dev_staging.stg__01__freshdesk"
+                        " WHERE assigned_agent_name = :agent AND status IN (2, 3, 6)"
+                        " ORDER BY created_at DESC"
+                    ),
+                    {"agent": d["freshdesk_fk"]},
+                )
+                .mappings()
+                .fetchall()
+            )
             freshdesk_tickets = [
                 {
-                    "id": r[0],
-                    "subject": r[1],
-                    "status": STATUS_LABELS.get(r[2], str(r[2])),
-                    "priority": PRIORITY_LABELS.get(r[3], str(r[3])),
+                    "id": r["ticket_id"],
+                    "subject": r["ticket_subject"],
+                    "status": STATUS_LABELS.get(r["status"], str(r["status"])),
+                    "priority": PRIORITY_LABELS.get(r["priority"], str(r["priority"])),
                 }
                 for r in ticket_rows
             ]
@@ -138,23 +177,27 @@ def get_team_member(member_id: str):
 
     # Asana tasks ------------------------------------------------------
     asana_tasks: list[dict] = []
-    if member.asana_fk:
+    if d["asana_fk"]:
         try:
-            task_rows = db.session.execute(
-                text(
-                    "SELECT gid, name, due_on, permalink_url"
-                    " FROM asana.project_tasks"
-                    " WHERE assignee__gid = :gid AND completed = false"
-                    " ORDER BY due_on ASC NULLS LAST"
-                ),
-                {"gid": member.asana_fk},
-            ).fetchall()
+            task_rows = (
+                db.session.execute(
+                    text(
+                        "SELECT task_id, name, due_on"
+                        " FROM dbt_dev_staging.stg__01__asana"
+                        " WHERE assignee_id = :gid AND completed = false"
+                        " ORDER BY due_on ASC NULLS LAST"
+                    ),
+                    {"gid": d["asana_fk"]},
+                )
+                .mappings()
+                .fetchall()
+            )
             asana_tasks = [
                 {
-                    "id": r[0],
-                    "name": r[1],
-                    "due_on": r[2].isoformat() if r[2] else None,
-                    "url": r[3],
+                    "id": r["task_id"],
+                    "name": r["name"],
+                    "due_on": r["due_on"].isoformat() if r["due_on"] else None,
+                    "url": None,
                 }
                 for r in task_rows
             ]

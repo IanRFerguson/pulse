@@ -1,20 +1,8 @@
 from sqlalchemy import text
 
-from src.web_app.backend.models import Team, TeamMember, User, db
+from ..models import db
 
 #####
-
-
-def _member_to_dict(member: TeamMember, user: User, team: Team) -> dict:
-    return {
-        "id": str(member.id),
-        "username": user.username,
-        "email": user.email,
-        "team": team.name,
-        "github_fk": member.github_fk,
-        "asana_fk": member.asana_fk,
-        "freshdesk_fk": member.freshdesk_fk,
-    }
 
 
 def _count_open_prs(github_login: str) -> int:
@@ -22,8 +10,9 @@ def _count_open_prs(github_login: str) -> int:
         return (
             db.session.execute(
                 text(
-                    "SELECT COUNT(*) FROM github.pull_requests"
-                    " WHERE user__login = :login AND state = 'open'"
+                    "SELECT COUNT(*) FROM dbt_dev_staging.stg__01__github"
+                    " WHERE github_username = :login"
+                    " AND is_merged = false AND is_closed_unmerged = false"
                 ),
                 {"login": github_login},
             ).scalar()
@@ -38,7 +27,7 @@ def _count_open_tickets(agent_name: str) -> int:
         return (
             db.session.execute(
                 text(
-                    "SELECT COUNT(*) FROM freshdesk.tickets"
+                    "SELECT COUNT(*) FROM dbt_dev_staging.stg__01__freshdesk"
                     " WHERE assigned_agent_name = :agent AND status IN (2, 3, 6)"
                 ),
                 {"agent": agent_name},
@@ -54,8 +43,8 @@ def _count_active_tasks(assignee_gid: str) -> int:
         return (
             db.session.execute(
                 text(
-                    "SELECT COUNT(*) FROM asana.project_tasks"
-                    " WHERE assignee__gid = :gid AND completed = false"
+                    "SELECT COUNT(*) FROM dbt_dev_staging.stg__01__asana"
+                    " WHERE assignee_id = :gid AND completed = false"
                 ),
                 {"gid": assignee_gid},
             ).scalar()
