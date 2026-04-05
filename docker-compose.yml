@@ -12,6 +12,8 @@ services:
       - .local/local.env
     environment:
       - DB_HOST=host.docker.internal
+      # NOTE: To run with mocked data just uncomment the line below
+      # - DEMO_MODE=true
 
   # ABOUT: This service runs the data pipeline and has access to the host machine's
   # Postgres database via host.docker.internal.
