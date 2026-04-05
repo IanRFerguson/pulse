@@ -4,8 +4,8 @@ pulse:
     dev:
       type: postgres
       host: localhost
-      user: postgres
-      password: postgres
+      user: "{{ env_var('DB_USERNAME') }}"
+      password: "{{ env_var('DB_PASSWORD') }}"
       port: 5432
       dbname: tmcadmin
       schema: dbt_dev
