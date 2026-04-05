@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from common import metrics_logger
 
@@ -8,7 +8,12 @@ from .routes import bp as api_bp
 
 #####
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder="../frontend/dist",
+    static_url_path="/",
+    template_folder="../frontend/dist",
+)
 app.config.from_object(FlaskConfig())
 
 app.logger = metrics_logger
@@ -21,4 +26,4 @@ app.register_blueprint(api_bp)
 
 @app.route("/")
 def home():
-    return "Hello, World!"
+    return render_template("index.html")

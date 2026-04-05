@@ -1,33 +1,11 @@
+import os
+
 import click
-from sources import AsanaSource, FreshdeskSource, GithubSource
+from config import LOAD_MAP, setup_dlt_environment
 
 from src.common import metrics_logger
 
 #####
-
-LOAD_MAP = [
-    {
-        "friendly_name": "GitHub",
-        "source_cls": GithubSource,
-        "pipeline_name": "github_pipeline",
-        "destination_name": "postgres",
-        "dataset_name": "github_data",
-    },
-    {
-        "friendly_name": "Asana",
-        "source_cls": AsanaSource,
-        "pipeline_name": "asana_pipeline",
-        "destination_name": "postgres",
-        "dataset_name": "asana_data",
-    },
-    {
-        "friendly_name": "Freshdesk",
-        "source_cls": FreshdeskSource,
-        "pipeline_name": "freshdesk_pipeline",
-        "destination_name": "postgres",
-        "dataset_name": "freshdesk_data",
-    },
-]
 
 
 @click.command()
@@ -40,7 +18,17 @@ LOAD_MAP = [
 @click.option(
     "--full-refresh", is_flag=True, help="Perform a full refresh (replace data)"
 )
-def cli(source, full_refresh):
+def cli(source: str, full_refresh: bool) -> None:
+    """
+    Run the data loading process for the specified source(s).
+
+    Args:
+        source (str): The source to load (github, asana, freshdesk). If None, all sources will be loaded.
+        full_refresh (bool): If True, perform a full refresh by replacing existing data. Otherwise, perform an incremental load.
+    """
+
+    setup_dlt_environment()
+
     load_errors = []
     for _map in LOAD_MAP:
         if source and not _map["source_cls"].__name__.lower().startswith(source):
