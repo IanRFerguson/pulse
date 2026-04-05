@@ -3,9 +3,11 @@ import type { ThemeConfig } from '../types';
 
 interface Props {
   theme: ThemeConfig | null;
+  isDark: boolean;
+  toggleDark: () => void;
 }
 
-export default function NavBar({ theme }: Props) {
+export default function NavBar({ theme, isDark, toggleDark }: Props) {
   const location = useLocation();
   const companyName = theme?.company?.name ?? 'Pulse';
   const logoUrl = theme?.company?.logo_url ?? null;
@@ -34,6 +36,13 @@ export default function NavBar({ theme }: Props) {
         >
           Add Team Member
         </Link>
+        <button
+          className="theme-toggle"
+          onClick={toggleDark}
+          aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {isDark ? '☀️' : '🌙'}
+        </button>
       </div>
     </nav>
   );

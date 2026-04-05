@@ -1,9 +1,10 @@
 company:
-  name: "Pulse"
-  logo_url: null
+  name: "The Movement Cooperative"
+  team_name: "Data Engineering Team"
+  logo_url: "https://media.licdn.com/dms/image/v2/D4E0BAQG3yDcJLVdnDQ/company-logo_200_200/B4EZU4oT7oGwAM-/0/1740411846733/themovementcooperative_logo?e=2147483647&v=beta&t=-ldjFMOlKqrD16qrqpe6YbH4wmKu7QHbyTAVgcL7ulY"
 
 colors:
-  primary: "#7c3aed"
+  primary: "#1D448C"
   secondary: "#1e293b"
   background: "#ffffff"
   surface: "#f8fafc"
