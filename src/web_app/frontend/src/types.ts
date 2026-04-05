@@ -1,6 +1,7 @@
 export interface ThemeConfig {
   company: {
     name: string;
+    team_name: string | null;
     logo_url: string | null;
   };
   colors: Record<string, string>;

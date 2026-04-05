@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 import yaml
 
+from common import metrics_logger
+
 #####
 
 _THEME_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "theme.yaml")
@@ -25,10 +27,17 @@ _DEFAULT_THEME: dict = {
 
 
 def load_theme() -> dict:
+    if os.environ.get("DEMO_MODE", "").lower() in ("1", "true", "yes"):
+        metrics_logger.warning("DEMO_MODE is enabled - using default theme")
+        return _DEFAULT_THEME
+
     try:
         with open(_THEME_PATH) as f:
-            return yaml.safe_load(f) or _DEFAULT_THEME
+            resp = yaml.safe_load(f) or _DEFAULT_THEME
+            metrics_logger.info("Using custom config")
+            return resp
     except FileNotFoundError:
+        metrics_logger.warning("No config YAML found - using defaults")
         return _DEFAULT_THEME
 
 

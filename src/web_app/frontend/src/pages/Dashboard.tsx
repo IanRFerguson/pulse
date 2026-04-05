@@ -5,12 +5,19 @@ import type {
   ActiveExpansion,
   MetricCategory,
   TeamMemberSummary,
+  ThemeConfig
 } from '../types';
 
-export default function Dashboard() {
+interface Props {
+  theme: ThemeConfig | null;
+}
+
+export default function Dashboard({ theme }: Props) {
   const [members, setMembers] = useState<TeamMemberSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const teamName = theme?.company?.team_name ?? 'Team Dashboard';
 
   const [activeExpansion, setActiveExpansion] = useState<ActiveExpansion | null>(null);
 
@@ -59,7 +66,7 @@ export default function Dashboard() {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1 className="page-title">Team Dashboard</h1>
+        <h1 className="page-title">{teamName}</h1>
         <p className="page-subtitle">
           {members.length} team member{members.length !== 1 ? 's' : ''}
         </p>

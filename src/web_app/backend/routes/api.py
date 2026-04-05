@@ -1,3 +1,4 @@
+import os
 import uuid as uuid_mod
 
 from flask import jsonify, request
@@ -6,8 +7,11 @@ from sqlalchemy import select, text
 from common import metrics_logger
 
 from ..config import load_theme
+from ..mock_data import MOCK_TEAM_MEMBERS, MOCK_TEAMS
 from ..models import Team, TeamMember, User, db
 from . import bp
+
+DEMO_MODE = os.environ.get("DEMO_MODE", "").lower() in ("1", "true", "yes")
 
 #####
 
@@ -21,6 +25,9 @@ def get_config():
 @bp.route("/teams")
 def list_teams():
     """Endpoint to list all teams."""
+
+    if DEMO_MODE:
+        return jsonify(MOCK_TEAMS)
 
     rows = (
         db.session.execute(
@@ -39,6 +46,9 @@ def list_teams():
 @bp.route("/team-members")
 def list_team_members():
     """Endpoint to list all team members."""
+
+    if DEMO_MODE:
+        return jsonify(MOCK_TEAM_MEMBERS)
 
     rows = (
         db.session.execute(
@@ -69,6 +79,12 @@ def list_team_members():
 @bp.route("/team-members/<member_id>")
 def get_team_member(member_id: str):
     """Endpoint to retrieve details for a specific team member."""
+
+    if DEMO_MODE:
+        match = next((m for m in MOCK_TEAM_MEMBERS if m["id"] == member_id), None)
+        if match is None:
+            return jsonify({"error": "Team member not found"}), 404
+        return jsonify(match)
 
     try:
         uid = uuid_mod.UUID(member_id)
