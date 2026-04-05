@@ -9,3 +9,4 @@ services:
       - .local/local.env
     environment:
       - DB_HOST=host.docker.internal
+      - DEMO_MODE=true
