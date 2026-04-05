@@ -1,4 +1,7 @@
 services:
+  # ABOUT: This service runs the Flask backend / React frontend and
+  # exposes it to the user at localhost:5000. It also has access to the host machine's 
+  # Postgres database via host.docker.internal.
   web-app:
     build:
       context: .
@@ -9,4 +12,51 @@ services:
       - .local/local.env
     environment:
       - DB_HOST=host.docker.internal
-      - DEMO_MODE=true
+
+  # ABOUT: This service runs the data pipeline and has access to the host machine's
+  # Postgres database via host.docker.internal.
+  pipeline:
+    build: 
+      context: .
+      dockerfile: ./devops/docker/Dockerfile.pipe
+    volumes:
+      - ./dbt_project:/app/dbt_project
+    env_file:
+      - .local/local.env
+    environment:
+      - DB_HOST=host.docker.internal
+      - DEBUG=true
+      - PYTHONPATH=/app/src/data-pipeline
+    command: uv run src/data-pipeline/task_scheduler.py
+    depends_on:
+      - redis
+
+  # ABOUT: This service runs the Redis server.
+  redis:
+    image: redis:alpine
+
+  # ABOUT: This service runs the RQ worker. It listens for jobs on the Redis server 
+  # and executes them.
+  worker:
+    build: 
+      context: .
+      dockerfile: ./devops/docker/Dockerfile.pipe
+    volumes:
+      - ./dbt_project:/app/dbt_project
+    env_file:
+      - .local/local.env
+    environment:
+      - DB_HOST=host.docker.internal
+      - PYTHONPATH=/app/src/data-pipeline
+    command: uv run rq worker --url redis://redis:6379
+    depends_on:
+      - redis
+
+  # ABOUT: This service runs the RQ scheduler. It schedules jobs to be executed by the RQ worker. 
+  scheduler:
+    build: 
+      context: .
+      dockerfile: ./devops/docker/Dockerfile.pipe
+    command: uv run rqscheduler --host redis --port 6379 --interval 5
+    depends_on:
+      - redis

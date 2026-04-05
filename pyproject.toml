@@ -26,6 +26,8 @@ pipeline = [
     "click>=8.3.1",
     "dbt-postgres>=1.8",
     "dlt[postgres]>=1.24.0",
+    "redis>=7.4.0",
+    "rq-scheduler>=0.14.0",
 ]
 web_app = [
     "alembic>=1.18.4",

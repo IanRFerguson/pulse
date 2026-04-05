@@ -1,0 +1,18 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY pyproject.toml .
+COPY uv.lock .
+
+# This is goofy but it allows us to cache the dependencies in a layer and not 
+# have to re-install them every time we change the source code
+COPY README.md .
+
+RUN pip install --no-cache-dir uv
+RUN uv sync --all-groups --no-install-project
+
+COPY ./src/data-pipeline ./src/data-pipeline
+COPY ./src/common ./src/common
+
+CMD ["uv", "run", "src/data-pipeline/run_pipeline.py", "--docker"]
