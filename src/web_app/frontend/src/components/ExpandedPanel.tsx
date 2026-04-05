@@ -8,9 +8,8 @@ interface Props {
 const STATUS_LABELS: Record<number, string> = {
   2: 'Open',
   3: 'Pending',
-  4: 'Resolved',
-  5: 'Closed',
-  6: 'Waiting',
+  6: 'Waiting on Member',
+  7: 'Waiting on Third Party'
 };
 
 const PRIORITY_LABELS: Record<number, string> = {
@@ -21,10 +20,10 @@ const PRIORITY_LABELS: Record<number, string> = {
 };
 
 const PRIORITY_CLASS: Record<string, string> = {
-  Urgent: 'badge-danger',
-  High: 'badge-warning',
-  Medium: 'badge-neutral',
-  Low: 'badge-neutral',
+  Urgent: 'freshdesk-badge-danger',
+  High: 'freshdesk-badge-warning',
+  Medium: 'freshdesk-badge-neutral',
+  Low: 'freshdesk-badge-neutral',
 };
 
 export default function ExpandedPanel({ category, member }: Props) {
@@ -52,9 +51,7 @@ export default function ExpandedPanel({ category, member }: Props) {
                   <span className="pr-title">{pr.pr_title}</span>
                 </a>
                 {pr.is_draft && <span className="badge badge-neutral">Draft</span>}
-                <span className="pr-created">
-                  Opened {pr.created_at ? new Date(pr.created_at).toLocaleDateString() : 'N/A'}
-                </span>
+                <span className="pr-created">{pr.days_active} days active</span>
               </li>
             ))}
           </ul>
@@ -65,7 +62,7 @@ export default function ExpandedPanel({ category, member }: Props) {
 
   if (category === 'freshdesk') {
     const tickets = (member.freshdesk_data ?? []).filter((t) =>
-      [2, 3, 6].includes(t.status),
+      ![4, 5].includes(t.status),
     );
     return (
       <div className="expanded-panel">
@@ -78,9 +75,9 @@ export default function ExpandedPanel({ category, member }: Props) {
               return (
                 <li key={t.ticket_id} className="expanded-item">
                   <a href={`https://movementcooperative.freshdesk.com/a/tickets/${t.ticket_id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="expanded-link">
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="expanded-link">
                     <span className="ticket-id">#{t.ticket_id}</span>
                     <span className="ticket-subject">{t.ticket_subject}</span>
                   </a>
@@ -90,6 +87,7 @@ export default function ExpandedPanel({ category, member }: Props) {
                   <span className="badge badge-neutral">
                     {STATUS_LABELS[t.status] ?? t.status}
                   </span>
+                  <span className="pr-created">{t.days_active} days active</span>
                 </li>
               );
             })}
@@ -111,12 +109,12 @@ export default function ExpandedPanel({ category, member }: Props) {
             <li key={task.task_id} className="expanded-item">
               {/* TODO - If other teams are going to use this we'll need to make the URL dynamic */}
               <a href={`https://app.asana.com/1/506377617206170/project/1200839284702516/task/${task.task_id}?focus=true`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="expanded-link">
+                target="_blank"
+                rel="noopener noreferrer"
+                className="expanded-link">
                 <span className="task-name">{task.name}</span>
               </a>
-              
+
               {task.due_on && (
                 <span className="task-due">
                   Due {new Date(task.due_on).toLocaleDateString()}
@@ -127,6 +125,7 @@ export default function ExpandedPanel({ category, member }: Props) {
                   {task.priority}
                 </span>
               )}
+              <span className="pr-created">{task.days_active} days active</span>
             </li>
           ))}
         </ul>

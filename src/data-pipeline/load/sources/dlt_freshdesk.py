@@ -30,18 +30,39 @@ class FreshdeskSource(DltSource):
         auth = (FRESHDESK_API_KEY, "X")
 
         @dlt.resource(write_disposition=write_disposition, primary_key="id")
-        def tickets():
-            # 1. First, grab all agents and store them in a dictionary
-            agents_res = requests.get(
-                f"https://{FRESHDESK_DOMAIN}.freshdesk.com/api/v2/agents", auth=auth
+        def tickets(
+            updated_since: dlt.sources.incremental[str] = dlt.sources.incremental(
+                "updated_at", initial_value="2000-01-01T00:00:00Z"
             )
-            agents_res.raise_for_status()
-            # Map ID -> Name: {12345: "John Doe"}
-            agent_map = {a["id"]: a["contact"]["name"] for a in agents_res.json()}
+        ):
+            # 1. First, grab all agents and store them in a dictionary.
+            # Must paginate — the API defaults to 50 agents per page.
+            agent_map = {}
+            agent_page = 1
+            while True:
+                agents_res = requests.get(
+                    f"https://{FRESHDESK_DOMAIN}.freshdesk.com/api/v2/agents",
+                    auth=auth,
+                    params={"per_page": 100, "page": agent_page},
+                )
+                agents_res.raise_for_status()
+                page_agents = agents_res.json()
+                if not page_agents:
+                    break
+                for a in page_agents:
+                    agent_map[a["id"]] = a["contact"]["name"]
+                agent_page += 1
 
             # 2. Now fetch tickets
+            # updated_since prevents the Freshdesk API default of only returning
+            # tickets from the last 30 days. On the first run this fetches all
+            # history; on subsequent runs it only fetches newly-updated tickets.
             url = f"https://{FRESHDESK_DOMAIN}.freshdesk.com/api/v2/tickets"
-            params = {"per_page": 100, "page": 1}
+            params = {
+                "per_page": 100,
+                "page": 1,
+                "updated_since": updated_since.last_value,
+            }
 
             while True:
                 response = requests.get(url, auth=auth, params=params)

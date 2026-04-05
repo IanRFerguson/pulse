@@ -82,20 +82,24 @@ h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
   margin: 32px 0;
+
   @media (max-width: 1024px) {
     font-size: 36px;
     margin: 20px 0;
   }
 }
+
 h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
+
   @media (max-width: 1024px) {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
 }
@@ -429,19 +433,19 @@ code {
   white-space: nowrap;
 }
 
-.badge-neutral {
+.freshdesk-badge-neutral {
   background: var(--social-bg);
   color: var(--text);
   border: 1px solid var(--border);
 }
 
-.badge-warning {
+.freshdesk-badge-warning {
   background: rgba(245, 158, 11, 0.12);
   color: #d97706;
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
-.badge-danger {
+.freshdesk-badge-danger {
   background: rgba(239, 68, 68, 0.12);
   color: #dc2626;
   border: 1px solid rgba(239, 68, 68, 0.3);

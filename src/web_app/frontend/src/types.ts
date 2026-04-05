@@ -14,6 +14,7 @@ export interface GithubPR {
   github_repo_name: string;
   branch_name: string;
   created_at: string | null;
+  days_active: number;
   is_draft: boolean;
   is_merged: boolean;
   is_closed_unmerged: boolean;
@@ -26,6 +27,7 @@ export interface FreshdeskTicket {
   ticket_subject: string;
   status: number;
   priority: number;
+  days_active: number;
   created_at: string | null;
   updated_at: string | null;
   due_by_date: string | null;
@@ -35,6 +37,7 @@ export interface AsanaTask {
   task_id: string;
   name: string;
   completed: boolean;
+  days_active: number;
   due_on: string | null;
   priority: string | null;
   sprint_points: number | null;

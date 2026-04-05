@@ -46,7 +46,7 @@ export default function TeamMemberRow({
     (pr) => !pr.is_merged && !pr.is_closed_unmerged,
   ).length;
   const openTicketCount = (member.freshdesk_data ?? []).filter(
-    (t) => [2, 3, 6].includes(t.status),
+    (t) => ![4, 5].includes(t.status),
   ).length;
   const activeTaskCount = (member.asana_data ?? []).filter(
     (t) => !t.completed,

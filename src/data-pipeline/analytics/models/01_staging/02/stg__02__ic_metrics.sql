@@ -25,7 +25,8 @@ WITH
                     'pr_title', title,
                     'pr_number', number,
                     'branch_name', branch_name,
-                    "created_at", created_at,
+                    'created_at', created_at,
+                    'days_active', (CURRENT_DATE - CAST(created_at AS DATE)),
                     'is_draft', is_draft,
                     'is_merged', is_merged,
                     'is_closed_unmerged', is_closed_unmerged,
@@ -47,6 +48,7 @@ WITH
                     'name', name,
                     'completed', completed,
                     'modified_at', modified_at,
+                    'days_active', (CURRENT_DATE - CAST(added_to_sprint AS DATE)),
                     'due_on', due_on,
                     'priority', priority,
                     'sprint_planning', sprint_planning,
@@ -71,6 +73,8 @@ WITH
                     'created_at', created_at,
                     'updated_at', updated_at,
                     'due_by_date', due_by_date,
+                    'days_active', (CURRENT_DATE - CAST(created_at AS DATE)),
+                    'is_overdue', due_by_date < CURRENT_DATE,
                     'status', status,
                     'priority', priority
                 )
