@@ -1,4 +1,5 @@
 services:
+  # TODO
   web-app:
     build:
       context: .
@@ -9,3 +10,44 @@ services:
       - .local/local.env
     environment:
       - DB_HOST=host.docker.internal
+
+  # TODO
+  pipeline:
+    build: 
+      context: .
+      dockerfile: ./devops/docker/Dockerfile.pipe
+    volumes:
+      - ./dbt_project:/app/dbt_project
+    env_file:
+      - .local/local.env
+    environment:
+      - DB_HOST=host.docker.internal
+      - DEBUG=true
+
+  # TODO
+  redis:
+    image: redis:alpine
+
+  # TODO
+  worker:
+    build: 
+      context: .
+      dockerfile: ./devops/docker/Dockerfile.pipe
+    volumes:
+      - ./dbt_project:/app/dbt_project
+    env_file:
+      - .local/local.env
+    environment:
+      - DB_HOST=host.docker.internal
+    command: uv run rq worker --url redis://redis:6379
+    depends_on:
+      - redis
+
+  # TODO
+  scheduler:
+    build: 
+      context: .
+      dockerfile: ./devops/docker/Dockerfile.pipe
+    command: uv run rqscheduler --host redis --port 6379 --interval 5
+    depends_on:
+      - redis

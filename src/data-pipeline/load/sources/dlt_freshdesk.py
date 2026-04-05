@@ -33,7 +33,7 @@ class FreshdeskSource(DltSource):
         def tickets(
             updated_since: dlt.sources.incremental[str] = dlt.sources.incremental(
                 "updated_at", initial_value="2000-01-01T00:00:00Z"
-            )
+            ),
         ):
             # 1. First, grab all agents and store them in a dictionary.
             # Must paginate — the API defaults to 50 agents per page.
