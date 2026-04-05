@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 import click
 from config import LOAD_MAP, setup_dlt_environment
@@ -18,7 +19,7 @@ from src.common import metrics_logger
 @click.option(
     "--full-refresh", is_flag=True, help="Perform a full refresh (replace data)"
 )
-def cli(source: str, full_refresh: bool) -> None:
+def cli(source: Optional[str] = None, full_refresh: bool = False) -> None:
     """
     Run the data loading process for the specified source(s).
 

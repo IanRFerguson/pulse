@@ -42,4 +42,10 @@ DLT_ENV_MAP = {
 def setup_dlt_environment():
     for key, value in DLT_ENV_MAP.items():
         metrics_logger.debug(f"Setting `{key}` environment variable for dlt")
-        os.environ[value] = os.environ[key]
+        try:
+            os.environ[value] = os.environ[key]
+        except KeyError:
+            metrics_logger.error(
+                f"Environment variable `{key}` not found. Please set it before running the pipeline."
+            )
+            raise

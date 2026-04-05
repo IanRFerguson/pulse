@@ -19,8 +19,6 @@ services:
     build: 
       context: .
       dockerfile: ./devops/docker/Dockerfile.pipe
-    volumes:
-      - ./dbt_project:/app/dbt_project
     env_file:
       - .local/local.env
     environment:
@@ -41,8 +39,6 @@ services:
     build: 
       context: .
       dockerfile: ./devops/docker/Dockerfile.pipe
-    volumes:
-      - ./dbt_project:/app/dbt_project
     env_file:
       - .local/local.env
     environment:

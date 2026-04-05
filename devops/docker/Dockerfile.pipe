@@ -10,7 +10,7 @@ COPY uv.lock .
 COPY README.md .
 
 RUN pip install --no-cache-dir uv
-RUN uv sync --all-groups --no-install-project
+RUN uv sync --group pipeline --group development --no-install-project
 
 COPY ./src/data-pipeline ./src/data-pipeline
 COPY ./src/common ./src/common
