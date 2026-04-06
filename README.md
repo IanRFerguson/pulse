@@ -12,7 +12,7 @@ This app provides a clean, centralized overview of your team's productivity by m
 - [x] Data syncing from GitHub
 - [x] Data syncing from Asana
 - [x] Data syncing from Freshdesk
-- [ ] Data is modeled with dbt to produce IC-level summary models
+- [x] Data is modeled with dbt to produce IC-level summary models
 - [x] Flask connects to Postgres and serves the responses
 - [x] SQLAlchemy models IC profiles to tether them to data sources
 
