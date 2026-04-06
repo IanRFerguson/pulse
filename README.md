@@ -7,16 +7,7 @@ This app provides a clean, centralized overview of your team's productivity by m
 | Data Pipeline | This codebase hosts the `dlt` and `dbt` configurations to load and transform data for our frontend | [Link](./src/data-pipeline/README.md) |
 | Web App       | This codebase defines the Flask backend and React frontend to serve as the user interface          | [Link](./src/web-app/README.md)       |
 
-## Roadmap
-### Backend
-- [x] Data syncing from GitHub
-- [x] Data syncing from Asana
-- [x] Data syncing from Freshdesk
-- [x] Data is modeled with dbt to produce IC-level summary models
-- [x] Flask connects to Postgres and serves the responses
-- [x] SQLAlchemy models IC profiles to tether them to data sources
+## Adding Your Team
+You can customize teams and team members in the frontend (or by adding records directly to the db if that's your jam). The dbt that pulls all the disparate information together runs in the background every 5 minutes, so changes to Team Member records will be reflected there.
 
-### Frontend
-- [x] Dashboard lists open PRs, assigned tickets, and Asana stories
-- [x] All of these resources have qualified links that allow us to easily click into them
-- [x] We can see how long things have been assigned to identify bottlenecks
+If you want to update the branding / styling of this page, just tweak the [Theme YAML](./src/web_app/theme.yaml) with colors, team names, logos, etc. that will override the defaults.
