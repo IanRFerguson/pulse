@@ -10,9 +10,4 @@ pytest:
 	@uv run pytest -v tests/
 
 app:
-	@docker compose up \
-		web-app \
-		redis \
-		worker \
-		scheduler \
-		--build
+	@docker compose up --build

@@ -7,7 +7,7 @@ from rq_scheduler import Scheduler
 #####
 
 
-def run():
+def run() -> None:
     """
     NOTE: This is a little hacky but will suffice for an MVP
     """

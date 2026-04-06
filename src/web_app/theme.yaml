@@ -4,11 +4,11 @@ company:
   logo_url: "https://media.licdn.com/dms/image/v2/D4E0BAQG3yDcJLVdnDQ/company-logo_200_200/B4EZU4oT7oGwAM-/0/1740411846733/themovementcooperative_logo?e=2147483647&v=beta&t=-ldjFMOlKqrD16qrqpe6YbH4wmKu7QHbyTAVgcL7ulY"
 
 colors:
-  primary: "#1D448C"
+  primary: "#0053ed"
   secondary: "#1e293b"
-  background: "#ffffff"
+  background: "#16171d"
   surface: "#f8fafc"
-  border: "#e2e8f0"
+  border: "#2e303a"
   text: "#334155"
   text-muted: "#94a3b8"
   success: "#10b981"
