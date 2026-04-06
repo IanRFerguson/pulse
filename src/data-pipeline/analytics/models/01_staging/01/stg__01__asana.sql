@@ -8,6 +8,9 @@ SELECT
     modified_at,
     due_on,
 
+    due_on::DATE < CURRENT_DATE AS is_overdue,
+    CURRENT_DATE - modified_at::DATE AS days_active,
+
     -- Custom fields
     "Priority" AS priority,
     "Sprint Planning" AS sprint_planning,

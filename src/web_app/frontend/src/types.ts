@@ -67,6 +67,10 @@ export interface CreateTeamMemberPayload {
   freshdesk_agent?: string;
 }
 
+export interface CreateTeamPayload {
+  name: string;
+}
+
 export type MetricCategory = 'github' | 'freshdesk' | 'asana';
 
 export interface ActiveExpansion {

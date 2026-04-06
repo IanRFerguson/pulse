@@ -31,6 +31,12 @@ export default function NavBar({ theme, isDark, toggleDark }: Props) {
           Dashboard
         </Link>
         <Link
+          to="/add-team"
+          className={`nav-link${location.pathname === '/add-team' ? ' active' : ''}`}
+        >
+          Add Team
+        </Link>
+        <Link
           to="/add-member"
           className={`nav-link${location.pathname === '/add-member' ? ' active' : ''}`}
         >

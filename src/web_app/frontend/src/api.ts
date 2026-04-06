@@ -1,5 +1,6 @@
 import type {
   CreateTeamMemberPayload,
+  CreateTeamPayload,
   Team,
   TeamMemberSummary,
   ThemeConfig,
@@ -24,9 +25,15 @@ export const api = {
 
   createTeamMember: (payload: CreateTeamMemberPayload) =>
     apiFetch<{ id: string; username: string; email: string; team: string }>(
-      '/api/team-members',
+      '/api/create-team-member',
       { method: 'POST', body: JSON.stringify(payload) },
     ),
 
   getTeams: () => apiFetch<Team[]>('/api/teams'),
+
+  createTeam: (payload: CreateTeamPayload) =>
+    apiFetch<{ id: string; name: string }>(
+      '/api/create-team',
+      { method: 'POST', body: JSON.stringify(payload) },
+    ),
 };

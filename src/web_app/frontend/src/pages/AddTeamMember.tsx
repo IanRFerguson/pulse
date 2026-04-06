@@ -85,22 +85,6 @@ export default function AddTeamMember() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              Email <span aria-hidden="true">*</span>
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              className="form-input"
-              value={form.email}
-              onChange={handleChange}
-              required
-              autoComplete="off"
-            />
-          </div>
-
-          <div className="form-group">
             <label htmlFor="team_id" className="form-label">
               Team <span aria-hidden="true">*</span>
             </label>
@@ -163,7 +147,7 @@ export default function AddTeamMember() {
 
           <div className="form-group">
             <label htmlFor="asana_id" className="form-label">
-              Asana Assignee GID
+              Asana Assignee Name
             </label>
             <input
               id="asana_id"
@@ -172,7 +156,7 @@ export default function AddTeamMember() {
               className="form-input"
               value={form.asana_id}
               onChange={handleChange}
-              placeholder="e.g. 1234567890123456"
+              placeholder="e.g. Jane Smith"
             />
           </div>
         </fieldset>

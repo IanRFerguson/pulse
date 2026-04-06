@@ -2,13 +2,13 @@ import os
 import uuid as uuid_mod
 
 from flask import jsonify, request
-from sqlalchemy import select, text
+from sqlalchemy import text
 
 from common import metrics_logger
 
 from ..config import load_theme
 from ..mock_data import MOCK_TEAM_MEMBERS, MOCK_TEAMS
-from ..models import Team, TeamMember, User, db
+from ..models import Team, TeamMember, db
 from . import bp
 
 DEMO_MODE = os.environ.get("DEMO_MODE", "").lower() in ("1", "true", "yes")
@@ -29,18 +29,8 @@ def list_teams():
     if DEMO_MODE:
         return jsonify(MOCK_TEAMS)
 
-    rows = (
-        db.session.execute(
-            text(
-                "SELECT DISTINCT team_id, team_name"
-                " FROM dbt_dev.ic_metrics"
-                " ORDER BY team_name"
-            )
-        )
-        .mappings()
-        .all()
-    )
-    return jsonify([{"id": str(r["team_id"]), "name": r["team_name"]} for r in rows])
+    resp = db.session.query(Team).all()
+    return jsonify([{"id": str(r.id), "name": r.name} for r in resp])
 
 
 @bp.route("/team-members")
@@ -118,7 +108,7 @@ def get_team_member(member_id: str):
     return jsonify(d)
 
 
-@bp.route("/team-members", methods=["POST"])
+@bp.route("/create-team-member", methods=["POST"])
 def create_team_member():
     """Endpoint to create a new team member and associate them with a team."""
 
@@ -139,35 +129,44 @@ def create_team_member():
     if team is None:
         return jsonify({"error": "Team not found"}), 404
 
-    existing_user = db.session.execute(
-        select(User).where(User.email == data["email"])
-    ).scalar_one_or_none()
-
-    if existing_user:
-        user = existing_user
-    else:
-        user = User(username=data["username"], email=data["email"])
-        db.session.add(user)
-        db.session.flush()
-
     member = TeamMember(
-        user_id=user.id,
+        user_name=data["username"],
         team_id=team.id,
         github_fk=data.get("github_username") or None,
         asana_fk=data.get("asana_id") or None,
         freshdesk_fk=data.get("freshdesk_agent") or None,
     )
+    metrics_logger.info(f"Adding team member {member.user_name} to team {team.name}...")
     db.session.add(member)
     db.session.commit()
+    metrics_logger.info("Success")
 
     return (
         jsonify(
             {
-                "id": str(member.id),
-                "username": user.username,
-                "email": user.email,
-                "team": team.name,
+                "member_id": str(member.id),
+                "team_id": str(team.id),
+                "username": member.user_name,
             }
         ),
         201,
     )
+
+@bp.route("/create-team", methods=["POST"])
+def create_team():
+    """Endpoint to create a new team."""
+
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"error": "Request body must be JSON"}), 400
+
+    if not data.get("name"):
+        return jsonify({"error": "Missing required field: name"}), 400
+
+    team = Team(name=data["name"])
+    metrics_logger.info(f"Creating team {team.name}...")
+    db.session.add(team)
+    db.session.commit()
+    metrics_logger.info("Success")
+
+    return jsonify({"team_id": str(team.id), "name": team.name}), 201

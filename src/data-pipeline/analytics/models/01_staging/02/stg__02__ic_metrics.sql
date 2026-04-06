@@ -3,8 +3,9 @@ WITH
         SELECT
             
             team_member_id,
-            team_name,
             user_name,
+            team_name,
+            team_id,
             github_fk,
             asana_fk,
             freshdesk_fk
@@ -26,7 +27,7 @@ WITH
                     'pr_number', number,
                     'branch_name', branch_name,
                     'created_at', created_at,
-                    'days_active', (CURRENT_DATE - CAST(created_at AS DATE)),
+                    'days_active', days_active,
                     'is_draft', is_draft,
                     'is_merged', is_merged,
                     'is_closed_unmerged', is_closed_unmerged,
@@ -48,8 +49,9 @@ WITH
                     'name', name,
                     'completed', completed,
                     'modified_at', modified_at,
-                    'days_active', (CURRENT_DATE - CAST(added_to_sprint AS DATE)),
+                    'days_active', days_active,
                     'due_on', due_on,
+                    'is_overdue', is_overdue,
                     'priority', priority,
                     'sprint_planning', sprint_planning,
                     'started_on', started_on,
@@ -73,8 +75,8 @@ WITH
                     'created_at', created_at,
                     'updated_at', updated_at,
                     'due_by_date', due_by_date,
-                    'days_active', (CURRENT_DATE - CAST(created_at AS DATE)),
-                    'is_overdue', due_by_date < CURRENT_DATE,
+                    'days_active', days_active,
+                    'is_overdue', is_overdue,
                     'status', status,
                     'priority', priority
                 )
@@ -87,8 +89,9 @@ WITH
 SELECT
     
     team_member_id,
-    team_name,
     user_name,
+    team_id,
+    team_name,
 
     github_data,
     asana_data,

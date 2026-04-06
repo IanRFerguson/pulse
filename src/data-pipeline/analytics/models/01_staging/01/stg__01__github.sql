@@ -32,6 +32,7 @@ SELECT DISTINCT
     github_user_id,
     created_at,
     updated_at,
+    CURRENT_DATE - created_at::DATE AS days_active,
     github_repo_name,
     branch_name,
     is_draft,

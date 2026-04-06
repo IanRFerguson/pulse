@@ -51,7 +51,7 @@ export default function ExpandedPanel({ category, member }: Props) {
                   <span className="pr-title">{pr.pr_title}</span>
                 </a>
                 {pr.is_draft && <span className="badge badge-neutral">Draft</span>}
-                <span className="pr-created">{pr.days_active} days active</span>
+                <span className="pr-created">Opened {pr.created_at}</span>
               </li>
             ))}
           </ul>
@@ -115,17 +115,22 @@ export default function ExpandedPanel({ category, member }: Props) {
                 <span className="task-name">{task.name}</span>
               </a>
 
-              {task.due_on && (
-                <span className="task-due">
-                  Due {new Date(task.due_on).toLocaleDateString()}
-                </span>
-              )}
+              {task.due_on && (() => {
+                const isOverdue = new Date(task.due_on) < new Date(new Date().toDateString());
+                return (
+                  <>
+                    {isOverdue && <span className="badge freshdesk-badge-danger">Overdue</span>}
+                    <span className="task-due">
+                      Due {new Date(task.due_on).toLocaleDateString()}
+                    </span>
+                  </>
+                );
+              })()}
               {task.priority && (
                 <span className={`badge ${PRIORITY_CLASS[task.priority] ?? 'badge-neutral'}`}>
                   {task.priority}
                 </span>
               )}
-              <span className="pr-created">{task.days_active} days active</span>
             </li>
           ))}
         </ul>
