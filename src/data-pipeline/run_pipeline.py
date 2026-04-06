@@ -25,7 +25,7 @@ def setup_runtime_environment(docker: bool) -> None:
         return
 
     ROOT = os.path.abspath(
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
     )
     load_dotenv(os.path.join(ROOT, ".local", "local.env"))
 
