@@ -1,7 +1,21 @@
-# Web App Source Code
+# Web App
 
-## Flask Backend
-The spine of this app is a simple Flask backend that interacts with the Postgres database and serves the data to the frontend for the user to interact with.
+Full-stack application for viewing and interacting with pipeline data.
 
-## React Frontend
-The frontend is written in React and gives the user a clean interface.
+## Backend
+
+Flask API that interfaces with Postgres database and serves data to the frontend.
+
+- **server.py** - Defines the Flask application
+- **models.py** - SQLAlchemy database models (`Team`, `TeamMember`)
+- **routes/api.py** - API endpoints that are exposed to the frontend
+- **config.py** - Configuration management
+
+## Frontend
+
+React + TypeScript UI for data visualization and interaction.
+
+- **src/components/** - Reusable React components
+- **src/pages/** - Page-level components
+- **src/hooks/** - Custom React hooks to manage the themes in the frontend
+- **src/api.ts** - Backend API client
