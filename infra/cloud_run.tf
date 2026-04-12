@@ -1,10 +1,10 @@
 locals {
-  cron_object = [
-    "0 8 * * 1-5",
-    "0 10 * * 1-5",
-    "0 14 * * 1-5",
-    "0 16 * * 1-5"
-  ]
+  cron_object = {
+    "morning"     = "0 8 * * 1-5"
+    "mid-morning" = "0 10 * * 1-5"
+    "afternoon"   = "0 14 * * 1-5"
+    "evening"     = "0 16 * * 1-5"
+  }
 }
 
 resource "google_cloud_run_v2_job" "data_pipeline" {
@@ -22,7 +22,7 @@ resource "google_cloud_run_v2_job" "data_pipeline" {
         image = var.production_docker_image
 
         command = ["uv"]
-        args    = ["run", "/app/src/data_pipeline/run_pipeline.py"]
+        args    = ["run", "/app/src/data-pipeline/run_pipeline.py"]
 
         // Postgres Connection variables
         env {
@@ -73,9 +73,9 @@ resource "google_cloud_run_v2_job" "data_pipeline" {
 }
 
 resource "google_cloud_scheduler_job" "job" {
-  for_each         = toset(local.cron_object)
-  name             = "run-tmc-pulse-data-pipeline-${each.key}" # Added key to name to ensure uniqueness
-  description      = "Triggers TMC Pulse data pipeline at ${each.key}"
+  for_each         = local.cron_object
+  name             = "run-tmc-pulse-data-pipeline-${each.key}"
+  description      = "Triggers TMC Pulse data pipeline at ${each.value}"
   schedule         = each.value
   time_zone        = "America/New_York"
   region           = "us-central1"
