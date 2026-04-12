@@ -46,9 +46,13 @@ export default function AddTeamMember() {
     setSubmitting(true);
     try {
       await api.createTeamMember(form);
-      navigate('/', { state: { success: `${form.username} added successfully.` } });
+      navigate('/', {
+        state: { success: `${form.username} added successfully.` },
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create team member');
+      setError(
+        err instanceof Error ? err.message : 'Failed to create team member',
+      );
     } finally {
       setSubmitting(false);
     }
@@ -58,7 +62,9 @@ export default function AddTeamMember() {
     <div className="page-container page-container--narrow">
       <div className="page-header">
         <h1 className="page-title">Add Team Member</h1>
-        <p className="page-subtitle">Register a new member and link their platform accounts.</p>
+        <p className="page-subtitle">
+          Register a new member and link their platform accounts.
+        </p>
       </div>
 
       <form className="form-card" onSubmit={handleSubmit} noValidate>
@@ -170,7 +176,11 @@ export default function AddTeamMember() {
           >
             Cancel
           </button>
-          <button type="submit" className="btn btn-primary" disabled={submitting}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={submitting}
+          >
             {submitting ? 'Saving…' : 'Add Team Member'}
           </button>
         </div>

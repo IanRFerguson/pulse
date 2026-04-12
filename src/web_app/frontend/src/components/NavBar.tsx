@@ -18,7 +18,9 @@ export default function NavBar({ theme, isDark, toggleDark }: Props) {
         {logoUrl ? (
           <img src={logoUrl} alt={companyName} className="navbar-logo" />
         ) : (
-          <span className="navbar-logo-placeholder" aria-hidden="true">{companyName[0]}</span>
+          <span className="navbar-logo-placeholder" aria-hidden="true">
+            {companyName[0]}
+          </span>
         )}
         <span className="navbar-name">{companyName}</span>
       </div>

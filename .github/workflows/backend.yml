@@ -9,7 +9,7 @@ jobs:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     name: Ruff Linting
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,31 +19,31 @@ jobs:
         uses: tj-actions/changed-files@v44
         with:
           files: |
-             **/*.py
-      
+            **/*.py
+
       - name: Set up Python
         uses: actions/setup-python@v5
         if: steps.changed-files.outputs.any_changed == 'true'
         with:
           python-version: '3.12'
-      
+
       - name: Install uv
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: astral-sh/setup-uv@v4
-      
+
       - name: Install dependencies
         if: steps.changed-files.outputs.any_changed == 'true'
         run: uv sync --group development
-      
+
       - name: Run ruff linting
         if: steps.changed-files.outputs.any_changed == 'true'
         run: uv run ruff check .
-  
+
   ruff-format:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     name: Ruff Formatting
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -53,65 +53,65 @@ jobs:
         uses: tj-actions/changed-files@v44
         with:
           files: |
-             **/*.py
-      
+            **/*.py
+
       - name: Set up Python
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      
+
       - name: Install uv
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: astral-sh/setup-uv@v4
-      
+
       - name: Install dependencies
         if: steps.changed-files.outputs.any_changed == 'true'
         run: uv sync --group development
-      
+
       - name: Run ruff formatting check
         if: steps.changed-files.outputs.any_changed == 'true'
         run: uv run ruff format --check .
-  
+
   # mypy:
   #   if: github.event.pull_request.draft == false
   #   runs-on: ubuntu-latest
   #   name: Type Checking
-    
+
   #   steps:
   #     - name: Checkout code
   #       uses: actions/checkout@v4
-      
+
   #     - name: Get changed files
   #       id: changed-files
   #       uses: tj-actions/changed-files@v44
   #       with:
   #         files: |
   #            **/*.py
-      
+
   #     - name: Set up Python
   #       if: steps.changed-files.outputs.any_changed == 'true'
   #       uses: actions/setup-python@v5
   #       with:
   #         python-version: '3.12'
-      
+
   #     - name: Install uv
   #       if: steps.changed-files.outputs.any_changed == 'true'
   #       uses: astral-sh/setup-uv@v4
-      
+
   #     - name: Install dependencies
   #       if: steps.changed-files.outputs.any_changed == 'true'
   #       run: uv sync --group development
-      
+
   #     - name: Run mypy type checking
   #       if: steps.changed-files.outputs.any_changed == 'true'
   #       run: uv run mypy src/
-  
+
   pytest:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     name: PyTest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -121,22 +121,22 @@ jobs:
         uses: tj-actions/changed-files@v44
         with:
           files: |
-             **/*.py
-      
+            **/*.py
+
       - name: Set up Python
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      
+
       - name: Install uv
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: astral-sh/setup-uv@v4
-      
+
       - name: Install dependencies
         if: steps.changed-files.outputs.any_changed == 'true'
         run: uv sync --group development
-      
+
       - name: Run pytest
         if: steps.changed-files.outputs.any_changed == 'true'
         run: uv run pytest -rf tests/

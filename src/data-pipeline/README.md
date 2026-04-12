@@ -12,6 +12,6 @@ ETL pipeline for ingesting and transforming data from multiple sources.
 
 ## Architecture
 
-Data flows from external sources → dlt ingestion → Postgres → dbt transformations, before being picked up by the web application (see [the README](../web_app/README.md)). 
+Data flows from external sources → dlt ingestion → Postgres → dbt transformations, before being picked up by the web application (see [the README](../web_app/README.md)).
 
 When you spin up the web app with Docker Compose, the pipeline is automatically scheduled to run every 5 minutes in order to keep the data fresh in the dashboard.

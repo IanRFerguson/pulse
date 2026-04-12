@@ -32,8 +32,8 @@ export const api = {
   getTeams: () => apiFetch<Team[]>('/api/teams'),
 
   createTeam: (payload: CreateTeamPayload) =>
-    apiFetch<{ id: string; name: string }>(
-      '/api/create-team',
-      { method: 'POST', body: JSON.stringify(payload) },
-    ),
+    apiFetch<{ id: string; name: string }>('/api/create-team', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
 };

@@ -5,7 +5,7 @@ import type {
   ActiveExpansion,
   MetricCategory,
   TeamMemberSummary,
-  ThemeConfig
+  ThemeConfig,
 } from '../types';
 
 interface Props {
@@ -19,14 +19,17 @@ export default function Dashboard({ theme }: Props) {
 
   const teamName = theme?.company?.team_name ?? 'Team Dashboard';
 
-  const [activeExpansion, setActiveExpansion] = useState<ActiveExpansion | null>(null);
+  const [activeExpansion, setActiveExpansion] =
+    useState<ActiveExpansion | null>(null);
 
   useEffect(() => {
     api
       .getTeamMembers()
       .then(setMembers)
       .catch((err: unknown) =>
-        setError(err instanceof Error ? err.message : 'Failed to load team members'),
+        setError(
+          err instanceof Error ? err.message : 'Failed to load team members',
+        ),
       )
       .finally(() => setLoading(false));
   }, []);
@@ -96,7 +99,9 @@ export default function Dashboard({ theme }: Props) {
                   key={member.id}
                   member={member}
                   activeExpansion={
-                    activeExpansion?.memberId === member.id ? activeExpansion : null
+                    activeExpansion?.memberId === member.id
+                      ? activeExpansion
+                      : null
                   }
                   onBadgeClick={handleBadgeClick}
                 />

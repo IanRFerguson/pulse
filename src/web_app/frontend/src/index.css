@@ -32,7 +32,7 @@
 }
 
 /* Light mode overrides */
-[data-theme="light"] {
+[data-theme='light'] {
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -170,7 +170,9 @@ code {
   font-weight: 500;
   color: var(--text);
   text-decoration: none;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .nav-link:hover {
@@ -196,7 +198,9 @@ code {
   color: var(--text);
   cursor: pointer;
   font-size: 16px;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
   flex-shrink: 0;
 }
 
@@ -326,7 +330,10 @@ code {
   font-weight: 500;
   color: var(--text);
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .metric-badge:hover {
@@ -579,7 +586,9 @@ code {
   font-size: 15px;
   font-family: var(--sans);
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
   appearance: auto;
 }
 

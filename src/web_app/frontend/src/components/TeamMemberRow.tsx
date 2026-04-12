@@ -91,10 +91,7 @@ export default function TeamMemberRow({
       {isExpanded && expandedCategory && (
         <tr className="expansion-row">
           <td colSpan={4}>
-            <ExpandedPanel
-              category={expandedCategory}
-              member={member}
-            />
+            <ExpandedPanel category={expandedCategory} member={member} />
           </td>
         </tr>
       )}

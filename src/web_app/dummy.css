@@ -1,13 +1,13 @@
 /* This is really just to get color previews */
 :root {
-    --primary: #0053ed;
-    --secondary: #1e293b;
-    --background: #ffffff;
-    --surface: #f8fafc;
-    --border: #e2e8f0ad;
-    --text: #334155;
-    --text-muted: #94a3b8;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
+  --primary: #0053ed;
+  --secondary: #1e293b;
+  --background: #ffffff;
+  --surface: #f8fafc;
+  --border: #e2e8f0ad;
+  --text: #334155;
+  --text-muted: #94a3b8;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
 }
