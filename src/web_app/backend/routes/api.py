@@ -152,6 +152,7 @@ def create_team_member():
         201,
     )
 
+
 @bp.route("/create-team", methods=["POST"])
 def create_team():
     """Endpoint to create a new team."""
