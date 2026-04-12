@@ -11,3 +11,8 @@ pytest:
 
 app:
 	@docker compose up --build
+
+docker:
+	@uv run \
+		devops/push_docker_image.py \
+		--dockerfile ./devops/docker/Dockerfile.pipe
