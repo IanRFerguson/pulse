@@ -15,3 +15,7 @@ models:
     tests:
       - unique:
           column_name: surrogate_team_member_id
+  - name: stg__02__all_pull_requests
+    tests:
+      - unique:
+          column_name: surrogate_pull_request_id

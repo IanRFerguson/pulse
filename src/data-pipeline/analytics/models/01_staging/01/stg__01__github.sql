@@ -1,3 +1,9 @@
+{{
+    config(
+        tags=["github"]
+    )
+}}
+
 WITH
     base AS (
         SELECT
@@ -32,6 +38,7 @@ SELECT DISTINCT
     github_user_id,
     created_at,
     updated_at,
+    merged_at,
     CURRENT_DATE - created_at::DATE AS days_active,
     github_repo_name,
     branch_name,
