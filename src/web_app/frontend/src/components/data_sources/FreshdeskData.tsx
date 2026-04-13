@@ -25,7 +25,6 @@ export default function FreshdeskPanel({ member }: Props) {
               PRIORITY_LABELS[t.priority] ?? String(t.priority);
             return (
               <li key={t.ticket_id} className="expanded-item">
-
                 {/* Adds a link to the ticket on Freshdesk */}
                 <a
                   href={`https://movementcooperative.freshdesk.com/a/tickets/${t.ticket_id}`}

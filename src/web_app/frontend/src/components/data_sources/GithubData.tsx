@@ -6,9 +6,7 @@ interface Props {
 
 export default function GitHubPanel({ member }: Props) {
   const prs = (member.github_data ?? [])
-    .filter(
-      (pr) => !pr.is_merged && !pr.is_closed_unmerged,
-    )
+    .filter((pr) => !pr.is_merged && !pr.is_closed_unmerged)
     .sort((a, b) => -1 * (b.days_active - a.days_active));
   return (
     <div className="expanded-panel">
@@ -18,7 +16,6 @@ export default function GitHubPanel({ member }: Props) {
         <ul className="expanded-list">
           {prs.map((pr) => (
             <li key={pr.pr_id} className="expanded-item">
-
               {/* Adds a link to the pull request on GitHub */}
               <a
                 href={`https://github.com/${pr.github_repo_name}/pull/${pr.pr_number}`}

@@ -37,7 +37,6 @@ export default function AsanaPanel({ member }: Props) {
         <ul className="expanded-list">
           {tasks.map((task) => (
             <li key={task.task_id} className="expanded-item">
-
               {/* TODO - If other teams are going to use this we'll need to make the URL dynamic */}
               {/* Adds a link to the task on Asana */}
               <a
@@ -65,7 +64,6 @@ export default function AsanaPanel({ member }: Props) {
                     new Date(task.due_on) < new Date(new Date().toDateString());
                   return (
                     <>
-
                       {/* Display overdue status if applicable */}
                       {isOverdue && (
                         <span className="badge freshdesk-badge-danger">
