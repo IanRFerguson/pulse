@@ -1,7 +1,7 @@
 import type { MetricCategory, TeamMemberSummary } from '../types';
-import GitHubPanel from './data_sources/github';
-import AsanaPanel from './data_sources/asana';
-import FreshdeskPanel from './data_sources/freshdesk';
+import GitHubPanel from './data_sources/GithubData';
+import AsanaPanel from './data_sources/AsanaData';
+import FreshdeskPanel from './data_sources/FreshdeskData';
 
 interface Props {
   category: MetricCategory;

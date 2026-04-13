@@ -13,10 +13,10 @@ const PRIORITY_LABELS: Record<number, string> = {
 };
 
 const PRIORITY_CLASS: Record<string, string> = {
-  Urgent: 'freshdesk-badge-danger',
-  High: 'freshdesk-badge-warning',
-  Medium: 'freshdesk-badge-neutral',
-  Low: 'freshdesk-badge-neutral',
+  Urgent: 'display-badge-urgent',
+  High: 'display-badge-high',
+  Medium: 'display-badge-medium',
+  Low: 'display-badge-low',
 };
 
 export { STATUS_LABELS, PRIORITY_LABELS, PRIORITY_CLASS };

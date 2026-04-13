@@ -42,6 +42,7 @@ export interface AsanaTask {
   due_on: string | null;
   priority: string | null;
   sprint_points: number | null;
+  sprint_planning: string | null;
 }
 
 export interface TeamMemberSummary {
