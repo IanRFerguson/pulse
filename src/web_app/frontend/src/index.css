@@ -11,6 +11,13 @@
   --social-bg: rgba(47, 48, 58, 0.5);
   --shadow:
     rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  --shadow-sm: rgba(0, 0, 0, 0.3) 0 4px 6px -1px, rgba(0, 0, 0, 0.2) 0 2px 4px -1px;
+
+  --success: #4ade80;
+  --warning: #facc15;
+  --orange: #fb923c;
+  --danger: #f87171;
+  --navbar-bg: rgba(22, 23, 29, 0.85);
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -44,6 +51,14 @@
   --social-bg: rgba(244, 243, 236, 0.5);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --shadow-sm: rgba(0, 0, 0, 0.08) 0 4px 6px -1px, rgba(0, 0, 0, 0.04) 0 2px 4px -1px;
+
+  --success: #16a34a;
+  --warning: #ca8a04;
+  --orange: #ea580c;
+  --danger: #dc2626;
+  --navbar-bg: rgba(255, 255, 255, 0.85);
+
   color-scheme: light;
 }
 
@@ -118,11 +133,17 @@ code {
 
 /* ── Navbar ── */
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 0;
   border-bottom: 1px solid var(--border);
+  background: var(--navbar-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   gap: 24px;
 }
 
@@ -250,6 +271,7 @@ code {
   overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: 10px;
+  box-shadow: var(--shadow-sm);
 }
 
 .dashboard-table {
@@ -259,7 +281,7 @@ code {
 }
 
 .dashboard-table thead tr {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--accent-border);
   background: var(--code-bg);
 }
 
@@ -289,6 +311,7 @@ code {
 
 .member-row:hover {
   background: var(--accent-bg);
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .member-name-cell {
@@ -458,34 +481,35 @@ code {
   white-space: nowrap;
 }
 
-.display-badge-neutral {
+.display-badge-neutral,
+.badge-neutral {
   background: var(--social-bg);
   color: var(--text);
   border: 1px solid var(--border);
 }
 
 .display-badge-low {
-  background: rgba(74, 222, 128, 0.12);
-  color: #4ade80;
-  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: color-mix(in srgb, var(--success) 15%, transparent);
+  color: var(--success);
+  border: 1px solid color-mix(in srgb, var(--success) 35%, transparent);
 }
 
 .display-badge-medium {
-  background: rgba(250, 204, 21, 0.12);
-  color: #facc15;
-  border: 1px solid rgba(250, 204, 21, 0.3);
+  background: color-mix(in srgb, var(--warning) 15%, transparent);
+  color: var(--warning);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
 }
 
 .display-badge-high {
-  background: rgba(251, 146, 60, 0.12);
-  color: #fb923c;
-  border: 1px solid rgba(251, 146, 60, 0.3);
+  background: color-mix(in srgb, var(--orange) 15%, transparent);
+  color: var(--orange);
+  border: 1px solid color-mix(in srgb, var(--orange) 35%, transparent);
 }
 
 .display-badge-urgent {
-  background: rgba(248, 113, 113, 0.12);
-  color: #f87171;
-  border: 1px solid rgba(248, 113, 113, 0.3);
+  background: color-mix(in srgb, var(--danger) 15%, transparent);
+  color: var(--danger);
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
 }
 
 /* ── Buttons ── */

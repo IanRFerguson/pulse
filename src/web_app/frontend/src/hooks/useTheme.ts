@@ -7,6 +7,9 @@ import type { ThemeConfig } from '../types';
 const THEME_TO_CSS: Record<string, string[]> = {
   primary: ['--accent'],
   border: ['--border'],
+  success: ['--success'],
+  warning: ['--warning'],
+  danger: ['--danger'],
 };
 
 function hexToRgba(hex: string, alpha: number): string {
