@@ -7,6 +7,9 @@ import type { ThemeConfig } from '../types';
 const THEME_TO_CSS: Record<string, string[]> = {
   primary: ['--accent'],
   border: ['--border'],
+  success: ['--success'],
+  warning: ['--warning'],
+  danger: ['--danger'],
 };
 
 function hexToRgba(hex: string, alpha: number): string {
@@ -36,7 +39,10 @@ export function useTheme(): ThemeConfig | null {
               // Derive alpha variants for the primary/accent color
               if (key === 'primary') {
                 root.style.setProperty('--accent-bg', hexToRgba(value, 0.1));
-                root.style.setProperty('--accent-border', hexToRgba(value, 0.5));
+                root.style.setProperty(
+                  '--accent-border',
+                  hexToRgba(value, 0.5),
+                );
               }
             }
           }

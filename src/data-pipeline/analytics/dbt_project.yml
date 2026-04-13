@@ -2,11 +2,11 @@ name: pulse
 
 profile: pulse
 
-model-paths: ["models"]
-macro-paths: ["macros"]
+model-paths: ['models']
+macro-paths: ['macros']
 clean-targets:
-  - "target"
-  - "dbt_packages"
+  - 'target'
+  - 'dbt_packages'
 
 models:
   pulse:

@@ -11,6 +11,13 @@
   --social-bg: rgba(47, 48, 58, 0.5);
   --shadow:
     rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  --shadow-sm: rgba(0, 0, 0, 0.3) 0 4px 6px -1px, rgba(0, 0, 0, 0.2) 0 2px 4px -1px;
+
+  --success: #4ade80;
+  --warning: #facc15;
+  --orange: #fb923c;
+  --danger: #f87171;
+  --navbar-bg: rgba(22, 23, 29, 0.85);
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -32,7 +39,7 @@
 }
 
 /* Light mode overrides */
-[data-theme="light"] {
+[data-theme='light'] {
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -44,6 +51,14 @@
   --social-bg: rgba(244, 243, 236, 0.5);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --shadow-sm: rgba(0, 0, 0, 0.08) 0 4px 6px -1px, rgba(0, 0, 0, 0.04) 0 2px 4px -1px;
+
+  --success: #16a34a;
+  --warning: #ca8a04;
+  --orange: #ea580c;
+  --danger: #dc2626;
+  --navbar-bg: rgba(255, 255, 255, 0.85);
+
   color-scheme: light;
 }
 
@@ -118,11 +133,17 @@ code {
 
 /* ── Navbar ── */
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 0;
   border-bottom: 1px solid var(--border);
+  background: var(--navbar-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   gap: 24px;
 }
 
@@ -170,7 +191,9 @@ code {
   font-weight: 500;
   color: var(--text);
   text-decoration: none;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .nav-link:hover {
@@ -196,7 +219,9 @@ code {
   color: var(--text);
   cursor: pointer;
   font-size: 16px;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
   flex-shrink: 0;
 }
 
@@ -246,6 +271,7 @@ code {
   overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: 10px;
+  box-shadow: var(--shadow-sm);
 }
 
 .dashboard-table {
@@ -255,7 +281,7 @@ code {
 }
 
 .dashboard-table thead tr {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--accent-border);
   background: var(--code-bg);
 }
 
@@ -285,6 +311,7 @@ code {
 
 .member-row:hover {
   background: var(--accent-bg);
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .member-name-cell {
@@ -326,7 +353,10 @@ code {
   font-weight: 500;
   color: var(--text);
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .metric-badge:hover {
@@ -451,22 +481,35 @@ code {
   white-space: nowrap;
 }
 
-.freshdesk-badge-neutral {
+.display-badge-neutral,
+.badge-neutral {
   background: var(--social-bg);
   color: var(--text);
   border: 1px solid var(--border);
 }
 
-.freshdesk-badge-warning {
-  background: rgba(245, 158, 11, 0.12);
-  color: #d97706;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+.display-badge-low {
+  background: color-mix(in srgb, var(--success) 15%, transparent);
+  color: var(--success);
+  border: 1px solid color-mix(in srgb, var(--success) 35%, transparent);
 }
 
-.freshdesk-badge-danger {
-  background: rgba(239, 68, 68, 0.12);
-  color: #dc2626;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+.display-badge-medium {
+  background: color-mix(in srgb, var(--warning) 15%, transparent);
+  color: var(--warning);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
+}
+
+.display-badge-high {
+  background: color-mix(in srgb, var(--orange) 15%, transparent);
+  color: var(--orange);
+  border: 1px solid color-mix(in srgb, var(--orange) 35%, transparent);
+}
+
+.display-badge-urgent {
+  background: color-mix(in srgb, var(--danger) 15%, transparent);
+  color: var(--danger);
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
 }
 
 /* ── Buttons ── */
@@ -579,7 +622,9 @@ code {
   font-size: 15px;
   font-family: var(--sans);
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
   appearance: auto;
 }
 

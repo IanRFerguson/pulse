@@ -1,15 +1,15 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './index.css'
-import NavBar from './components/NavBar'
-import { useDarkMode } from './hooks/useDarkMode'
-import { useTheme } from './hooks/useTheme'
-import AddTeamMember from './pages/AddTeamMember'
-import Dashboard from './pages/Dashboard'
-import AddTeam from './pages/AddTeam'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './index.css';
+import NavBar from './components/NavBar';
+import { useDarkMode } from './hooks/useDarkMode';
+import { useTheme } from './hooks/useTheme';
+import AddTeamMember from './pages/AddTeamMember';
+import Dashboard from './pages/Dashboard';
+import AddTeam from './pages/AddTeam';
 
 export default function App() {
-  const theme = useTheme()
-  const { isDark, toggleDark } = useDarkMode()
+  const theme = useTheme();
+  const { isDark, toggleDark } = useDarkMode();
 
   return (
     <BrowserRouter>
@@ -22,5 +22,5 @@ export default function App() {
         </Routes>
       </main>
     </BrowserRouter>
-  )
+  );
 }

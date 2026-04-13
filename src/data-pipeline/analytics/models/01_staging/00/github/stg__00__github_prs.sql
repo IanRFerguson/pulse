@@ -1,3 +1,9 @@
+{{
+    config(
+        tags=["github"]
+    )
+}}
+
 WITH
     base AS (
         SELECT
@@ -8,6 +14,7 @@ WITH
 
             created_at,
             updated_at,
+            merged_at,
 
             base__repo__full_name AS github_repo_name,
             head__ref AS branch_name,
@@ -54,6 +61,7 @@ SELECT
 
     created_at,
     updated_at,
+    merged_at,
 
     github_repo_name,
     branch_name,
