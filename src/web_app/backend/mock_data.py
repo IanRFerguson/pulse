@@ -46,6 +46,7 @@ MOCK_TEAM_MEMBERS = [
             },
         ],
         "freshdesk_data": [],
+        "active_sprint_points": 8,
         "asana_data": [
             {
                 "task_id": "1001",
@@ -89,6 +90,7 @@ MOCK_TEAM_MEMBERS = [
             },
         ],
         "freshdesk_data": [],
+        "active_sprint_points": 8,
         "asana_data": [
             {
                 "task_id": "2001",
@@ -139,6 +141,7 @@ MOCK_TEAM_MEMBERS = [
             },
         ],
         "asana_data": [],
+        "active_sprint_points": 0,
     },
     {
         "id": "44444444-4444-4444-4444-444444444444",
@@ -168,5 +171,6 @@ MOCK_TEAM_MEMBERS = [
                 "sprint_points": 2,
             },
         ],
+        "active_sprint_points": 2,
     },
 ]

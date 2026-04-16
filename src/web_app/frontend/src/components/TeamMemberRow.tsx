@@ -78,13 +78,23 @@ export default function TeamMemberRow({
           />
         </td>
         <td>
-          <MetricBadge
-            label="Asana"
-            count={activeTaskCount}
-            category="asana"
-            active={isExpanded && expandedCategory === 'asana'}
-            onClick={() => onBadgeClick(member.id, 'asana')}
-          />
+          <div className="asana-cell">
+            <MetricBadge
+              label="Asana"
+              count={activeTaskCount}
+              category="asana"
+              active={isExpanded && expandedCategory === 'asana'}
+              onClick={() => onBadgeClick(member.id, 'asana')}
+            />
+            {member.active_sprint_points != null && (
+              <span
+                className="sprint-points-badge"
+                title={`${member.active_sprint_points} active sprint points`}
+              >
+                {member.active_sprint_points}
+              </span>
+            )}
+          </div>
         </td>
       </tr>
 

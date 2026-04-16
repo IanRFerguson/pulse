@@ -49,8 +49,10 @@ def list_team_members():
                 " team_name AS team,"
                 " github_data,"
                 " asana_data,"
-                " freshdesk_data"
+                " freshdesk_data,"
+                " active_sprint_points"
                 " FROM dbt_dev.ic_metrics"
+                " ORDER BY team_name, user_name"
             )
         )
         .mappings()
@@ -90,7 +92,8 @@ def get_team_member(member_id: str):
                 " team_name AS team,"
                 " github_data,"
                 " asana_data,"
-                " freshdesk_data"
+                " freshdesk_data,"
+                " active_sprint_points"
                 " FROM dbt_dev.ic_metrics"
                 " WHERE team_member_id = :id"
             ),
