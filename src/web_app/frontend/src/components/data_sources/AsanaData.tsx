@@ -13,6 +13,8 @@ function translateToPriorityLabel(priority: string): string {
       return 'Medium';
     case 'High Priority':
       return 'High';
+    case 'URGENT - Top Priority':
+      return 'Urgent';
     default:
       return String(priority);
   }
