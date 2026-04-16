@@ -30,8 +30,8 @@ services:
     environment:
       # - DB_HOST=host.docker.internal
       - DEBUG=true
-      - PYTHONPATH=/app/src/data-pipeline
-    command: uv run src/data-pipeline/task_scheduler.py
+      - PYTHONPATH=/app/src/data_pipeline
+    command: uv run src/data_pipeline/task_scheduler.py
     depends_on:
       - redis
 
@@ -50,7 +50,7 @@ services:
     environment:
       # NOTE: If you're running locally uncomment the line below to allow the worker to connect to the host machine's Postgres database.
       # - DB_HOST=host.docker.internal
-      - PYTHONPATH=/app/src/data-pipeline
+      - PYTHONPATH=/app/src/data_pipeline
     command: uv run rq worker --url redis://redis:6379
     depends_on:
       - redis

@@ -12,7 +12,7 @@ COPY README.md .
 RUN pip install --no-cache-dir uv
 RUN uv sync --group pipeline --group development --no-install-project
 
-COPY ./src/data-pipeline ./src/data-pipeline
+COPY ./src/data_pipeline ./src/data_pipeline
 COPY ./src/common ./src/common
 
-CMD ["uv", "run", "src/data-pipeline/run_pipeline.py", "--docker"]
+CMD ["uv", "run", "src/data_pipeline/run_pipeline.py", "--docker"]

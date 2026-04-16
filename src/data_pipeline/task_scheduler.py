@@ -13,7 +13,7 @@ def run() -> None:
     """
 
     subprocess.run(
-        ["uv", "run", "src/data-pipeline/run_pipeline.py", "--docker"], check=True
+        ["uv", "run", "src/data_pipeline/run_pipeline.py", "--docker"], check=True
     )
 
 

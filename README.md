@@ -21,7 +21,7 @@ As long as your environment file is populated, you can run `make app` to orchest
 ### Source Code Overview
 | Codebase      | Description                                                                                        | Docs                                  |
 | ------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| Data Pipeline | This codebase hosts the `dlt` and `dbt` configurations to load and transform data for our frontend | [Link](./src/data-pipeline/README.md) |
+| Data Pipeline | This codebase hosts the `dlt` and `dbt` configurations to load and transform data for our frontend | [Link](./src/data_pipeline/README.md) |
 | Web App       | This codebase defines the Flask backend and React frontend to serve as the user interface          | [Link](./src/web-app/README.md)       |
 
 ## Adding Your Team
