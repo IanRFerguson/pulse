@@ -47,11 +47,11 @@ def run_pipeline_locally(docker: bool):
     metrics_logger.info(f"Running pipeline from {os.getcwd()}")
 
     # Run the loading step with dlt
-    subprocess.run(["uv", "run", "src/data-pipeline/load/main.py"], check=True)
+    subprocess.run(["uv", "run", "src/data_pipeline/load/main.py"], check=True)
 
     # Run the dbt transformations
     subprocess.run(
-        ["cd src/data-pipeline/analytics && uv run dbt build"], shell=True, check=True
+        ["cd src/data_pipeline/analytics && uv run dbt build"], shell=True, check=True
     )
 
 

@@ -73,3 +73,23 @@ class Team(db.Model):
 
     def __repr__(self):
         return f"<Team {self.name}>"
+
+
+class MaintenanceShift(db.Model):
+    """Represents a maintenance shift for a team."""
+
+    __tablename__ = "maintenance_shifts"
+
+    id = db.Column(db.Uuid, primary_key=True, default=uuid.uuid4)
+    team_member_id = db.Column(
+        db.Uuid, db.ForeignKey("team_members.id"), nullable=False
+    )
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
+
+    team_member = db.relationship(
+        "TeamMember", backref=db.backref("maintenance_shifts", lazy=True)
+    )
+
+    def __repr__(self):
+        return f"<MaintenanceShift team_member_id={self.team_member_id} start_time={self.start_time} end_time={self.end_time}>"

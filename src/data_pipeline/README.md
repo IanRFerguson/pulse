@@ -7,7 +7,7 @@ ETL pipeline for ingesting and transforming data from multiple sources.
 - **load/** - Data ingestion from external sources (Asana, Freshdesk, GitHub)
 - **analytics/** - dbt project for data modeling and transformation
 - **run_pipeline.py** - Main pipeline orchestration
-  - You can run this from the root directory with `uv run src/data-pipeline/run_pipeline.py`
+  - You can run this from the root directory with `uv run src/data_pipeline/run_pipeline.py`
 - **task_scheduler.py** - Scheduled pipeline execution
 
 ## Architecture

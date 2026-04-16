@@ -58,7 +58,15 @@ WITH
                     'added_to_sprint', added_to_sprint,
                     'sprint_points', sprint_points
                 )
-            ) AS asana_data
+            ) AS asana_data,
+            SUM(
+                CASE 
+                    WHEN sprint_planning IS NOT NULL
+                        AND NOT completed 
+                        AND NOT is_blocked THEN CAST(sprint_points AS INTEGER)
+                    ELSE 0 
+                END
+            ) AS active_sprint_points
 
         FROM {{ ref('stg__01__asana') }}
         GROUP BY assignee_name
@@ -95,7 +103,10 @@ SELECT
 
     github_data,
     asana_data,
-    freshdesk_data
+    active_sprint_points,
+    freshdesk_data,
+
+    CURRENT_TIMESTAMP AS _dbt_updated_at
 
 FROM team_members
 LEFT JOIN github 

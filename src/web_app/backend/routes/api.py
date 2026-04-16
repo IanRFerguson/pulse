@@ -1,3 +1,4 @@
+import datetime
 import os
 import uuid as uuid_mod
 
@@ -8,7 +9,7 @@ from common import metrics_logger
 
 from ..config import load_theme
 from ..mock_data import MOCK_TEAM_MEMBERS, MOCK_TEAMS
-from ..models import Team, TeamMember, db
+from ..models import MaintenanceShift, Team, TeamMember, db
 from . import bp
 
 DEMO_MODE = os.environ.get("DEMO_MODE", "").lower() in ("1", "true", "yes")
@@ -49,8 +50,10 @@ def list_team_members():
                 " team_name AS team,"
                 " github_data,"
                 " asana_data,"
-                " freshdesk_data"
+                " freshdesk_data,"
+                " active_sprint_points"
                 " FROM dbt_dev.ic_metrics"
+                " ORDER BY team_name, user_name"
             )
         )
         .mappings()
@@ -90,7 +93,8 @@ def get_team_member(member_id: str):
                 " team_name AS team,"
                 " github_data,"
                 " asana_data,"
-                " freshdesk_data"
+                " freshdesk_data,"
+                " active_sprint_points"
                 " FROM dbt_dev.ic_metrics"
                 " WHERE team_member_id = :id"
             ),
@@ -171,3 +175,54 @@ def create_team():
     metrics_logger.info("Success")
 
     return jsonify({"team_id": str(team.id), "name": team.name}), 201
+
+
+@bp.route("/create-maintenance-shift", methods=["POST"])
+def create_maintenance_shift():
+    """Endpoint to create a new maintenance shift."""
+
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"error": "Request body must be JSON"}), 400
+
+    for field in ("team_id", "start_time", "end_time"):
+        if not data.get(field):
+            return jsonify({"error": f"Missing required field: {field}"}), 400
+
+    try:
+        team_uuid = uuid_mod.UUID(data["team_id"])
+    except ValueError:
+        return jsonify({"error": "Invalid team_id"}), 400
+
+    team = db.session.get(Team, team_uuid)
+    if team is None:
+        return jsonify({"error": "Team not found"}), 404
+
+    try:
+        start_time = datetime.fromisoformat(data["start_time"])
+        end_time = datetime.fromisoformat(data["end_time"])
+    except ValueError:
+        return jsonify({"error": "Invalid date format"}), 400
+
+    shift = MaintenanceShift(
+        team_member_id=team.id,
+        start_time=start_time,
+        end_time=end_time,
+    )
+    db.session.add(shift)
+    db.session.commit()
+
+    metrics_logger.info(
+        f"Created maintenance shift for team {team.name} from {start_time} to {end_time}"
+    )
+
+    return (
+        jsonify(
+            {
+                "team_member_id": str(shift.team_member_id),
+                "start_time": data["start_time"],
+                "end_time": data["end_time"],
+            }
+        ),
+        201,
+    )

@@ -52,6 +52,7 @@ export interface TeamMemberSummary {
   github_data: GithubPR[] | null;
   asana_data: AsanaTask[] | null;
   freshdesk_data: FreshdeskTicket[] | null;
+  active_sprint_points: number | null;
 }
 
 export interface Team {
