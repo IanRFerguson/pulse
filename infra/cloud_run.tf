@@ -86,10 +86,13 @@ resource "google_cloud_scheduler_job" "job" {
     # The URL must point to the Google Cloud Run API 'run' action
     uri = "https://${google_cloud_run_v2_job.data_pipeline.location}-run.googleapis.com/v2/${google_cloud_run_v2_job.data_pipeline.id}:run"
 
-    oidc_token {
+    headers = {
+      "Content-Type" = "application/json"
+    }
+
+    oauth_token {
       service_account_email = google_service_account.pulse_sa.email
-      # Audience must be the base Google Cloud Run API
-      audience = "https://${google_cloud_run_v2_job.data_pipeline.location}-run.googleapis.com/"
+      scope                 = "https://www.googleapis.com/auth/cloud-platform"
     }
   }
 }

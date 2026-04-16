@@ -5,6 +5,7 @@ locals {
     "logging.logWriter",
     "artifactregistry.createOnPushWriter",
     "run.admin",
+    "run.invoker",
     "iam.serviceAccountUser",
     "iam.serviceAccountTokenCreator",
   ]
