@@ -8,7 +8,14 @@ SELECT
     modified_at,
     due_on,
 
-    due_on::DATE < CURRENT_DATE AS is_overdue,
+    CASE
+        WHEN due_on::DATE < CURRENT_DATE THEN TRUE
+        ELSE FALSE
+    END AS is_overdue,
+    CASE
+        WHEN "Is Blocked" = 'BLOCKED' THEN TRUE
+        ELSE FALSE
+    END AS is_blocked,
     CURRENT_DATE - modified_at::DATE AS days_active,
 
     -- Custom fields

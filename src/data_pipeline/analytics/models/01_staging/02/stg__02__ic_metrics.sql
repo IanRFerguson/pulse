@@ -62,7 +62,8 @@ WITH
             SUM(
                 CASE 
                     WHEN sprint_planning IS NOT NULL
-                        AND NOT completed THEN CAST(sprint_points AS INTEGER)
+                        AND NOT completed 
+                        AND NOT is_blocked THEN CAST(sprint_points AS INTEGER)
                     ELSE 0 
                 END
             ) AS active_sprint_points
