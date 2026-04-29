@@ -1,0 +1,10 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='surrogate_ticket_status_id',
+        incremental_strategy='merge',
+        full_refresh=false,
+        on_schema_change='sync_all_columns',
+        tags=["freshdesk"]
+    )
+}}
