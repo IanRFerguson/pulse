@@ -41,16 +41,28 @@ def load_theme() -> dict:
         return _DEFAULT_THEME
 
 
-SQLALCHEMY_DATABASE_URI = (
-    "{driver}://{username}:{password}@{host}:{port}/{database}".format(
-        driver=os.environ["DB_DRIVER"],
-        username=os.environ["DB_USERNAME"],
-        password=os.environ["DB_PASSWORD"],
-        host=os.environ["DB_HOST"],
-        port=os.environ["DB_PORT"],
-        database=os.environ["DB_NAME"],
-    )
+_db_host = os.environ["DB_HOST"]
+_db_kwargs = dict(
+    driver=os.environ["DB_DRIVER"],
+    username=os.environ["DB_USERNAME"],
+    password=os.environ["DB_PASSWORD"],
+    database=os.environ["DB_NAME"],
 )
+
+if _db_host.startswith("/"):
+    # Unix socket path — Cloud SQL Auth Proxy via Cloud Run volume mount
+    SQLALCHEMY_DATABASE_URI = (
+        "{driver}://{username}:{password}@/{database}?host={host}".format(
+            host=_db_host, **_db_kwargs
+        )
+    )
+else:
+    # TCP connection — local dev or direct host
+    SQLALCHEMY_DATABASE_URI = (
+        "{driver}://{username}:{password}@{host}:{port}/{database}".format(
+            host=_db_host, port=os.environ["DB_PORT"], **_db_kwargs
+        )
+    )
 
 
 @dataclass

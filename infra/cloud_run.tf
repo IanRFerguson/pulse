@@ -15,14 +15,26 @@ resource "google_cloud_run_v2_job" "data_pipeline" {
 
   template {
     template {
-      service_account = null
+      service_account = google_service_account.pulse_sa.email
       max_retries     = 0
+
+      volumes {
+        name = "cloudsql"
+        cloud_sql_instance {
+          instances = [var.db_connection_name]
+        }
+      }
 
       containers {
         image = var.production_docker_image
 
         command = ["uv"]
         args    = ["run", "/app/src/data_pipeline/run_pipeline.py"]
+
+        volume_mounts {
+          name       = "cloudsql"
+          mount_path = "/cloudsql"
+        }
 
         // Postgres Connection variables
         env {
@@ -31,11 +43,7 @@ resource "google_cloud_run_v2_job" "data_pipeline" {
         }
         env {
           name  = "DB_HOST"
-          value = var.db_host
-        }
-        env {
-          name  = "DB_PORT"
-          value = var.db_port
+          value = "/cloudsql/${var.db_connection_name}"
         }
         env {
           name  = "DB_NAME"

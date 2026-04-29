@@ -15,14 +15,10 @@ variable "production_docker_image" {
 }
 
 // Postgres Connection variables
-variable "db_host" {
-  description = "The hostname of the Postgres database."
+variable "db_connection_name" {
+  description = "The Cloud SQL connection name (project:region:instance)."
   type        = string
-}
-
-variable "db_port" {
-  description = "Port to connect to Postgres with"
-  type        = number
+  default     = "ian-is-online:us-central1:elvis-maria-pg"
 }
 
 variable "db_name" {

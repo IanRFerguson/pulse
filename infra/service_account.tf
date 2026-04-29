@@ -8,6 +8,7 @@ locals {
     "run.invoker",
     "iam.serviceAccountUser",
     "iam.serviceAccountTokenCreator",
+    "cloudsql.client",
   ]
 }
 
