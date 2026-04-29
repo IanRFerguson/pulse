@@ -50,6 +50,10 @@ resource "google_cloud_run_v2_job" "data_pipeline" {
           value = var.db_name
         }
         env {
+          name  = "DB_PORT"
+          value = "5432"
+        }
+        env {
           name  = "DB_USERNAME"
           value = var.db_username
         }
