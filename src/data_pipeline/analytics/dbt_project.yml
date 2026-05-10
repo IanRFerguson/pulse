@@ -17,3 +17,15 @@ models:
     01_staging:
       +schema: staging
     02_marts:
+
+vars:
+  engineering_freshdesk_group: 47000644023
+  freshdesk_status_lookup: {
+    1: 'new',
+    2: 'open',
+    3: 'pending',
+    4: 'resolved',
+    5: 'closed',
+    6: 'waiting_on_member',
+    7: 'waiting_on_third_party'
+  }

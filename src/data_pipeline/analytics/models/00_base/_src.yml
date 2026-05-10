@@ -32,3 +32,4 @@ sources:
       - name: users
       - name: team_members
       - name: teams
+      - name: maintenance_shifts
