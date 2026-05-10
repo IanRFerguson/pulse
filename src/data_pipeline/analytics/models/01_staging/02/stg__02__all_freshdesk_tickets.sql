@@ -1,22 +1,25 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='append',
+        incremental_strategy='merge',
+        primary_key='surrogate_ticket_status_id',
         full_refresh=false,
-        tags=["freshdesk"]
+        tags=["freshdesk"],
+        on_schema_change='sync_all_columns'
     )
 }}
 
 SELECT
 
     surrogate_ticket_id,
-    {{ dbt_utils.generate_surrogate_key(['ticket_id', 'status', 'updated_at']) }} AS surrogate_ticket_status_id,
+    surrogate_ticket_status_id,
     ticket_id,
     ticket_subject,
     assigned_agent_name,
     group_id,
     ticket_type,
     status,
+    status_label,
     priority,
     created_at,
     updated_at AS valid_from,
@@ -25,5 +28,8 @@ SELECT
 FROM {{ ref('stg__01__freshdesk') }}
 
 {% if is_incremental() %}
-    WHERE updated_at > (SELECT MAX(valid_from) FROM {{ this }})
+    WHERE surrogate_ticket_status_id NOT IN (
+        SELECT surrogate_ticket_status_id
+        FROM {{ this }}
+    )
 {% endif %}

@@ -11,6 +11,7 @@ SELECT
     due_by_date::DATE < CURRENT_DATE AS is_overdue,
     due_by_date,
     status,
+    status_label,
     priority,
     surrogate_ticket_id,
     surrogate_ticket_status_id

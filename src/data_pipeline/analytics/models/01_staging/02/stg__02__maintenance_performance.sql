@@ -1,16 +1,3 @@
-/*
-Probably ought to write this somewhere else, but here are the
-Freshdesk status lookups for reference:
-
-Status ID 	Status Name
-2 	        open
-3 	        pending
-4 	        resolved
-5 	        closed
-6           waiting on member
-7           waiting on third party
-*/
-
 WITH
     shift_metadata AS (
         SELECT
@@ -33,10 +20,11 @@ WITH
             ticket_id,
             assigned_agent_name,
             status,
+            status_label,
             created_at,
             valid_from
         FROM {{ ref('stg__02__all_freshdesk_tickets') }}
-        WHERE group_id = 47000644023 -- Hardcoded for Engineering
+        WHERE group_id = {{ var('engineering_freshdesk_group') }} 
     ),
 
     -- Compute the active window for each status period
@@ -45,6 +33,7 @@ WITH
             ticket_id,
             assigned_agent_name,
             status,
+            status_label,
             created_at,
             valid_from,
             LEAD(valid_from) OVER (
@@ -63,7 +52,7 @@ WITH
             ON t.assigned_agent_name = sm.freshdesk_agent_name
             AND t.valid_from::date < sm.start_date
             AND (t.valid_to IS NULL OR t.valid_to::date >= sm.start_date)
-            AND t.status NOT IN (4,5) -- Not 'resolved' or 'closed'
+            AND {{ filter_open_tickets_only("t.status_label") }}
         GROUP BY sm.shift_id
     ),
 
@@ -75,8 +64,8 @@ WITH
         FROM shift_metadata AS sm
         INNER JOIN ticket_status_periods AS t
             ON t.assigned_agent_name = sm.freshdesk_agent_name
-            AND t.created_at::date BETWEEN sm.start_date AND sm.end_date
-            AND t.status = 2 -- 'open'
+            AND t.valid_from::date BETWEEN sm.start_date AND sm.end_date
+            AND UPPER(t.status_label) = 'OPEN'
         GROUP BY sm.shift_id
     ),
 
@@ -89,7 +78,7 @@ WITH
         INNER JOIN ticket_status_periods AS t
             ON t.assigned_agent_name = sm.freshdesk_agent_name
             AND t.valid_from::date BETWEEN sm.start_date AND sm.end_date
-            AND t.status IN (4,5) -- 'resolved' or 'closed'
+            AND {{ filter_open_tickets_only("t.status_label") }}
         GROUP BY sm.shift_id
     ),
 
@@ -103,7 +92,7 @@ WITH
             ON t.assigned_agent_name = sm.freshdesk_agent_name
             AND t.valid_from::date <= sm.end_date
             AND (t.valid_to IS NULL OR t.valid_to::date > sm.end_date)
-            AND t.status NOT IN (4,5) -- Not 'resolved' or 'closed'
+            AND {{ filter_open_tickets_only("t.status_label") }}
         GROUP BY sm.shift_id
     )
 

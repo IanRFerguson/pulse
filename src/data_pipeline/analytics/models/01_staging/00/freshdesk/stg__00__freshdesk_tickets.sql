@@ -27,7 +27,9 @@ SELECT
     updated_at,
     due_by_date,
     status,
+    {{ get_status_label("status") }} AS status_label,
     priority,
-    {{ dbt_utils.generate_surrogate_key(["ticket_id"]) }} AS surrogate_ticket_id
+    {{ dbt_utils.generate_surrogate_key(["ticket_id"]) }} AS surrogate_ticket_id,
+    {{ dbt_utils.generate_surrogate_key(["ticket_id", "status", "updated_at"]) }} AS surrogate_ticket_status_id
 
 FROM base
