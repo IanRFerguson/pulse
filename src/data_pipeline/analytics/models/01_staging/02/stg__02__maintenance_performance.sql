@@ -78,7 +78,7 @@ WITH
         INNER JOIN ticket_status_periods AS t
             ON t.assigned_agent_name = sm.freshdesk_agent_name
             AND t.valid_from::date BETWEEN sm.start_date AND sm.end_date
-            AND {{ filter_open_tickets_only("t.status_label") }}
+            AND UPPER(t.status_label) IN ('RESOLVED', 'CLOSED')
         GROUP BY sm.shift_id
     ),
 

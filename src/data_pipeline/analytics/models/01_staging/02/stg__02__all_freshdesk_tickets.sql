@@ -2,7 +2,7 @@
     config(
         materialized='incremental',
         incremental_strategy='merge',
-        primary_key='surrogate_ticket_status_id',
+        unique_key='surrogate_ticket_status_id',
         full_refresh=false,
         tags=["freshdesk"],
         on_schema_change='sync_all_columns'
