@@ -43,6 +43,8 @@ export interface AsanaTask {
   priority: string | null;
   sprint_points: number | null;
   sprint_planning: string | null;
+  added_to_sprint: string | null;
+  is_blocked: boolean;
 }
 
 export interface TeamMemberSummary {

@@ -3,6 +3,7 @@ const STATUS_LABELS: Record<number, string> = {
   3: 'Pending',
   6: 'Waiting on Member',
   7: 'Waiting on Third Party',
+  8: 'Waiting on Bonterra'
 };
 
 const PRIORITY_LABELS: Record<number, string> = {
@@ -19,4 +20,13 @@ const PRIORITY_CLASS: Record<string, string> = {
   Low: 'display-badge-low',
 };
 
-export { STATUS_LABELS, PRIORITY_LABELS, PRIORITY_CLASS };
+const SPRINT_POINT_CLASS: Record<number, string> = {
+  1: 'display-badge-sprint-point-1',
+  2: 'display-badge-sprint-point-2',
+  3: 'display-badge-sprint-point-3',
+  5: 'display-badge-sprint-point-5',
+  8: 'display-badge-sprint-point-8',
+  13: 'display-badge-sprint-point-13',
+};
+
+export { STATUS_LABELS, PRIORITY_LABELS, PRIORITY_CLASS, SPRINT_POINT_CLASS };
