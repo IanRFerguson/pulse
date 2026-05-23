@@ -69,6 +69,39 @@ def list_team_members():
     return jsonify(result)
 
 
+@bp.route("/teams/<team_id>/members")
+def list_team_members_by_team(team_id: str):
+    """Endpoint to list team members for a specific team."""
+
+    if DEMO_MODE:
+        team = next((t for t in MOCK_TEAMS if t["id"] == team_id), None)
+        if team is None:
+            return jsonify({"error": "Team not found"}), 404
+        members = [
+            {"id": m["id"], "name": m["username"]}
+            for m in MOCK_TEAM_MEMBERS
+            if m["team"] == team["name"]
+        ]
+        return jsonify(members)
+
+    try:
+        team_uuid = uuid_mod.UUID(team_id)
+    except ValueError:
+        return jsonify({"error": "Invalid team_id"}), 400
+
+    team = db.session.get(Team, team_uuid)
+    if team is None:
+        return jsonify({"error": "Team not found"}), 404
+
+    members = (
+        db.session.query(TeamMember)
+        .filter(TeamMember.team_id == team_uuid, TeamMember.active.is_(True))
+        .order_by(TeamMember.user_name)
+        .all()
+    )
+    return jsonify([{"id": str(m.id), "name": m.user_name} for m in members])
+
+
 @bp.route("/team-members/<member_id>")
 def get_team_member(member_id: str):
     """Endpoint to retrieve details for a specific team member."""
@@ -185,27 +218,28 @@ def create_maintenance_shift():
     if not data:
         return jsonify({"error": "Request body must be JSON"}), 400
 
-    for field in ("team_id", "start_time", "end_time"):
+    for field in ("team_member_id", "start_time", "end_time"):
         if not data.get(field):
             return jsonify({"error": f"Missing required field: {field}"}), 400
 
     try:
-        team_uuid = uuid_mod.UUID(data["team_id"])
+        team_member_uuid = uuid_mod.UUID(data["team_member_id"])
     except ValueError:
-        return jsonify({"error": "Invalid team_id"}), 400
+        return jsonify({"error": "Invalid team_member_id"}), 400
 
-    team = db.session.get(Team, team_uuid)
-    if team is None:
-        return jsonify({"error": "Team not found"}), 404
+    metrics_logger.debug(f"Looking up team member with ID {team_member_uuid}...")
+    team_member = db.session.get(TeamMember, team_member_uuid)
+    if team_member is None:
+        return jsonify({"error": "Team member not found"}), 404
 
     try:
-        start_time = datetime.fromisoformat(data["start_time"])
-        end_time = datetime.fromisoformat(data["end_time"])
+        start_time = data["start_time"]
+        end_time = data["end_time"]
     except ValueError:
         return jsonify({"error": "Invalid date format"}), 400
 
     shift = MaintenanceShift(
-        team_member_id=team.id,
+        team_member_id=team_member.id,
         start_time=start_time,
         end_time=end_time,
     )
@@ -213,7 +247,7 @@ def create_maintenance_shift():
     db.session.commit()
 
     metrics_logger.info(
-        f"Created maintenance shift for team {team.name} from {start_time} to {end_time}"
+        f"Created maintenance shift for {team_member.user_name} from {start_time} to {end_time}"
     )
 
     return (

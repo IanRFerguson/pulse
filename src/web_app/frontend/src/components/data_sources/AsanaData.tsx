@@ -1,5 +1,5 @@
 import type { TeamMemberSummary } from '../../types';
-import { PRIORITY_CLASS } from '../LabelInterface';
+import { PRIORITY_CLASS, SPRINT_POINT_CLASS } from '../LabelInterface';
 
 interface Props {
   member: TeamMemberSummary;
@@ -49,6 +49,13 @@ export default function AsanaPanel({ member }: Props) {
               >
                 <span className="task-name">{task.name}</span>
               </a>
+
+              {/* Display sprint points if available */}
+              {task.sprint_points != null && (
+                <span className={`badge ${SPRINT_POINT_CLASS[task.sprint_points] ?? 'badge-neutral'}`}>
+                  {task.sprint_points}
+                </span>
+              )}
 
               {/* Display the priority of the task */}
               {task.priority && (

@@ -1,7 +1,9 @@
 import type {
+  CreateMaintenanceShiftPayload,
   CreateTeamMemberPayload,
   CreateTeamPayload,
   Team,
+  TeamMemberOption,
   TeamMemberSummary,
   ThemeConfig,
 } from './types';
@@ -31,9 +33,18 @@ export const api = {
 
   getTeams: () => apiFetch<Team[]>('/api/teams'),
 
+  getTeamMembersByTeam: (teamId: string) =>
+    apiFetch<TeamMemberOption[]>(`/api/teams/${encodeURIComponent(teamId)}/members`),
+
   createTeam: (payload: CreateTeamPayload) =>
     apiFetch<{ id: string; name: string }>('/api/create-team', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
+
+  createMaintenanceShift: (payload: CreateMaintenanceShiftPayload) =>
+    apiFetch<{ id: string; username: string; email: string; team: string }>(
+      '/api/create-maintenance-shift',
+      { method: 'POST', body: JSON.stringify(payload) },
+    ),
 };

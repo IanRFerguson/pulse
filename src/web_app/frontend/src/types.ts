@@ -43,6 +43,8 @@ export interface AsanaTask {
   priority: string | null;
   sprint_points: number | null;
   sprint_planning: string | null;
+  added_to_sprint: string | null;
+  is_blocked: boolean;
 }
 
 export interface TeamMemberSummary {
@@ -56,6 +58,11 @@ export interface TeamMemberSummary {
 }
 
 export interface Team {
+  id: string;
+  name: string;
+}
+
+export interface TeamMemberOption {
   id: string;
   name: string;
 }
@@ -78,4 +85,11 @@ export type MetricCategory = 'github' | 'freshdesk' | 'asana';
 export interface ActiveExpansion {
   memberId: string;
   category: MetricCategory;
+}
+
+export interface CreateMaintenanceShiftPayload {
+  team_id: string;
+  team_member_id: string;
+  start_time: string;
+  end_time: string;
 }

@@ -8,7 +8,8 @@ WITH
             team_id,
             github_fk,
             asana_fk,
-            freshdesk_fk
+            freshdesk_fk,
+            is_triager
         
         FROM {{ ref('stg__01__team_members') }}
         WHERE active
@@ -101,6 +102,7 @@ SELECT
     user_name,
     team_id,
     team_name,
+    is_triager,
 
     github_data,
     asana_data,

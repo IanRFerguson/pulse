@@ -49,7 +49,7 @@ export default function TeamMemberRow({
     (t) => ![4, 5].includes(t.status),
   ).length;
   const activeTaskCount = (member.asana_data ?? []).filter(
-    (t) => !t.completed,
+    (t) => !t.completed && t.added_to_sprint != null && !t.is_blocked,
   ).length;
 
   return (

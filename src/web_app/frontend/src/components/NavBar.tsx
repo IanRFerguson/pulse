@@ -44,6 +44,12 @@ export default function NavBar({ theme, isDark, toggleDark }: Props) {
         >
           Add Team Member
         </Link>
+        <Link
+          to="/add-shift"
+          className={`nav-link${location.pathname === '/add-shift' ? ' active' : ''}`}
+        >
+          Add Maintenance Shift
+        </Link>
         <button
           className="theme-toggle"
           onClick={toggleDark}
