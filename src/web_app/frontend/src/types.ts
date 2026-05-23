@@ -60,6 +60,11 @@ export interface Team {
   name: string;
 }
 
+export interface TeamMemberOption {
+  id: string;
+  name: string;
+}
+
 export interface CreateTeamMemberPayload {
   username: string;
   email: string;
@@ -78,4 +83,11 @@ export type MetricCategory = 'github' | 'freshdesk' | 'asana';
 export interface ActiveExpansion {
   memberId: string;
   category: MetricCategory;
+}
+
+export interface CreateMaintenanceShiftPayload {
+  team_id: string;
+  team_member_id: string;
+  start_time: string;
+  end_time: string;
 }
