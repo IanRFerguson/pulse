@@ -1,15 +1,30 @@
+WITH
+    shifts AS (
+        SELECT
+        
+            team_member_id,
+            TRUE AS is_active_shift
+            
+        FROM {{ source('backend', 'maintenance_shifts') }}
+        WHERE CURRENT_DATE >= start_time::date 
+            AND CURRENT_DATE <= end_time::date
+    )
+
 SELECT
 
-    team_member_id,
-    user_name,
-    team_id,
-    team_name,
-    created_at,
-    modified_at,
-    active,
-    github_fk,
-    asana_fk,
-    freshdesk_fk,
-    surrogate_team_member_id
+    tm.team_member_id,
+    tm.user_name,
+    tm.team_id,
+    tm.team_name,
+    tm.created_at,
+    tm.modified_at,     
+    tm.active,
+    tm.github_fk,
+    tm.asana_fk,
+    tm.freshdesk_fk,
+    tm.surrogate_team_member_id,
+    COALESCE(s.is_active_shift, FALSE) AS is_triager
 
-FROM {{ ref("stg__00__team_members") }}
+FROM {{ ref("stg__00__team_members") }} tm
+LEFT JOIN shifts s
+    ON tm.team_member_id = s.team_member_id
