@@ -6,8 +6,7 @@ WITH
             TRUE AS is_active_shift
             
         FROM {{ source('backend', 'maintenance_shifts') }}
-        WHERE CURRENT_DATE >= start_time::date 
-            AND CURRENT_DATE <= end_time::date
+        WHERE CURRENT_DATE BETWEEN start_time::date AND end_time::date
     )
 
 SELECT
