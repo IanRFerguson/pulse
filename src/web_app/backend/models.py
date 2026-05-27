@@ -84,12 +84,29 @@ class MaintenanceShift(db.Model):
     team_member_id = db.Column(
         db.Uuid, db.ForeignKey("team_members.id"), nullable=False
     )
-    start_time = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.DateTime, nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
 
     team_member = db.relationship(
         "TeamMember", backref=db.backref("maintenance_shifts", lazy=True)
     )
 
     def __repr__(self):
-        return f"<MaintenanceShift team_member_id={self.team_member_id} start_time={self.start_time} end_time={self.end_time}>"
+        return f"<MaintenanceShift team_member_id={self.team_member_id} start_date={self.start_date} end_date={self.end_date}>"
+
+
+class SprintPeriod(db.Model):
+    """Represents an agile sprint"""
+
+    __tablename__ = "sprint_period"
+
+    id = db.Column(db.Uuid, primary_key=True, default=uuid.uuid4)
+    team_id = db.Column(db.Uuid, db.ForeignKey("teams.id"), nullable=False)
+    friendly_name = db.Column(db.String(80), nullable=True)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
+
+    team = db.relationship("Team", backref=db.backref("sprint_period", lazy=True))
+
+    def __repr__(self):
+        return f"<SprintPeriod team_id={self.team_id} start_date={self.start_date} end_date={self.end_date}>"
