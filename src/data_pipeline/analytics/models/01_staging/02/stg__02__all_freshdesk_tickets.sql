@@ -3,7 +3,7 @@
         materialized='incremental',
         incremental_strategy='merge',
         unique_key='surrogate_ticket_status_id',
-        full_refresh=true,
+        full_refresh=false,
         tags=["freshdesk"],
         on_schema_change='sync_all_columns'
     )
