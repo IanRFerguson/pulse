@@ -22,10 +22,16 @@ from src.web_app.backend.models import SprintPeriod, Team
     help="A friendly name for the sprint period.",
 )
 @click.option(
-    "--start-date", prompt="Start date", help="The start date of the sprint period."
+    "--start-date",
+    prompt="Start date",
+    help="The start date of the sprint period.",
+    type=click.DateTime(formats=["%Y-%m-%d"]),
 )
 @click.option(
-    "--end-date", prompt="End date", help="The end date of the sprint period."
+    "--end-date",
+    prompt="End date",
+    help="The end date of the sprint period.",
+    type=click.DateTime(formats=["%Y-%m-%d"]),
 )
 def cli(
     team_name: str, start_date: str, end_date: str, friendly_name: Optional[str] = None
@@ -38,13 +44,13 @@ def cli(
             click.echo(f"Team '{team_name}' not found.")
             raise click.Abort()
 
-        shift = SprintPeriod(
+        sprint = SprintPeriod(
             team_id=team.id,
             friendly_name=friendly_name,
             start_date=start_date,
             end_date=end_date,
         )
-        session.add(shift)
+        session.add(sprint)
         session.commit()
         click.echo(
             f"Added '{team_name}' sprint period from {start_date} to {end_date}."

@@ -14,10 +14,16 @@ from src.web_app.backend.models import MaintenanceShift, TeamMember
     help="The name of the user to add to the maintenance shift.",
 )
 @click.option(
-    "--start-date", prompt="Start date", help="The start date of the maintenance shift."
+    "--start-date",
+    prompt="Start date",
+    help="The start date of the maintenance shift.",
+    type=click.DateTime(formats=["%Y-%m-%d"]),
 )
 @click.option(
-    "--end-date", prompt="End date", help="The end date of the maintenance shift."
+    "--end-date",
+    prompt="End date",
+    help="The end date of the maintenance shift.",
+    type=click.DateTime(formats=["%Y-%m-%d"]),
 )
 def cli(user_name: str, start_date: str, end_date: str) -> None:
     """CLI command to add a user to a maintenance shift."""
