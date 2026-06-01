@@ -106,7 +106,7 @@ class SprintPeriod(db.Model):
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
 
-    team = db.relationship("Team", backref=db.backref("sprint_period", lazy=True))
+    team = db.relationship("Team", backref=db.backref("sprint_periods", lazy=True))
 
     def __repr__(self):
         return f"<SprintPeriod team_id={self.team_id} start_date={self.start_date} end_date={self.end_date}>"
