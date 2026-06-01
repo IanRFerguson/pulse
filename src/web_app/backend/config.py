@@ -41,13 +41,37 @@ def load_theme() -> dict:
         return _DEFAULT_THEME
 
 
-_db_host = os.environ["DB_HOST"]
-_db_kwargs = dict(
-    driver=os.environ["DB_DRIVER"],
-    username=os.environ["DB_USERNAME"],
-    password=os.environ["DB_PASSWORD"],
-    database=os.environ["DB_NAME"],
-)
+"""
+We'll default to running against the production database connection, but if 
+the LOCAL environment variable is set to "true", we'll use the local 
+database connection instead. This allows for easy switching between local 
+development and production environments without changing code.
+"""
+match os.environ.get("LOCAL", "false") == "true":
+    case True:
+        metrics_logger.info("Running in local mode - using local database connection")
+        # If running in local mode, we'll connect to the database running on the host machine.
+        _db_host = (
+            "host.docker.internal"
+            if os.environ.get("DOCKER", "false").lower() == "true"
+            else "localhost"
+        )
+        _db_kwargs = dict(
+            driver=os.environ["LOCAL_DB_DRIVER"],
+            username=os.environ["LOCAL_DB_USERNAME"],
+            password=os.environ["LOCAL_DB_PASSWORD"],
+            database=os.environ["LOCAL_DB_NAME"],
+        )
+
+    case False:
+        metrics_logger.info("Running in production mode - using Cloud SQL connection")
+        _db_host = os.environ["DB_HOST"]
+        _db_kwargs = dict(
+            driver=os.environ["DB_DRIVER"],
+            username=os.environ["DB_USERNAME"],
+            password=os.environ["DB_PASSWORD"],
+            database=os.environ["DB_NAME"],
+        )
 
 if _db_host.startswith("/"):
     # Unix socket path — Cloud SQL Auth Proxy via Cloud Run volume mount

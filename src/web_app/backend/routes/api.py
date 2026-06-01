@@ -233,29 +233,29 @@ def create_maintenance_shift():
         return jsonify({"error": "Team member not found"}), 404
 
     try:
-        start_time = data["start_time"]
-        end_time = data["end_time"]
+        start_date = data["start_date"]
+        end_date = data["end_date"]
     except ValueError:
         return jsonify({"error": "Invalid date format"}), 400
 
     shift = MaintenanceShift(
         team_member_id=team_member.id,
-        start_time=start_time,
-        end_time=end_time,
+        start_date=start_date,
+        end_date=end_date,
     )
     db.session.add(shift)
     db.session.commit()
 
     metrics_logger.info(
-        f"Created maintenance shift for {team_member.user_name} from {start_time} to {end_time}"
+        f"Created maintenance shift for {team_member.user_name} from {start_date} to {end_date}"
     )
 
     return (
         jsonify(
             {
                 "team_member_id": str(shift.team_member_id),
-                "start_time": data["start_time"],
-                "end_time": data["end_time"],
+                "start_date": start_date,
+                "end_date": end_date,
             }
         ),
         201,

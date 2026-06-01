@@ -90,6 +90,6 @@ export interface ActiveExpansion {
 export interface CreateMaintenanceShiftPayload {
   team_id: string;
   team_member_id: string;
-  start_time: string;
-  end_time: string;
+  start_date: string;
+  end_date: string;
 }

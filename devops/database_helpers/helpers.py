@@ -4,7 +4,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from src.web_app.backend.config import SQLALCHEMY_DATABASE_URI
-from src.web_app.backend.models import Team, TeamMember, User
 
 #####
 

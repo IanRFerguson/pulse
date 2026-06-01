@@ -6,6 +6,7 @@ sources:
       - name: pull_requests__assignees
       - name: pull_requests__labels
       - name: pull_requests__requested_reviewers
+      - name: _dlt_loads
 
   - name: asana
     schema: asana_data
@@ -14,6 +15,7 @@ sources:
       - name: project_tasks__custom_fields
       - name: project_tasks__custom_fields__enum_options
       - name: project_tasks__custom_fields__multi_enum_values
+      - name: _dlt_loads
 
   - name: freshdesk
     schema: freshdesk_data
@@ -25,6 +27,7 @@ sources:
       - name: tickets__tags
       - name: tickets__ticket_cc_emails
       - name: tickets__to_emails
+      - name: _dlt_loads
 
   - name: backend
     schema: public
@@ -33,3 +36,4 @@ sources:
       - name: team_members
       - name: teams
       - name: maintenance_shifts
+      - name: sprint_period

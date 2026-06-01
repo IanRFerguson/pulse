@@ -1251,6 +1251,7 @@ name = "pulse"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "alembic" },
     { name = "colorlog" },
     { name = "pre-commit" },
     { name = "psycopg2-binary" },
@@ -1281,6 +1282,7 @@ web-app = [
 
 [package.metadata]
 requires-dist = [
+    { name = "alembic", specifier = ">=1.18.4" },
     { name = "colorlog", specifier = ">=6.10.1" },
     { name = "pre-commit", specifier = ">=4.5.1" },
     { name = "psycopg2-binary", specifier = ">=2.9.11" },
