@@ -6,8 +6,8 @@ import type { CreateMaintenanceShiftPayload, Team, TeamMemberOption } from '../t
 const EMPTY_FORM: CreateMaintenanceShiftPayload = {
     team_id: '',
     team_member_id: '',
-    start_time: '',
-    end_time: '',
+    start_date: '',
+    end_date: '',
 };
 
 export default function AddMaintenanceShift() {
@@ -144,34 +144,34 @@ export default function AddMaintenanceShift() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="start_time" className="form-label">
+                        <label htmlFor="start_date" className="form-label">
                             Start Date <span aria-hidden="true">*</span>
                         </label>
                         <input
                             ref={firstFieldRef}
                             type="date"
-                            id="start_time"
-                            name="start_time"
+                            id="start_date"
+                            name="start_date"
                             className="form-input"
-                            value={form.start_time}
+                            value={form.start_date}
                             onChange={handleChange}
                             required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="end_time" className="form-label">
+                        <label htmlFor="end_date" className="form-label">
                             End Date <span aria-hidden="true">*</span>
                         </label>
                         <input
                             type="date"
-                            id="end_time"
-                            name="end_time"
+                            id="end_date"
+                            name="end_date"
                             className="form-input"
-                            value={form.end_time}
+                            value={form.end_date}
                             onChange={handleChange}
                             required
-                            min={form.start_time || undefined}
+                            min={form.start_date || undefined}
                         />
                     </div>
 
