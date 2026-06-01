@@ -32,6 +32,24 @@ def setup_runtime_environment(docker: bool) -> None:
     os.chdir(ROOT)
 
 
+def build_command_line_argument(docker: bool) -> str:
+    """
+    Generates the command line argument for running the pipeline based on the environment.
+
+    Args:
+        docker (bool): If True, generate the command for Docker. Otherwise, generate for local development.
+
+    Returns:
+        str: The command line argument to run the pipeline.
+    """
+
+    match docker:
+        case True:
+            return "cd src/data_pipeline/analytics && uv run dbt build -t production"
+        case False:
+            return "cd src/data_pipeline/analytics && uv run dbt build -t local"
+
+
 @click.command()
 @click.option("--docker", is_flag=True, help="Run the pipeline in Docker")
 def run_pipeline_locally(docker: bool):
@@ -51,7 +69,9 @@ def run_pipeline_locally(docker: bool):
 
     # Run the dbt transformations
     subprocess.run(
-        ["cd src/data_pipeline/analytics && uv run dbt build"], shell=True, check=True
+        build_command_line_argument(docker=docker),
+        shell=True,
+        check=True,
     )
 
 

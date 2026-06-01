@@ -29,7 +29,7 @@ resource "google_cloud_run_v2_job" "data_pipeline" {
         image = var.production_docker_image
 
         command = ["uv"]
-        args    = ["run", "/app/src/data_pipeline/run_pipeline.py"]
+        args    = ["run", "/app/src/data_pipeline/run_pipeline.py", "--docker"]
 
         volume_mounts {
           name       = "cloudsql"

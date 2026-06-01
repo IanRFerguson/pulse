@@ -1,5 +1,5 @@
 pulse:
-  target: production
+  target: local
   outputs:
     # Run against CloudSQL
     production:
