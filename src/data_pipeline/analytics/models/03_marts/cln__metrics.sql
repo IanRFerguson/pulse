@@ -7,7 +7,7 @@
 SELECT
     {{
         dbt_utils.star(
-            ref('stg__02__ic_metrics'),
+            ref('int__ic_metrics'),
         )
     }}
-FROM {{ ref('stg__02__ic_metrics') }}
+FROM {{ ref('int__ic_metrics') }}

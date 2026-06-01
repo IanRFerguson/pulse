@@ -16,7 +16,9 @@ models:
       +schema: base
     01_staging:
       +schema: staging
-    02_marts:
+    02_intermediate:
+      +schema: intermediate
+    03_marts:
 
 vars:
   engineering_freshdesk_group: 47000644023

@@ -3,7 +3,7 @@
         materialized='incremental',
         unique_key='surrogate_pull_request_id',
         incremental_strategy='merge',
-        full_refresh=false,
+        full_refresh=true,
         on_schema_change='sync_all_columns',
         tags=["github"]
     )
