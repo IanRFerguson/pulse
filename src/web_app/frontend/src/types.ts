@@ -93,3 +93,10 @@ export interface CreateMaintenanceShiftPayload {
   start_date: string;
   end_date: string;
 }
+
+export interface CreateSprintPayload {
+  team_id: string;
+  friendly_name: string;
+  start_date: string;
+  end_date: string;
+}

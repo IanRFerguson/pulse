@@ -7,6 +7,7 @@ import AddTeamMember from './pages/AddTeamMember';
 import Dashboard from './pages/Dashboard';
 import AddTeam from './pages/AddTeam';
 import AddMaintenanceShift from './pages/AddMaintenanceShift';
+import AddSprint from './pages/AddSprint';
 
 export default function App() {
   const theme = useTheme();
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/" element={<Dashboard theme={theme} />} />
           <Route path="/add-team" element={<AddTeam />} />
           <Route path="/add-member" element={<AddTeamMember />} />
+          <Route path="/add-sprint" element={<AddSprint />} />
           <Route path="/add-shift" element={<AddMaintenanceShift />} />
         </Routes>
       </main>

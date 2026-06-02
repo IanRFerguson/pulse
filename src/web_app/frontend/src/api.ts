@@ -1,5 +1,6 @@
 import type {
   CreateMaintenanceShiftPayload,
+  CreateSprintPayload,
   CreateTeamMemberPayload,
   CreateTeamPayload,
   Team,
@@ -45,6 +46,12 @@ export const api = {
   createMaintenanceShift: (payload: CreateMaintenanceShiftPayload) =>
     apiFetch<{ id: string; username: string; email: string; team: string }>(
       '/api/create-maintenance-shift',
+      { method: 'POST', body: JSON.stringify(payload) },
+    ),
+
+  createSprint: (payload: CreateSprintPayload) =>
+    apiFetch<{ id: string; friendly_name: string; team: string }>(
+      '/api/create-sprint',
       { method: 'POST', body: JSON.stringify(payload) },
     ),
 };
