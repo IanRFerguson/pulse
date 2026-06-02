@@ -17,16 +17,16 @@ pg_dump \
     -f "$BACKUP_FILE"
 
 echo "Dropping and recreating local database..."
-psql -h localhost -U "$LOCAL_USERNAME" -d postgres \
-    -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$LOCAL_DATABASE' AND pid <> pg_backend_pid();"
-dropdb -h localhost -U "$LOCAL_USERNAME" "$LOCAL_DATABASE"
-createdb -h localhost -U "$LOCAL_USERNAME" "$LOCAL_DATABASE"
+psql -h localhost -U "$LOCAL_DB_USERNAME" -d postgres \
+    -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$LOCAL_DB_NAME' AND pid <> pg_backend_pid();"
+dropdb -h localhost -U "$LOCAL_DB_USERNAME" "$LOCAL_DB_NAME"
+createdb -h localhost -U "$LOCAL_DB_USERNAME" "$LOCAL_DB_NAME"
 
 echo "Restoring to local database..."
 pg_restore \
     -h localhost \
-    -U "$LOCAL_USERNAME" \
-    -d "$LOCAL_DATABASE" \
+    -U "$LOCAL_DB_USERNAME" \
+    -d "$LOCAL_DB_NAME" \
     --no-owner \
     --no-privileges \
     "$BACKUP_FILE" || {
