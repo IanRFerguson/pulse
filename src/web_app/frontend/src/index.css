@@ -252,6 +252,42 @@ code {
   color: var(--text);
 }
 
+/* ── Tab toggle ── */
+.tab-toggle {
+  display: flex;
+  gap: 8px;
+  margin: 0 auto 24px;
+  padding: 4px;
+  background: var(--bg-alt);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  width: fit-content;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.tab-button.active {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
 .loading-state,
 .error-state,
 .empty-state {

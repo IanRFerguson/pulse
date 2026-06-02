@@ -3,6 +3,8 @@ import type {
   CreateSprintPayload,
   CreateTeamMemberPayload,
   CreateTeamPayload,
+  MaintenanceMetric,
+  SprintMetric,
   Team,
   TeamMemberOption,
   TeamMemberSummary,
@@ -54,4 +56,8 @@ export const api = {
       '/api/create-sprint',
       { method: 'POST', body: JSON.stringify(payload) },
     ),
+
+  getMaintenanceMetrics: () => apiFetch<MaintenanceMetric[]>('/api/maintenance-metrics'),
+
+  getSprintMetrics: () => apiFetch<SprintMetric[]>('/api/sprint-metrics'),
 };

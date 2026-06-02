@@ -100,3 +100,28 @@ export interface CreateSprintPayload {
   start_date: string;
   end_date: string;
 }
+
+export interface MaintenanceMetric {
+  shift_id: string;
+  team_member_id: string;
+  user_name: string;
+  start_date: string;
+  end_date: string;
+  inherited_ticket_count: number;
+  opened_during_shift_count: number;
+  closed_during_shift_count: number;
+  passed_off_ticket_count: number;
+}
+
+export interface SprintMetric {
+  sprint_period_id: string;
+  team_id: string;
+  team_name: string;
+  user_name: string;
+  sprint_period_name: string;
+  start_date: string;
+  end_date: string;
+  total_sprint_points: number | null;
+  total_tasks_assigned: number | null;
+  average_points_per_task: number | null;
+}

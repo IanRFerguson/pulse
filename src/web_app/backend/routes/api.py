@@ -314,3 +314,74 @@ def create_sprint():
         ),
         201,
     )
+
+
+@bp.route("/maintenance-metrics")
+def get_maintenance_metrics():
+    """Endpoint to retrieve maintenance performance metrics from dbt model."""
+
+    rows = (
+        db.session.execute(
+            text(
+                "SELECT"
+                " shift_id,"
+                " team_member_id,"
+                " user_name,"
+                " start_date,"
+                " end_date,"
+                " inherited_ticket_count,"
+                " opened_during_shift_count,"
+                " closed_during_shift_count,"
+                " passed_off_ticket_count"
+                " FROM dbt_dev_intermediate.int__maintenance_performance"
+                " ORDER BY start_date DESC, user_name"
+            )
+        )
+        .mappings()
+        .all()
+    )
+
+    result = []
+    for row in rows:
+        d = dict(row)
+        d["shift_id"] = str(d["shift_id"])
+        d["team_member_id"] = str(d["team_member_id"])
+        result.append(d)
+
+    return jsonify(result)
+
+
+@bp.route("/sprint-metrics")
+def get_sprint_metrics():
+    """Endpoint to retrieve sprint performance metrics from dbt model."""
+
+    rows = (
+        db.session.execute(
+            text(
+                "SELECT"
+                " sprint_period_id,"
+                " team_id,"
+                " team_name,"
+                " user_name,"
+                " sprint_period_name,"
+                " start_date,"
+                " end_date,"
+                " total_sprint_points,"
+                " total_tasks_assigned,"
+                " average_points_per_task"
+                " FROM dbt_dev_intermediate.int__sprint_performance"
+                " ORDER BY start_date DESC, team_name, user_name"
+            )
+        )
+        .mappings()
+        .all()
+    )
+
+    result = []
+    for row in rows:
+        d = dict(row)
+        d["sprint_period_id"] = str(d["sprint_period_id"])
+        d["team_id"] = str(d["team_id"])
+        result.append(d)
+
+    return jsonify(result)
