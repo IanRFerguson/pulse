@@ -3,6 +3,7 @@ from sqlalchemy import text
 
 from common import metrics_logger
 
+from ...config import LOCAL_MODE
 from ...models import db
 from . import bp
 from .helpers import get_sprint_metrics_query
@@ -40,11 +41,10 @@ def get_maintenance_metrics():
     result = []
     for row in rows:
         d = dict(row)
-        d["shift_id"] = str(d["shift_id"])
-        d["team_member_id"] = str(d["team_member_id"])
         result.append(d)
 
-    metrics_logger.debug(result)
+    if LOCAL_MODE:
+        metrics_logger.debug(result)
 
     return jsonify(result)
 
@@ -72,10 +72,9 @@ def get_sprint_metrics():
     result = []
     for row in rows:
         d = dict(row)
-        d["sprint_period_id"] = str(d["sprint_period_id"])
-        d["team_id"] = str(d["team_id"])
         result.append(d)
 
-    metrics_logger.debug(result)
+    if LOCAL_MODE:
+        metrics_logger.debug(result)
 
     return jsonify(result)

@@ -1,4 +1,4 @@
-from sqlalchemy import text
+from sqlalchemy import TextClause, text
 
 from common import metrics_logger
 
@@ -56,7 +56,7 @@ def _count_active_tasks(assignee_gid: str) -> int:
         return 0
 
 
-def get_sprint_metrics_query(by_team: bool, average: bool) -> text:
+def get_sprint_metrics_query(by_team: bool, average: bool) -> TextClause:
     """
     Helper function to construct the appropriate SQL query for retrieving sprint metrics
     based on the provided parameters.
@@ -64,7 +64,7 @@ def get_sprint_metrics_query(by_team: bool, average: bool) -> text:
         by_team (bool): Whether to group metrics by team.
         average (bool): Whether to calculate average metrics per team member.
     Returns:
-        text: The constructed SQL query string.
+        TextClause: The constructed SQL query string.
     """
 
     if by_team:

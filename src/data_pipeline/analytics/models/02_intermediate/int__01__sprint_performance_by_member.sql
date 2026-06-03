@@ -31,8 +31,11 @@ WITH
             COUNT(DISTINCT task_id) AS total_tasks_assigned,
             COUNT(
                 CASE
-                    WHEN completed_on::DATE >= sp.start_date AND completed_on <= sp.end_date 
-                        OR completed_on IS NULL -- NOTE: We added this field after the pipeline was originally built
+                    WHEN (completed_on::DATE >= sp.start_date AND completed_on <= sp.end_date 
+                        -- NOTE: We added this field after the pipeline was originally built
+                        -- Rather than default to "late" we'll default to on-time and let the data be updated as we backfill this field
+                        OR completed_on IS NULL)
+                        AND completed = TRUE 
                         THEN 1
                     ELSE NULL
                 END
