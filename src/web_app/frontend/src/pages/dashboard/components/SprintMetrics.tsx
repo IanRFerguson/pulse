@@ -100,7 +100,7 @@ export default function SprintMetrics({
                             {metrics.map((metric, idx) => (
                                 <tr key={`${metric.sprint_period_id}-${metric.user_name}-${idx}`}>
                                     {columns.map(col => {
-                                        const accessor = columnConfig[col];
+                                        const accessor = columnConfig[col as keyof typeof columnConfig] as string | ((metric: SprintMetric) => string);
                                         const value = typeof accessor === 'function'
                                             ? accessor(metric)
                                             : metric[accessor as keyof SprintMetric];
