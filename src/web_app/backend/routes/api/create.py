@@ -1,4 +1,3 @@
-import os
 import uuid as uuid_mod
 
 from flask import jsonify, request

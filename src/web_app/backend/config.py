@@ -27,7 +27,7 @@ _DEFAULT_THEME: dict = {
 
 
 def load_theme() -> dict:
-    if os.environ.get("DEMO_MODE", "").lower() in ("1", "true", "yes"):
+    if FlaskConfig.DEMO_MODE:
         metrics_logger.warning("DEMO_MODE is enabled - using default theme")
         return _DEFAULT_THEME
 
@@ -97,5 +97,6 @@ class FlaskConfig:
     DEBUG: bool = os.environ.get("FLASK_DEBUG", "false").lower() == "true"
     TESTING: bool = os.environ.get("FLASK_TESTING", "false").lower() == "true"
     LOCAL: bool = LOCAL_MODE
+    DEMO_MODE: bool = os.environ.get("DEMO_MODE", "false").lower() == "true"
     SECRET_KEY: str = os.environ["SECRET_KEY"]
     SQLALCHEMY_DATABASE_URI: str = SQLALCHEMY_DATABASE_URI

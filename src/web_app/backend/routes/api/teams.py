@@ -3,9 +3,10 @@ import uuid as uuid_mod
 from flask import jsonify
 from sqlalchemy import text
 
+from ...config import FlaskConfig
 from ...mock_data import MOCK_TEAM_MEMBERS, MOCK_TEAMS
 from ...models import Team, TeamMember, db
-from . import DEMO_MODE, bp
+from . import bp
 
 #####
 
@@ -14,7 +15,7 @@ from . import DEMO_MODE, bp
 def list_teams():
     """Endpoint to list all teams."""
 
-    if DEMO_MODE:
+    if FlaskConfig.DEMO_MODE:
         return jsonify(MOCK_TEAMS)
 
     resp = db.session.query(Team).all()
@@ -25,7 +26,7 @@ def list_teams():
 def list_team_members():
     """Endpoint to list all team members."""
 
-    if DEMO_MODE:
+    if FlaskConfig.DEMO_MODE:
         return jsonify(MOCK_TEAM_MEMBERS)
 
     rows = (
@@ -60,7 +61,7 @@ def list_team_members():
 def list_team_members_by_team(team_id: str):
     """Endpoint to list team members for a specific team."""
 
-    if DEMO_MODE:
+    if FlaskConfig.DEMO_MODE:
         team = next((t for t in MOCK_TEAMS if t["id"] == team_id), None)
         if team is None:
             return jsonify({"error": "Team not found"}), 404
@@ -93,7 +94,7 @@ def list_team_members_by_team(team_id: str):
 def get_team_member(member_id: str):
     """Endpoint to retrieve details for a specific team member."""
 
-    if DEMO_MODE:
+    if FlaskConfig.DEMO_MODE:
         match = next((m for m in MOCK_TEAM_MEMBERS if m["id"] == member_id), None)
         if match is None:
             return jsonify({"error": "Team member not found"}), 404

@@ -46,13 +46,13 @@ export const api = {
     }),
 
   createMaintenanceShift: (payload: CreateMaintenanceShiftPayload) =>
-    apiFetch<{ id: string; username: string; email: string; team: string }>(
+    apiFetch<{ id: string; username: string; email: string; team: string, start_date: string, end_date: string }>(
       '/api/create-maintenance-shift',
       { method: 'POST', body: JSON.stringify(payload) },
     ),
 
   createSprint: (payload: CreateSprintPayload) =>
-    apiFetch<{ id: string; friendly_name: string; team: string }>(
+    apiFetch<{ id: string; friendly_name: string; team: string, start_date: string, end_date: string }>(
       '/api/create-sprint',
       { method: 'POST', body: JSON.stringify(payload) },
     ),

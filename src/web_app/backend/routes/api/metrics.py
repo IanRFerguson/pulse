@@ -3,7 +3,7 @@ from sqlalchemy import text
 
 from common import metrics_logger
 
-from ...config import LOCAL_MODE
+from ...config import FlaskConfig
 from ...models import db
 from . import bp
 from .helpers import get_sprint_metrics_query
@@ -14,6 +14,12 @@ from .helpers import get_sprint_metrics_query
 @bp.route("/maintenance-metrics")
 def get_maintenance_metrics():
     """Endpoint to retrieve maintenance performance metrics from dbt model."""
+
+    if FlaskConfig.DEMO_MODE:
+        metrics_logger.info(
+            "DEMO_MODE is enabled - returning empty maintenance metrics"
+        )
+        return jsonify([])
 
     metrics_logger.info("Retrieving maintenance performance metrics...")
 
@@ -43,7 +49,7 @@ def get_maintenance_metrics():
         d = dict(row)
         result.append(d)
 
-    if LOCAL_MODE:
+    if FlaskConfig.LOCAL_MODE:
         metrics_logger.debug(result)
 
     return jsonify(result)
@@ -52,6 +58,10 @@ def get_maintenance_metrics():
 @bp.route("/sprint-metrics")
 def get_sprint_metrics():
     """Endpoint to retrieve sprint performance metrics from dbt model."""
+
+    if FlaskConfig.DEMO_MODE:
+        metrics_logger.info("DEMO_MODE is enabled - returning empty sprint metrics")
+        return jsonify([])
 
     match request.args.get("byTeam", "").lower():
         case "true":
@@ -74,7 +84,7 @@ def get_sprint_metrics():
         d = dict(row)
         result.append(d)
 
-    if LOCAL_MODE:
+    if FlaskConfig.LOCAL_MODE:
         metrics_logger.debug(result)
 
     return jsonify(result)
