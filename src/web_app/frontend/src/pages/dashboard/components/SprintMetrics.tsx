@@ -1,4 +1,8 @@
+import { useState } from 'react';
 import type { SprintMetric } from '../../../types';
+
+// Configure pagination: change this value to adjust rows per page
+const ROWS_PER_PAGE = 8;
 
 interface Props {
     metrics: SprintMetric[];
@@ -57,10 +61,24 @@ export default function SprintMetrics({
     onByTeamChange,
     onAveragesChange,
 }: Props) {
+    const [currentPage, setCurrentPage] = useState(1);
+
     // Compute the map key based on current state
     const mapKey = `${averages ? 'average' : 'all'}_metrics_by_${byTeam ? 'team' : 'member'}` as keyof typeof sprintMetricsMap;
     const columnConfig = sprintMetricsMap[mapKey];
     const columns = Object.keys(columnConfig);
+
+    // Pagination calculations
+    const totalPages = Math.ceil(metrics.length / ROWS_PER_PAGE);
+    const startIdx = (currentPage - 1) * ROWS_PER_PAGE;
+    const endIdx = startIdx + ROWS_PER_PAGE;
+    const paginatedMetrics = metrics.slice(startIdx, endIdx);
+
+    // Reset to page 1 when filters change
+    const handleFilterChange = (setter: (value: boolean) => void) => (value: boolean) => {
+        setter(value);
+        setCurrentPage(1);
+    };
 
     return (
         <>
@@ -69,7 +87,7 @@ export default function SprintMetrics({
                     <input
                         type="checkbox"
                         checked={byTeam}
-                        onChange={(e) => onByTeamChange(e.target.checked)}
+                        onChange={(e) => handleFilterChange(onByTeamChange)(e.target.checked)}
                     />
                     By Team
                 </label>
@@ -77,7 +95,7 @@ export default function SprintMetrics({
                     <input
                         type="checkbox"
                         checked={averages}
-                        onChange={(e) => onAveragesChange(e.target.checked)}
+                        onChange={(e) => handleFilterChange(onAveragesChange)(e.target.checked)}
                     />
                     Averages
                 </label>
@@ -97,7 +115,7 @@ export default function SprintMetrics({
                             </tr>
                         </thead>
                         <tbody>
-                            {metrics.map((metric, idx) => (
+                            {paginatedMetrics.map((metric, idx) => (
                                 <tr key={`${metric.sprint_period_id}-${metric.user_name}-${idx}`}>
                                     {columns.map(col => {
                                         const accessor = columnConfig[col as keyof typeof columnConfig] as string | ((metric: SprintMetric) => string);
@@ -110,6 +128,27 @@ export default function SprintMetrics({
                             ))}
                         </tbody>
                     </table>
+                )}
+                {metrics.length > 0 && totalPages > 1 && (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1rem' }}>
+                        <button
+                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                            disabled={currentPage === 1}
+                            style={{ padding: '0.5rem 1rem', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+                        >
+                            Previous
+                        </button>
+                        <span>
+                            Page {currentPage} of {totalPages} ({metrics.length} total rows)
+                        </span>
+                        <button
+                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                            disabled={currentPage === totalPages}
+                            style={{ padding: '0.5rem 1rem', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
+                        >
+                            Next
+                        </button>
+                    </div>
                 )}
             </div>
         </>

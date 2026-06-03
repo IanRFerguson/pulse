@@ -1,10 +1,22 @@
+import { useState } from 'react';
 import type { MaintenanceMetric } from '../../../types';
+
+// Configure pagination: change this value to adjust rows per page
+const ROWS_PER_PAGE = 10;
 
 interface Props {
     metrics: MaintenanceMetric[];
 }
 
 export default function MaintenanceMetrics({ metrics }: Props) {
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // Pagination calculations
+    const totalPages = Math.ceil(metrics.length / ROWS_PER_PAGE);
+    const startIdx = (currentPage - 1) * ROWS_PER_PAGE;
+    const endIdx = startIdx + ROWS_PER_PAGE;
+    const paginatedMetrics = metrics.slice(startIdx, endIdx);
+
     if (metrics.length === 0) {
         return (
             <div className="empty-state">
@@ -27,7 +39,7 @@ export default function MaintenanceMetrics({ metrics }: Props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {metrics.map((metric) => (
+                    {paginatedMetrics.map((metric) => (
                         <tr key={metric.shift_id}>
                             <td>{metric.user_name}</td>
                             <td>
@@ -41,6 +53,27 @@ export default function MaintenanceMetrics({ metrics }: Props) {
                     ))}
                 </tbody>
             </table>
+            {totalPages > 1 && (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1rem' }}>
+                    <button
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        style={{ padding: '0.5rem 1rem', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+                    >
+                        Previous
+                    </button>
+                    <span>
+                        Page {currentPage} of {totalPages} ({metrics.length} total rows)
+                    </span>
+                    <button
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                        style={{ padding: '0.5rem 1rem', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
