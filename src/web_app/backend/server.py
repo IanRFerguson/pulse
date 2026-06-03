@@ -4,7 +4,7 @@ from common import metrics_logger
 
 from .config import FlaskConfig
 from .models import db
-from .routes import bp as api_bp
+from .routes.api import bp as api_bp
 
 #####
 

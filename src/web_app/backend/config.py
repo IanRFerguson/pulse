@@ -27,7 +27,7 @@ _DEFAULT_THEME: dict = {
 
 
 def load_theme() -> dict:
-    if os.environ.get("DEMO_MODE", "").lower() in ("1", "true", "yes"):
+    if FlaskConfig.DEMO_MODE:
         metrics_logger.warning("DEMO_MODE is enabled - using default theme")
         return _DEFAULT_THEME
 
@@ -47,7 +47,8 @@ the LOCAL environment variable is set to "true", we'll use the local
 database connection instead. This allows for easy switching between local 
 development and production environments without changing code.
 """
-match os.environ.get("LOCAL", "false") == "true":
+LOCAL_MODE: bool = os.environ.get("LOCAL", "false").lower() == "true"
+match LOCAL_MODE:
     case True:
         metrics_logger.info("Running in local mode - using local database connection")
         # If running in local mode, we'll connect to the database running on the host machine.
@@ -95,5 +96,7 @@ class FlaskConfig:
 
     DEBUG: bool = os.environ.get("FLASK_DEBUG", "false").lower() == "true"
     TESTING: bool = os.environ.get("FLASK_TESTING", "false").lower() == "true"
+    LOCAL: bool = LOCAL_MODE
+    DEMO_MODE: bool = os.environ.get("DEMO_MODE", "false").lower() == "true"
     SECRET_KEY: str = os.environ["SECRET_KEY"]
     SQLALCHEMY_DATABASE_URI: str = SQLALCHEMY_DATABASE_URI

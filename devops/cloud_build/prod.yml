@@ -1,0 +1,26 @@
+  steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+    - 'build'
+    - '-t' 
+    - 'us-central1-docker.pkg.dev/ian-is-online/tmc-pulse/pulse:$COMMIT_SHA' 
+    - '-t'
+    - 'us-central1-docker.pkg.dev/ian-is-online/tmc-pulse/pulse:latest'
+    - '-f'
+    - 'devops/docker/Dockerfile.pipe'
+    - '.'
+  
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/ian-is-online/tmc-pulse/pulse:$COMMIT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/ian-is-online/tmc-pulse/pulse:latest']
+  
+  images:
+  - 'us-central1-docker.pkg.dev/ian-is-online/tmc-pulse/pulse:$COMMIT_SHA'
+  - 'us-central1-docker.pkg.dev/ian-is-online/tmc-pulse/pulse:latest'
+  
+  options:
+    logging: CLOUD_LOGGING_ONLY 

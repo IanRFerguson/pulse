@@ -14,7 +14,7 @@ export default function NavBar({ theme, isDark, toggleDark }: Props) {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">
+      <Link to="/" className="navbar-brand">
         {logoUrl ? (
           <img src={logoUrl} alt={companyName} className="navbar-logo" />
         ) : (
@@ -23,15 +23,9 @@ export default function NavBar({ theme, isDark, toggleDark }: Props) {
           </span>
         )}
         <span className="navbar-name">{companyName}</span>
-      </div>
+      </Link>
 
       <div className="navbar-links">
-        <Link
-          to="/"
-          className={`nav-link${location.pathname === '/' ? ' active' : ''}`}
-        >
-          Dashboard
-        </Link>
         <Link
           to="/add-team"
           className={`nav-link${location.pathname === '/add-team' ? ' active' : ''}`}
@@ -49,6 +43,12 @@ export default function NavBar({ theme, isDark, toggleDark }: Props) {
           className={`nav-link${location.pathname === '/add-shift' ? ' active' : ''}`}
         >
           Add Maintenance Shift
+        </Link>
+        <Link
+          to="/add-sprint"
+          className={`nav-link${location.pathname === '/add-sprint' ? ' active' : ''}`}
+        >
+          Add Sprint
         </Link>
         <button
           className="theme-toggle"

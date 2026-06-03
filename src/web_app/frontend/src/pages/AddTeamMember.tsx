@@ -5,7 +5,6 @@ import type { CreateTeamMemberPayload, Team } from '../types';
 
 const EMPTY_FORM: CreateTeamMemberPayload = {
   username: '',
-  email: '',
   team_id: '',
   github_username: '',
   asana_id: '',
