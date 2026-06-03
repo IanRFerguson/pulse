@@ -18,7 +18,7 @@ def create_team_member():
     if not data:
         return jsonify({"error": "Request body must be JSON"}), 400
 
-    for field in ("username", "email", "team_id"):
+    for field in ("username", "team_id"):
         if not data.get(field):
             return jsonify({"error": f"Missing required field: {field}"}), 400
 
@@ -83,7 +83,7 @@ def create_maintenance_shift():
     if not data:
         return jsonify({"error": "Request body must be JSON"}), 400
 
-    for field in ("team_member_id", "start_time", "end_time"):
+    for field in ("team_member_id", "start_date", "end_date"):
         if not data.get(field):
             return jsonify({"error": f"Missing required field: {field}"}), 400
 

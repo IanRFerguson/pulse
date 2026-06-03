@@ -69,7 +69,6 @@ export interface TeamMemberOption {
 
 export interface CreateTeamMemberPayload {
   username: string;
-  email: string;
   team_id: string;
   github_username?: string;
   asana_id?: string;

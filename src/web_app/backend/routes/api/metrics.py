@@ -49,7 +49,7 @@ def get_maintenance_metrics():
         d = dict(row)
         result.append(d)
 
-    if FlaskConfig.LOCAL_MODE:
+    if FlaskConfig.LOCAL:
         metrics_logger.debug(result)
 
     return jsonify(result)
@@ -84,7 +84,7 @@ def get_sprint_metrics():
         d = dict(row)
         result.append(d)
 
-    if FlaskConfig.LOCAL_MODE:
+    if FlaskConfig.LOCAL:
         metrics_logger.debug(result)
 
     return jsonify(result)

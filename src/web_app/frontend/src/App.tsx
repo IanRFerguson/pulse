@@ -4,7 +4,7 @@ import NavBar from './components/NavBar';
 import { useDarkMode } from './hooks/useDarkMode';
 import { useTheme } from './hooks/useTheme';
 import AddTeamMember from './pages/AddTeamMember';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/dashboard/Dashboard';
 import AddTeam from './pages/AddTeam';
 import AddMaintenanceShift from './pages/AddMaintenanceShift';
 import AddSprint from './pages/AddSprint';

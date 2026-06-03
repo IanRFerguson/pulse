@@ -73,7 +73,7 @@ def get_sprint_metrics_query(by_team: bool, average: bool) -> TextClause:
                 "Constructing SQL query for average sprint metrics by team..."
             )
             return text(
-                "SELECT * FROM dbt_dev.average_sprint_performance_by_team ORDER BY start_date DESC, team_name"
+                "SELECT * FROM dbt_dev.average_sprint_performance_by_team ORDER BY team_name"
             )
 
         else:
@@ -90,7 +90,7 @@ def get_sprint_metrics_query(by_team: bool, average: bool) -> TextClause:
                 "Constructing SQL query for average sprint metrics by individual..."
             )
             return text(
-                "SELECT * FROM dbt_dev.average_sprint_performance_by_member ORDER BY start_date DESC, user_name"
+                "SELECT * FROM dbt_dev.average_sprint_performance_by_member ORDER BY user_name"
             )
 
         else:
