@@ -38,12 +38,15 @@ SELECT
     ) AS total_team_members,
     SUM(total_sprint_points) AS total_sprint_points,
     SUM(total_tasks_assigned) AS total_tasks_assigned,
+    ROUND(AVG(on_time_completion_rate), 3) AS average_on_time_completion_rate,
+    
     SUM(sprint_points_1) AS sprint_points_1,
     SUM(sprint_points_2) AS sprint_points_2,
     SUM(sprint_points_3) AS sprint_points_3,
     SUM(sprint_points_5) AS sprint_points_5,
     SUM(sprint_points_8) AS sprint_points_8,
     SUM(sprint_points_11) AS sprint_points_11,
+    
     SUM(priority_low_priority) AS priority_low_priority,
     SUM(priority_medium_priority) AS priority_medium_priority,
     SUM(priority_high_priority) AS priority_high_priority,

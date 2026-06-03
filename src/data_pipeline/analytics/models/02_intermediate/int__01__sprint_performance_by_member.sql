@@ -29,6 +29,14 @@ WITH
             sp.id AS sprint_period_id,
             SUM(sprint_points::NUMERIC) AS total_sprint_points,
             COUNT(DISTINCT task_id) AS total_tasks_assigned,
+            COUNT(
+                CASE
+                    WHEN completed_on::DATE >= sp.start_date AND completed_on <= sp.end_date 
+                        OR completed_on IS NULL -- NOTE: We added this field after the pipeline was originally built
+                        THEN 1
+                    ELSE NULL
+                END
+            ) AS tasks_completed_on_time,
 
             -- Get a count of how many tasks were assigned to this team member 
             --in each sprint, broken out by sprint points
@@ -69,6 +77,9 @@ SELECT
     ROUND(
         p.total_sprint_points::NUMERIC / NULLIF(p.total_tasks_assigned, 0), 3
     ) AS average_points_per_task,
+    ROUND(
+        p.tasks_completed_on_time::NUMERIC / NULLIF(p.total_tasks_assigned, 0), 3
+    ) AS on_time_completion_rate,
 
     p.sprint_points_1,
     p.sprint_points_2,

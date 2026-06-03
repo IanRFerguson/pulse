@@ -28,6 +28,7 @@ SELECT
         "Sprint Points",
         NULL
     ) AS sprint_points,
+    "Completed On"::TIMESTAMP AS completed_on,
 
     tasks.surrogate_task_id
 
