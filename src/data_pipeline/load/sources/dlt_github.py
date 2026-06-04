@@ -66,17 +66,15 @@ class GithubSource(DltSource):
 
         return [dbt_tmc_pulls(), canales_pulls(), terraform_pulls(), pipelines_pulls()]
 
-    def load(self):
-        source_data = self.sources()
-        return super().load(source_data)
-
 
 #####
 
 if __name__ == "__main__":
     source = GithubSource(
         pipeline_name="github_pipeline",
+        gcs_prefix="github",
         destination_name="postgres",
         dataset_name="github_data",
+        full_refresh=False,
     )
     source.load()
