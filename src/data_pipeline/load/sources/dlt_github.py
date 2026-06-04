@@ -73,7 +73,6 @@ if __name__ == "__main__":
     source = GithubSource(
         pipeline_name="github_pipeline",
         gcs_prefix="github",
-        destination_name="postgres",
         dataset_name="github_data",
         full_refresh=False,
     )

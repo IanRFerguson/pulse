@@ -105,7 +105,6 @@ if __name__ == "__main__":
     source = FreshdeskSource(
         pipeline_name="freshdesk_pipeline",
         gcs_prefix="freshdesk",
-        destination_name="postgres",
         dataset_name="freshdesk_data",
         full_refresh=False,
     )

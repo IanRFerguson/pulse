@@ -71,7 +71,6 @@ if __name__ == "__main__":
     source = AsanaSource(
         pipeline_name="asana_pipeline",
         gcs_prefix="asana",
-        destination_name="postgres",
         dataset_name="asana_data",
         full_refresh=False,
     )

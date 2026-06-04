@@ -3,8 +3,6 @@ from typing import Any
 
 import dlt
 from dlt.destinations import filesystem
-from google.auth import default
-from google.oauth2 import service_account
 from pydantic import BaseModel, PrivateAttr
 
 from src.common import metrics_logger
@@ -26,7 +24,6 @@ class DltSource(BaseModel):
 
     pipeline_name: str
     gcs_prefix: str
-    destination_name: str
     dataset_name: str
     full_refresh: bool = False
 
