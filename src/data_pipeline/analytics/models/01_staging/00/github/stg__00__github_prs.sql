@@ -34,7 +34,9 @@ WITH
             END AS is_closed_unmerged,
 
             -- For joining purposes only
-            _dlt_id
+            _dlt_id,
+            _inserted_at,
+            _transformed_at
 
         FROM {{ ref("base_github__pull_requests") }}
     ),
@@ -75,6 +77,8 @@ SELECT
     reviewer_github_username,
     reviewer_github_user_id,
 
+    _inserted_at,
+    _transformed_at,
     {{ dbt_utils.generate_surrogate_key(["id"]) }} AS surrogate_pull_request_id,
     {{ dbt_utils.generate_surrogate_key(["id", "reviewer_github_user_id"]) }} AS surrogate_pull_request_reviewer_id
 

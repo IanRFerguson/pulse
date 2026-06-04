@@ -11,7 +11,9 @@ WITH
             updated_at,
             DATE(due_by) AS due_by_date,
             status,
-            priority
+            priority,
+            _inserted_at,
+            _transformed_at
 
         FROM {{ ref("base_freshdesk__tickets") }}
     )
@@ -29,6 +31,8 @@ SELECT
     status,
     {{ get_status_label("status") }} AS status_label,
     priority,
+    _inserted_at,
+    _transformed_at,
     {{ dbt_utils.generate_surrogate_key(["ticket_id"]) }} AS surrogate_ticket_id,
     {{ dbt_utils.generate_surrogate_key(["ticket_id", "status", "updated_at"]) }} AS surrogate_ticket_status_id
 

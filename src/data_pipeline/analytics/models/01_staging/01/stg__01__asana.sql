@@ -30,7 +30,9 @@ SELECT
     ) AS sprint_points,
     "Completed On"::TIMESTAMP AS completed_on,
 
-    tasks.surrogate_task_id
+    tasks.surrogate_task_id,
+    _inserted_at,
+    _transformed_at
 
 
 FROM {{ ref("stg__00__asana_tasks") }} AS tasks

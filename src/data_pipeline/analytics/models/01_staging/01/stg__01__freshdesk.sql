@@ -14,6 +14,8 @@ SELECT
     status_label,
     priority,
     surrogate_ticket_id,
-    surrogate_ticket_status_id
+    surrogate_ticket_status_id,
+    _inserted_at,
+    _transformed_at
 
 FROM {{ ref("stg__00__freshdesk_tickets") }}
