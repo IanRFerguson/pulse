@@ -1,12 +1,3 @@
-locals {
-  cron_object = {
-    "morning"     = "0 8 * * 1-5"
-    "mid-morning" = "0 10 * * 1-5"
-    "afternoon"   = "0 14 * * 1-5"
-    "evening"     = "0 16 * * 1-5"
-  }
-}
-
 resource "google_cloud_run_v2_job" "data_pipeline" {
   name           = "tmc-pulse-data-pipeline"
   location       = "us-central1"
@@ -85,10 +76,9 @@ resource "google_cloud_run_v2_job" "data_pipeline" {
 }
 
 resource "google_cloud_scheduler_job" "job" {
-  for_each         = local.cron_object
-  name             = "run-tmc-pulse-data-pipeline-${each.key}"
-  description      = "Triggers TMC Pulse data pipeline at ${each.value}"
-  schedule         = each.value
+  name             = "run-tmc-pulse-data-pipeline"
+  description      = "Triggers TMC Pulse data pipeline every 2 hours on weekdays"
+  schedule         = "0 */2 * * 1-5" # Every 2 hours on weekdays
   time_zone        = "America/New_York"
   region           = "us-central1"
   attempt_deadline = "320s"
