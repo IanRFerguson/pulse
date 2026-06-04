@@ -2,7 +2,9 @@ import os
 from typing import Any
 
 import dlt
-from dlt.destinations import filesystem
+from dlt.destinations import filesystem as filesystem_destination
+from dlt.sources.filesystem import filesystem as filesystem_source
+from dlt.sources.filesystem import read_parquet
 from pydantic import BaseModel, PrivateAttr
 
 from src.common import metrics_logger
@@ -39,7 +41,7 @@ class DltSource(BaseModel):
         # or local metadata server/gcloud auth.
         self._extract_pipeline = dlt.pipeline(
             f"{self.pipeline_name}__extract",
-            destination=filesystem(bucket_url=self._gcs_path),
+            destination=filesystem_destination(bucket_url=self._gcs_path),
         )
         self._load_pipeline = dlt.pipeline(
             f"{self.pipeline_name}__load",
@@ -47,7 +49,34 @@ class DltSource(BaseModel):
             dataset_name=self.dataset_name,
         )
 
-    def extract(self):
+    def _resource_names(self, source_data: list[Any]) -> list[str]:
+        resource_names: list[str] = []
+
+        for source in source_data:
+            if hasattr(source, "selected_resources"):
+                resource_names.extend(source.selected_resources.keys())
+            elif hasattr(source, "name"):
+                resource_names.append(source.name)
+
+        return resource_names
+
+    def _staged_sources(self, resource_names: list[str]) -> list[Any]:
+        return [
+            read_parquet()
+            .with_name(resource_name)
+            .pipe_data_from(
+                filesystem_source(
+                    self._gcs_path,
+                    file_glob=f"{self._extract_pipeline.dataset_name}/{resource_name}/*.parquet",
+                )
+            )
+            for resource_name in resource_names
+        ]
+
+    def sources(self) -> list[Any]:
+        raise NotImplementedError
+
+    def extract(self) -> Any:
         """
         Extract data from the source API and save to GCS.
         """
@@ -67,15 +96,17 @@ class DltSource(BaseModel):
         # Get source data from the API
         metrics_logger.info(f"Extracting data from {self.pipeline_name}...")
         source_data = self.sources()
+        resource_names = self._resource_names(source_data)
 
         # First, save to GCS for data lake / backup
         metrics_logger.info(f"Loading to GCS at {self._gcs_path}...")
-        extract_info = self._extract_pipeline.run(source_data)
+        extract_info = self._extract_pipeline.run(
+            source_data, loader_file_format="parquet"
+        )
         metrics_logger.info(f"GCS load complete: {extract_info}")
 
-        # Then, load to Postgres (need to get sources again since they're generators)
+        # Then, load the staged parquet files from GCS into Postgres
         metrics_logger.info("Loading to Postgres...")
-        source_data = self.sources()
-        load_info = self._load_pipeline.run(source_data)
+        load_info = self._load_pipeline.run(self._staged_sources(resource_names))
 
         metrics_logger.info(f"Postgres load complete: {load_info}")
