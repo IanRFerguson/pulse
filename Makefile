@@ -25,3 +25,7 @@ docker:
 	@uv run \
 		devops/push_docker_image.py \
 		--dockerfile ./devops/docker/Dockerfile.pipe
+
+.PHONY: restart_pi
+restart_pi:
+	@./devops/restart_pi.sh
