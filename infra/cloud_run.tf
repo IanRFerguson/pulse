@@ -27,11 +27,6 @@ resource "google_cloud_run_v2_job" "data_pipeline" {
           mount_path = "/cloudsql"
         }
 
-        env {
-          name  = "GCS_BUCKET"
-          value = google_storage_bucket.data_pipeline_bucket.name
-        }
-
         // Postgres Connection variables
         env {
           name  = "DB_DRIVER"
