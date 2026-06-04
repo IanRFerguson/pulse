@@ -1,7 +1,1 @@
-SELECT
-    {{ 
-        dbt_utils.star(
-            from=source('freshdesk', 'tickets')
-        ) 
-    }}
-FROM {{ source('freshdesk', 'tickets') }}
+{{ build_base_table('freshdesk', 'tickets', include_metadata=true) }}
