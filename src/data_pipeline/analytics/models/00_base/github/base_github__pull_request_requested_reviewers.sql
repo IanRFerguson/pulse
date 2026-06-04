@@ -1,7 +1,1 @@
-SELECT
-    {{ 
-        dbt_utils.star(
-            from=source('github', 'pull_requests__requested_reviewers')
-        ) 
-    }}
-FROM {{ source('github', 'pull_requests__requested_reviewers') }}
+{{ build_base_table('github', 'pull_requests__requested_reviewers') }}

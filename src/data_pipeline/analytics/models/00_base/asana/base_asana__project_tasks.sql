@@ -1,7 +1,1 @@
-SELECT
-    {{ 
-        dbt_utils.star(
-            from=source('asana', 'project_tasks')
-        ) 
-    }}
-FROM {{ source('asana', 'project_tasks') }}
+{{ build_base_table('asana', 'project_tasks', include_metadata=true) }}

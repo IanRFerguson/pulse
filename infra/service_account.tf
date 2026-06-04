@@ -23,3 +23,12 @@ resource "google_project_iam_member" "pulse_sa_roles" {
   role     = "roles/${each.value}"
   member   = "serviceAccount:${google_service_account.pulse_sa.email}"
 }
+
+resource "google_service_account_key" "pulse_sa_key" {
+  service_account_id = google_service_account.pulse_sa.name
+}
+
+resource "local_file" "pulse_sa_key" {
+  content  = base64decode(google_service_account_key.pulse_sa_key.private_key)
+  filename = "${path.module}/../.local/pulse_sa_key.json"
+}

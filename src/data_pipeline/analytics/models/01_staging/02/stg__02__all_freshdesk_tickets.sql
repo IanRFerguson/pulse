@@ -23,13 +23,11 @@ SELECT
     priority,
     created_at,
     updated_at AS valid_from,
-    CURRENT_TIMESTAMP AS _dbt_loaded_at
+    _inserted_at,
+    _transformed_at
 
 FROM {{ ref('stg__01__freshdesk') }}
 
 {% if is_incremental() %}
-    WHERE surrogate_ticket_status_id NOT IN (
-        SELECT surrogate_ticket_status_id
-        FROM {{ this }}
-    )
+    WHERE _inserted_at > (SELECT MAX(_inserted_at) FROM {{ this }}
 {% endif %}

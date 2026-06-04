@@ -28,9 +28,11 @@ SELECT
     github_assignee_login,
     github_assignee_id,
     reviewers,
-    surrogate_pull_request_id
+    surrogate_pull_request_id,
+    _inserted_at,
+    _transformed_at
 
 FROM {{ ref("stg__01__github") }}
 {% if is_incremental() %}
-WHERE updated_at > (SELECT MAX(updated_at) FROM {{ this }})
+WHERE _inserted_at > (SELECT MAX(_inserted_at) FROM {{ this }})
 {% endif %}

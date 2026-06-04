@@ -49,7 +49,9 @@ SELECT DISTINCT
     github_assignee_login,
     github_assignee_id,
     reviewers,
-    surrogate_pull_request_id
+    surrogate_pull_request_id,
+    _inserted_at,
+    _transformed_at
 
 FROM {{ ref("stg__00__github_prs") }}
 LEFT JOIN nested USING (surrogate_pull_request_id)
