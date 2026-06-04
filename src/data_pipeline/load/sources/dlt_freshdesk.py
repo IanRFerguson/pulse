@@ -98,14 +98,17 @@ class FreshdeskSource(DltSource):
 
         return [support_tickets(), support_agents()]
 
+    def load(self):
+        source_data = self.sources()
+        return super().load(source_data)
+
 
 #####
 
 if __name__ == "__main__":
     source = FreshdeskSource(
         pipeline_name="freshdesk_pipeline",
-        gcs_prefix="freshdesk",
+        destination_name="postgres",
         dataset_name="freshdesk_data",
-        full_refresh=False,
     )
     source.load()

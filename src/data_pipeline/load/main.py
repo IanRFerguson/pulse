@@ -35,7 +35,6 @@ def cli(source: Optional[str] = None, full_refresh: bool = False) -> None:
             continue
         instance = _map["source_cls"](
             pipeline_name=_map["pipeline_name"],
-            gcs_prefix=_map["gcs_prefix"],
             destination_name=_map["destination_name"],
             dataset_name=_map["dataset_name"],
             full_refresh=full_refresh,

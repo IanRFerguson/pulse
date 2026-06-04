@@ -21,6 +21,8 @@ class AsanaSource(DltSource):
     DLT source for Asana data.
     """
 
+    full_refresh: bool = False
+
     def sources(self) -> List[dlt.resource]:
         write_disposition = "replace" if self.full_refresh else "merge"
 
@@ -64,14 +66,17 @@ class AsanaSource(DltSource):
 
         return [data_engineering_tasks()]
 
+    def load(self):
+        source_data = self.sources()
+        return super().load(source_data)
+
 
 #####
 
 if __name__ == "__main__":
     source = AsanaSource(
         pipeline_name="asana_pipeline",
-        gcs_prefix="asana",
+        destination_name="postgres",
         dataset_name="asana_data",
-        full_refresh=False,
     )
     source.load()
