@@ -73,3 +73,5 @@ services:
       - .local/local.env
     environment:
       - LOCAL=false
+    volumes:
+      - ./src:/app/src

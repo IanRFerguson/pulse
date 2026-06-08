@@ -2,12 +2,18 @@
     config(
         materialized='incremental',
         unique_key='surrogate_pull_request_id',
-        incremental_strategy='merge',
+        incremental_strategy='delete+insert',
         full_refresh=target.name == 'local',
         on_schema_change='sync_all_columns',
         tags=["github"]
     )
 }}
+
+{% if is_incremental() %}
+WITH max_filter AS (
+    SELECT MAX(_inserted_at) AS max_ts FROM {{ this }}
+)
+{% endif %}
 
 SELECT
 
@@ -34,5 +40,6 @@ SELECT
 
 FROM {{ ref("stg__01__github") }}
 {% if is_incremental() %}
-WHERE _inserted_at > (SELECT MAX(_inserted_at) FROM {{ this }})
+CROSS JOIN max_filter
+WHERE _inserted_at > max_filter.max_ts
 {% endif %}
