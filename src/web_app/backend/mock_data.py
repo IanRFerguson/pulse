@@ -8,6 +8,85 @@ MOCK_TEAMS = [
     {"id": "bbbbbbbb-0002-0002-0002-bbbbbbbbbbbb", "name": "Member Support"},
 ]
 
+MOCK_SPRINTS = [
+    {
+        "id": "cccccccc-0001-0001-0001-cccccccccccc",
+        "team_id": "aaaaaaaa-0001-0001-0001-aaaaaaaaaaaa",
+        "team_name": "Engineering",
+        "friendly_name": "Q1 Sprint 1",
+        "start_date": "2026-03-01",
+        "end_date": "2026-03-14",
+    },
+    {
+        "id": "cccccccc-0002-0002-0002-cccccccccccc",
+        "team_id": "aaaaaaaa-0001-0001-0001-aaaaaaaaaaaa",
+        "team_name": "Engineering",
+        "friendly_name": "Q1 Sprint 2",
+        "start_date": "2026-03-15",
+        "end_date": "2026-03-28",
+    },
+]
+
+MOCK_MAINTENANCE_SHIFTS = [
+    {
+        "id": "dddddddd-0001-0001-0001-dddddddddddd",
+        "team_member_id": "33333333-3333-3333-3333-333333333333",
+        "team_id": "bbbbbbbb-0002-0002-0002-bbbbbbbbbbbb",
+        "user_name": "Morgan Patel",
+        "team_name": "Member Support",
+        "start_date": "2026-03-01",
+        "end_date": "2026-03-07",
+    },
+    {
+        "id": "dddddddd-0002-0002-0002-dddddddddddd",
+        "team_member_id": "44444444-4444-4444-4444-444444444444",
+        "team_id": "bbbbbbbb-0002-0002-0002-bbbbbbbbbbbb",
+        "user_name": "Sam Okonkwo",
+        "team_name": "Member Support",
+        "start_date": "2026-03-08",
+        "end_date": "2026-03-14",
+    },
+]
+
+MOCK_TEAM_MEMBERS_RAW = [
+    {
+        "id": "11111111-1111-1111-1111-111111111111",
+        "user_name": "Alex Rivera",
+        "team_id": "aaaaaaaa-0001-0001-0001-aaaaaaaaaaaa",
+        "team_name": "Engineering",
+        "github_fk": "alex-rivera",
+        "asana_fk": "Alex Rivera",
+        "freshdesk_fk": None,
+    },
+    {
+        "id": "22222222-2222-2222-2222-222222222222",
+        "user_name": "Jordan Kim",
+        "team_id": "aaaaaaaa-0001-0001-0001-aaaaaaaaaaaa",
+        "team_name": "Engineering",
+        "github_fk": "jordan-kim",
+        "asana_fk": "Jordan Kim",
+        "freshdesk_fk": None,
+    },
+    {
+        "id": "33333333-3333-3333-3333-333333333333",
+        "user_name": "Morgan Patel",
+        "team_id": "bbbbbbbb-0002-0002-0002-bbbbbbbbbbbb",
+        "team_name": "Member Support",
+        "github_fk": None,
+        "asana_fk": None,
+        "freshdesk_fk": "Morgan Patel",
+    },
+    {
+        "id": "44444444-4444-4444-4444-444444444444",
+        "user_name": "Sam Okonkwo",
+        "team_id": "bbbbbbbb-0002-0002-0002-bbbbbbbbbbbb",
+        "team_name": "Member Support",
+        "github_fk": None,
+        "asana_fk": "Sam Okonkwo",
+        "freshdesk_fk": "Sam Okonkwo",
+    },
+]
+
 MOCK_TEAM_MEMBERS = [
     {
         "id": "11111111-1111-1111-1111-111111111111",

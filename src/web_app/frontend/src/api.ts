@@ -4,8 +4,11 @@ import type {
   CreateTeamMemberPayload,
   CreateTeamPayload,
   MaintenanceMetric,
+  MaintenanceShiftRecord,
   SprintMetric,
+  Sprint,
   Team,
+  TeamMemberDetail,
   TeamMemberOption,
   TeamMemberSummary,
   ThemeConfig,
@@ -56,6 +59,56 @@ export const api = {
       '/api/create-sprint',
       { method: 'POST', body: JSON.stringify(payload) },
     ),
+
+  getTeamMembersRaw: () => apiFetch<TeamMemberDetail[]>('/api/team-members-raw'),
+
+  getSprints: () => apiFetch<Sprint[]>('/api/sprints'),
+
+  getMaintenanceShifts: () => apiFetch<MaintenanceShiftRecord[]>('/api/maintenance-shifts'),
+
+  updateTeam: (id: string, payload: { name: string }) =>
+    apiFetch<{ id: string; name: string }>(`/api/teams/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    }),
+
+  updateTeamMember: (
+    id: string,
+    payload: {
+      username: string;
+      team_id: string;
+      github_username?: string;
+      asana_id?: string;
+      freshdesk_agent?: string;
+    },
+  ) =>
+    apiFetch<{ id: string; username: string }>(`/api/team-members/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    }),
+
+  updateSprint: (
+    id: string,
+    payload: {
+      team_id: string;
+      friendly_name?: string;
+      start_date: string;
+      end_date: string;
+    },
+  ) =>
+    apiFetch<{ id: string }>(`/api/sprints/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    }),
+
+  updateMaintenanceShift: (
+    id: string,
+    payload: { team_member_id: string; start_date: string; end_date: string },
+  ) =>
+    apiFetch<{ id: string }>(`/api/maintenance-shifts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    }),
 
   getMaintenanceMetrics: () => apiFetch<MaintenanceMetric[]>('/api/maintenance-metrics'),
 

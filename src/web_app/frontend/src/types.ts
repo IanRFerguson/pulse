@@ -112,6 +112,35 @@ export interface MaintenanceMetric {
   passed_off_ticket_count: number;
 }
 
+export interface Sprint {
+  id: string;
+  team_id: string;
+  team_name: string;
+  friendly_name: string | null;
+  start_date: string;
+  end_date: string;
+}
+
+export interface MaintenanceShiftRecord {
+  id: string;
+  team_member_id: string;
+  team_id: string;
+  user_name: string;
+  team_name: string;
+  start_date: string;
+  end_date: string;
+}
+
+export interface TeamMemberDetail {
+  id: string;
+  user_name: string;
+  team_id: string;
+  team_name: string;
+  github_fk: string | null;
+  asana_fk: string | null;
+  freshdesk_fk: string | null;
+}
+
 export interface SprintMetric {
   sprint_period_id: string;
   team_id: string;
