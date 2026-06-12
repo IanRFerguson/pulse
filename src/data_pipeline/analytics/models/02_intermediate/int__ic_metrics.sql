@@ -116,5 +116,5 @@ LEFT JOIN github
     ON CAST(team_members.github_fk AS TEXT) = CAST(github.github_user_id AS TEXT)
 LEFT JOIN asana 
     ON CAST(team_members.asana_fk AS TEXT) = CAST(asana.assignee_name AS TEXT)
-LEFT JOIN freshdesk 
-    ON CAST(team_members.freshdesk_fk AS TEXT) = CAST(freshdesk.assigned_agent_name AS TEXT)
+LEFT JOIN freshdesk
+    ON LOWER(TRIM(team_members.freshdesk_fk)) = LOWER(TRIM(freshdesk.assigned_agent_name))

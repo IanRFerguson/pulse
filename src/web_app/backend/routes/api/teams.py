@@ -4,8 +4,14 @@ from flask import jsonify
 from sqlalchemy import text
 
 from ...config import FlaskConfig
-from ...mock_data import MOCK_TEAM_MEMBERS, MOCK_TEAMS
-from ...models import Team, TeamMember, db
+from ...mock_data import (
+    MOCK_MAINTENANCE_SHIFTS,
+    MOCK_SPRINTS,
+    MOCK_TEAM_MEMBERS,
+    MOCK_TEAM_MEMBERS_RAW,
+    MOCK_TEAMS,
+)
+from ...models import MaintenanceShift, SprintPeriod, Team, TeamMember, db
 from . import bp
 
 #####
@@ -55,6 +61,94 @@ def list_team_members():
         result.append(d)
 
     return jsonify(result)
+
+
+@bp.route("/team-members-raw")
+def list_team_members_raw():
+    """Returns all team members with raw FK fields for the admin panel."""
+
+    if FlaskConfig.DEMO_MODE:
+        return jsonify(MOCK_TEAM_MEMBERS_RAW)
+
+    members = (
+        db.session.query(TeamMember)
+        .join(Team, TeamMember.team_id == Team.id)
+        .filter(TeamMember.active.is_(True))
+        .order_by(Team.name, TeamMember.user_name)
+        .all()
+    )
+    return jsonify(
+        [
+            {
+                "id": str(m.id),
+                "user_name": m.user_name,
+                "team_id": str(m.team_id),
+                "team_name": m.team.name,
+                "github_fk": m.github_fk,
+                "asana_fk": m.asana_fk,
+                "freshdesk_fk": m.freshdesk_fk,
+            }
+            for m in members
+        ]
+    )
+
+
+@bp.route("/sprints")
+def list_sprints():
+    """Returns all sprint periods."""
+
+    if FlaskConfig.DEMO_MODE:
+        return jsonify(MOCK_SPRINTS)
+
+    rows = (
+        db.session.query(SprintPeriod)
+        .join(Team, SprintPeriod.team_id == Team.id)
+        .order_by(Team.name, SprintPeriod.start_date.desc())
+        .all()
+    )
+    return jsonify(
+        [
+            {
+                "id": str(r.id),
+                "team_id": str(r.team_id),
+                "team_name": r.team.name,
+                "friendly_name": r.friendly_name,
+                "start_date": str(r.start_date),
+                "end_date": str(r.end_date),
+            }
+            for r in rows
+        ]
+    )
+
+
+@bp.route("/maintenance-shifts")
+def list_maintenance_shifts():
+    """Returns all maintenance shifts."""
+
+    if FlaskConfig.DEMO_MODE:
+        return jsonify(MOCK_MAINTENANCE_SHIFTS)
+
+    rows = (
+        db.session.query(MaintenanceShift)
+        .join(TeamMember, MaintenanceShift.team_member_id == TeamMember.id)
+        .join(Team, TeamMember.team_id == Team.id)
+        .order_by(MaintenanceShift.start_date.desc())
+        .all()
+    )
+    return jsonify(
+        [
+            {
+                "id": str(r.id),
+                "team_member_id": str(r.team_member_id),
+                "team_id": str(r.team_member.team_id),
+                "user_name": r.team_member.user_name,
+                "team_name": r.team_member.team.name,
+                "start_date": str(r.start_date),
+                "end_date": str(r.end_date),
+            }
+            for r in rows
+        ]
+    )
 
 
 @bp.route("/teams/<team_id>/members")

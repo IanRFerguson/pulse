@@ -32,7 +32,6 @@ def get_maintenance_metrics():
                 " user_name,"
                 " start_date,"
                 " end_date,"
-                " inherited_ticket_count,"
                 " opened_during_shift_count,"
                 " closed_during_shift_count,"
                 " passed_off_ticket_count"

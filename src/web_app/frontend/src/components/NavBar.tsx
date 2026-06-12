@@ -27,28 +27,10 @@ export default function NavBar({ theme, isDark, toggleDark }: Props) {
 
       <div className="navbar-links">
         <Link
-          to="/add-team"
-          className={`nav-link${location.pathname === '/add-team' ? ' active' : ''}`}
+          to="/admin"
+          className={`nav-link${location.pathname.startsWith('/admin') ? ' active' : ''}`}
         >
-          Add Team
-        </Link>
-        <Link
-          to="/add-member"
-          className={`nav-link${location.pathname === '/add-member' ? ' active' : ''}`}
-        >
-          Add Team Member
-        </Link>
-        <Link
-          to="/add-shift"
-          className={`nav-link${location.pathname === '/add-shift' ? ' active' : ''}`}
-        >
-          Add Maintenance Shift
-        </Link>
-        <Link
-          to="/add-sprint"
-          className={`nav-link${location.pathname === '/add-sprint' ? ' active' : ''}`}
-        >
-          Add Sprint
+          Manage
         </Link>
         <button
           className="theme-toggle"

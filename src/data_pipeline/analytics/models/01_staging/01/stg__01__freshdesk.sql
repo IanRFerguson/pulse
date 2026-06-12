@@ -2,9 +2,10 @@ SELECT
 
     ticket_id,
     ticket_subject,
-    assigned_agent_name,
     group_id,
     ticket_type,
+    responder_id,
+    assigned_agent_name,
     created_at,
     updated_at,
     CURRENT_DATE - created_at::DATE AS days_active,
