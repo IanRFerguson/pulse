@@ -76,6 +76,7 @@ function TeamsPanel() {
   const [editName, setEditName] = useState('');
 
   function reload() {
+    setError(null);
     setLoading(true);
     api
       .getTeams()
@@ -278,6 +279,7 @@ function TeamMembersPanel() {
   const [editForm, setEditForm] = useState<CreateTeamMemberPayload>(EMPTY_MEMBER);
 
   function reload() {
+    setError(null);
     setLoading(true);
     Promise.all([api.getTeamMembersRaw(), api.getTeams()])
       .then(([m, t]) => {
@@ -566,6 +568,7 @@ function SprintsPanel() {
   const [editForm, setEditForm] = useState<CreateSprintPayload>(EMPTY_SPRINT);
 
   function reload() {
+    setError(null);
     setLoading(true);
     Promise.all([api.getSprints(), api.getTeams()])
       .then(([s, t]) => {
@@ -842,6 +845,7 @@ function MaintenancePanel() {
   const [editMembers, setEditMembers] = useState<TeamMemberOption[]>([]);
 
   function reload() {
+    setError(null);
     setLoading(true);
     Promise.all([api.getMaintenanceShifts(), api.getTeams()])
       .then(([s, t]) => {
