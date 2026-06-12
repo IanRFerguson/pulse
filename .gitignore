@@ -1,6 +1,7 @@
 .venv/
 **/*.env
 .local/*.json
+.claude/
 
 **/*.pyc
 logs/
