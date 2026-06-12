@@ -106,7 +106,6 @@ export interface MaintenanceMetric {
   user_name: string;
   start_date: string;
   end_date: string;
-  inherited_ticket_count: number;
   opened_during_shift_count: number;
   closed_during_shift_count: number;
   passed_off_ticket_count: number;

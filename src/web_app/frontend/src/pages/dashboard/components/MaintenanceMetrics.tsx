@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { MaintenanceMetric } from '../../../types';
 
 // Configure pagination: change this value to adjust rows per page
-const ROWS_PER_PAGE = 10;
+const ROWS_PER_PAGE = 8;
 
 interface Props {
     metrics: MaintenanceMetric[];
@@ -11,13 +11,18 @@ interface Props {
 export default function MaintenanceMetrics({ metrics }: Props) {
     const [currentPage, setCurrentPage] = useState(1);
 
+    // Filter to shifts that have already started (exclude future shifts)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const pastMetrics = metrics.filter((m) => new Date(m.start_date) <= today);
+
     // Pagination calculations
-    const totalPages = Math.ceil(metrics.length / ROWS_PER_PAGE);
+    const totalPages = Math.ceil(pastMetrics.length / ROWS_PER_PAGE);
     const startIdx = (currentPage - 1) * ROWS_PER_PAGE;
     const endIdx = startIdx + ROWS_PER_PAGE;
-    const paginatedMetrics = metrics.slice(startIdx, endIdx);
+    const paginatedMetrics = pastMetrics.slice(startIdx, endIdx);
 
-    if (metrics.length === 0) {
+    if (pastMetrics.length === 0) {
         return (
             <div className="empty-state">
                 <p>No maintenance shift data available.</p>
@@ -32,7 +37,6 @@ export default function MaintenanceMetrics({ metrics }: Props) {
                     <tr>
                         <th>Team Member</th>
                         <th>Shift Period</th>
-                        <th>Inherited</th>
                         <th>Opened</th>
                         <th>Closed</th>
                         <th>Passed Off</th>
@@ -45,7 +49,6 @@ export default function MaintenanceMetrics({ metrics }: Props) {
                             <td>
                                 {new Date(metric.start_date).toLocaleDateString()} - {new Date(metric.end_date).toLocaleDateString()}
                             </td>
-                            <td>{metric.inherited_ticket_count}</td>
                             <td>{metric.opened_during_shift_count}</td>
                             <td>{metric.closed_during_shift_count}</td>
                             <td>{metric.passed_off_ticket_count}</td>
@@ -63,7 +66,7 @@ export default function MaintenanceMetrics({ metrics }: Props) {
                         Previous
                     </button>
                     <span>
-                        Page {currentPage} of {totalPages} ({metrics.length} total rows)
+                        Page {currentPage} of {totalPages} ({pastMetrics.length} total rows)
                     </span>
                     <button
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
