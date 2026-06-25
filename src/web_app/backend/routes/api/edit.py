@@ -5,7 +5,14 @@ from flask import jsonify, request
 from common import metrics_logger
 
 from ...config import FlaskConfig
-from ...models import MaintenanceShift, SprintPeriod, Team, TeamMember, db
+from ...models import (
+    MaintenanceShift,
+    SprintPeriod,
+    Team,
+    TeamMember,
+    TeamMemberSprint,
+    db,
+)
 from . import bp
 
 #####
@@ -145,3 +152,48 @@ def update_maintenance_shift(shift_id: str):
     db.session.commit()
     metrics_logger.info(f"Updated maintenance shift {shift_id}")
     return jsonify({"id": str(shift.id)})
+
+
+@bp.route("/sprints/<sprint_id>/members/<team_member_id>", methods=["PUT"])
+def upsert_sprint_member(sprint_id: str, team_member_id: str):
+    if FlaskConfig.DEMO_MODE:
+        return jsonify({"id": team_member_id})
+
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"error": "Request body must be JSON"}), 400
+
+    for field in ("working_days", "is_on_maintenance"):
+        if field not in data:
+            return jsonify({"error": f"Missing required field: {field}"}), 400
+
+    try:
+        sprint_uid = uuid_mod.UUID(sprint_id)
+        member_uid = uuid_mod.UUID(team_member_id)
+    except ValueError:
+        return jsonify({"error": "Invalid ID"}), 400
+
+    sprint = db.session.get(SprintPeriod, sprint_uid)
+    if sprint is None:
+        return jsonify({"error": "Sprint not found"}), 404
+
+    member = db.session.get(TeamMember, member_uid)
+    if member is None:
+        return jsonify({"error": "Team member not found"}), 404
+
+    record = (
+        db.session.query(TeamMemberSprint)
+        .filter_by(sprint_period_id=sprint_uid, team_member_id=member_uid)
+        .first()
+    )
+    if record is None:
+        record = TeamMemberSprint(
+            sprint_period_id=sprint_uid, team_member_id=member_uid
+        )
+        db.session.add(record)
+
+    record.working_days = data["working_days"]
+    record.is_on_maintenance = data["is_on_maintenance"]
+    db.session.commit()
+    metrics_logger.info(f"Upserted sprint member {sprint_id}/{team_member_id}")
+    return jsonify({"id": str(record.id)})

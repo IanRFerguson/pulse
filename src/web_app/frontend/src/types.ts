@@ -140,6 +140,14 @@ export interface TeamMemberDetail {
   freshdesk_fk: string | null;
 }
 
+export interface SprintMember {
+  id: string | null;
+  team_member_id: string;
+  user_name: string;
+  working_days: number;
+  is_on_maintenance: boolean;
+}
+
 export interface SprintMetric {
   sprint_period_id: string;
   team_id: string;

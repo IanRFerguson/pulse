@@ -3,6 +3,7 @@ import { api } from '../../api';
 import type {
     CreateSprintPayload,
     Sprint,
+    SprintMember,
     Team,
 } from '../../types';
 import { usePagination, Pagination } from './CustomPagination';
@@ -21,6 +22,7 @@ export function SprintsPanel() {
     const [error, setError] = useState<string | null>(null);
     const [adding, setAdding] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [membersSprintId, setMembersSprintId] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
     const [addForm, setAddForm] = useState<CreateSprintPayload>(EMPTY_SPRINT);
     const [editForm, setEditForm] = useState<CreateSprintPayload>(EMPTY_SPRINT);
@@ -68,7 +70,13 @@ export function SprintsPanel() {
         }
     }
 
+    function toggleMembers(id: string) {
+        setMembersSprintId((prev) => (prev === id ? null : id));
+        setEditingId(null);
+    }
+
     function startEdit(s: Sprint) {
+        setMembersSprintId(null);
         setEditingId(s.id);
         setEditForm({
             team_id: s.team_id,
@@ -242,7 +250,15 @@ export function SprintsPanel() {
                                         <td>
                                             <span className="member-team-badge">{s.team_name}</span>
                                         </td>
-                                        <td>{s.friendly_name ?? <span className="admin-empty">Unnamed</span>}</td>
+                                        <td>
+                                            <button
+                                                className="admin-name-link"
+                                                onClick={() => toggleMembers(s.id)}
+                                                title="View / edit sprint members"
+                                            >
+                                                {s.friendly_name ?? <span className="admin-empty">Unnamed</span>}
+                                            </button>
+                                        </td>
                                         <td className="admin-date-cell">{s.start_date}</td>
                                         <td className="admin-date-cell">{s.end_date}</td>
                                         <td className="admin-actions-cell">
@@ -254,6 +270,15 @@ export function SprintsPanel() {
                                             </button>
                                         </td>
                                     </tr>
+                                    {membersSprintId === s.id && (
+                                        <tr className="expansion-row">
+                                            <td colSpan={5}>
+                                                <div className="expanded-panel">
+                                                    <SprintMembersPanel sprintId={s.id} />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )}
                                     {editingId === s.id && (
                                         <tr className="expansion-row">
                                             <td colSpan={5}>
@@ -277,5 +302,108 @@ export function SprintsPanel() {
             )}
             <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
+    );
+}
+
+function SprintMembersPanel({ sprintId }: { sprintId: string }) {
+    const [members, setMembers] = useState<SprintMember[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [edits, setEdits] = useState<Record<string, { working_days: number; is_on_maintenance: boolean }>>({});
+    const [saving, setSaving] = useState<string | null>(null);
+
+    useEffect(() => {
+        api.getSprintMembers(sprintId)
+            .then((data) => {
+                setMembers(data);
+                const initial: Record<string, { working_days: number; is_on_maintenance: boolean }> = {};
+                data.forEach((m) => {
+                    initial[m.team_member_id] = { working_days: m.working_days, is_on_maintenance: m.is_on_maintenance };
+                });
+                setEdits(initial);
+            })
+            .catch(() => setError('Failed to load sprint members'))
+            .finally(() => setLoading(false));
+    }, [sprintId]);
+
+    async function save(m: SprintMember) {
+        const edit = edits[m.team_member_id];
+        if (!edit) return;
+        setSaving(m.team_member_id);
+        try {
+            const { id } = await api.upsertSprintMember(sprintId, m.team_member_id, edit);
+            setMembers((prev) =>
+                prev.map((x) => x.team_member_id === m.team_member_id ? { ...x, id, ...edit } : x)
+            );
+        } catch {
+            setError('Failed to save');
+        } finally {
+            setSaving(null);
+        }
+    }
+
+    if (loading) return <div className="loading-state">Loading members…</div>;
+    if (error) return <div className="form-error">{error}</div>;
+    if (members.length === 0) return <div className="empty-state">No active team members found.</div>;
+
+    return (
+        <table className="dashboard-table">
+            <thead>
+                <tr>
+                    <th>Team Member</th>
+                    <th>Working Days</th>
+                    <th>On Maintenance</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {members.map((m) => {
+                    const edit = edits[m.team_member_id] ?? { working_days: m.working_days, is_on_maintenance: m.is_on_maintenance };
+                    const isSaving = saving === m.team_member_id;
+                    const isDirty = edit.working_days !== m.working_days || edit.is_on_maintenance !== m.is_on_maintenance;
+                    return (
+                        <tr key={m.team_member_id}>
+                            <td>{m.user_name}</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    className="form-input"
+                                    style={{ width: '80px' }}
+                                    min={0}
+                                    value={edit.working_days}
+                                    onChange={(e) =>
+                                        setEdits((prev) => ({
+                                            ...prev,
+                                            [m.team_member_id]: { ...edit, working_days: parseInt(e.target.value) || 0 },
+                                        }))
+                                    }
+                                />
+                            </td>
+                            <td style={{ textAlign: 'center' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={edit.is_on_maintenance}
+                                    onChange={(e) =>
+                                        setEdits((prev) => ({
+                                            ...prev,
+                                            [m.team_member_id]: { ...edit, is_on_maintenance: e.target.checked },
+                                        }))
+                                    }
+                                />
+                            </td>
+                            <td className="admin-actions-cell">
+                                <button
+                                    className="btn btn-primary btn--sm"
+                                    disabled={isSaving || !isDirty}
+                                    onClick={() => save(m)}
+                                >
+                                    {isSaving ? 'Saving…' : 'Save'}
+                                </button>
+                            </td>
+                        </tr>
+                    );
+                })}
+            </tbody>
+        </table>
     );
 }

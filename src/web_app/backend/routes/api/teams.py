@@ -11,7 +11,14 @@ from ...mock_data import (
     MOCK_TEAM_MEMBERS_RAW,
     MOCK_TEAMS,
 )
-from ...models import MaintenanceShift, SprintPeriod, Team, TeamMember, db
+from ...models import (
+    MaintenanceShift,
+    SprintPeriod,
+    Team,
+    TeamMember,
+    TeamMemberSprint,
+    db,
+)
 from . import bp
 
 #####
@@ -117,6 +124,50 @@ def list_sprints():
                 "end_date": str(r.end_date),
             }
             for r in rows
+        ]
+    )
+
+
+@bp.route("/sprints/<sprint_id>/members")
+def list_sprint_members(sprint_id: str):
+    """Returns all active team members for a sprint's team with their TeamMemberSprint data."""
+    try:
+        uid = uuid_mod.UUID(sprint_id)
+    except ValueError:
+        return jsonify({"error": "Invalid sprint_id"}), 400
+
+    sprint = db.session.get(SprintPeriod, uid)
+    if sprint is None:
+        return jsonify({"error": "Sprint not found"}), 404
+
+    team_members = (
+        db.session.query(TeamMember)
+        .filter_by(team_id=sprint.team_id, active=True)
+        .order_by(TeamMember.user_name)
+        .all()
+    )
+
+    existing = {
+        tms.team_member_id: tms
+        for tms in db.session.query(TeamMemberSprint)
+        .filter_by(sprint_period_id=uid)
+        .all()
+    }
+
+    return jsonify(
+        [
+            {
+                "id": str(existing[tm.id].id) if tm.id in existing else None,
+                "team_member_id": str(tm.id),
+                "user_name": tm.user_name,
+                "working_days": existing[tm.id].working_days
+                if tm.id in existing
+                else 10,
+                "is_on_maintenance": existing[tm.id].is_on_maintenance
+                if tm.id in existing
+                else False,
+            }
+            for tm in team_members
         ]
     )
 
