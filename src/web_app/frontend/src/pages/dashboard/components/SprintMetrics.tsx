@@ -22,7 +22,7 @@ const sprintMetricsMap = {
     "all_metrics_by_team": {
         "Team Name": "team_name",
         "Sprint": "sprint_period_name",
-        "Period": (metric: SprintMetric) => `${new Date(metric.start_date).toLocaleDateString()} - ${new Date(metric.end_date).toLocaleDateString()}`,
+        "Period": (metric: SprintMetric) => `${metric.start_date} - ${metric.end_date}`,
         "Total Points": "total_sprint_points",
         "Total Tasks": "total_tasks_assigned",
         "On Time %": "average_on_time_completion_rate",
@@ -36,7 +36,7 @@ const sprintMetricsMap = {
     "all_metrics_by_member": {
         "Team Member": "user_name",
         "Sprint": "sprint_period_name",
-        "Period": (metric: SprintMetric) => `${new Date(metric.start_date).toLocaleDateString()} - ${new Date(metric.end_date).toLocaleDateString()}`,
+        "Period": (metric: SprintMetric) => `${metric.start_date} - ${metric.end_date}`,
         "Total Points": "total_sprint_points",
         "Total Tasks": "total_tasks_assigned",
         "On Time %": "on_time_completion_rate",
@@ -46,7 +46,7 @@ const sprintMetricsMap = {
 function formatValue(value: any, columnName: string) {
     if (value === null || value === undefined) return '-';
     if (columnName === 'On Time %') {
-        return `${(value * 100).toFixed(1)}%`;
+        return `${(value * 100).toFixed(1)}% `;
     }
     if (columnName.toLowerCase().includes("avg") || columnName.toLowerCase().includes("points") || columnName.toLowerCase().includes("tasks")) {
         return (value * 1).toFixed(2);
@@ -116,7 +116,7 @@ export default function SprintMetrics({
                         </thead>
                         <tbody>
                             {paginatedMetrics.map((metric, idx) => (
-                                <tr key={`${metric.sprint_period_id}-${metric.user_name}-${idx}`}>
+                                <tr key={`${metric.sprint_period_id} -${metric.user_name} -${idx} `}>
                                     {columns.map(col => {
                                         const accessor = columnConfig[col as keyof typeof columnConfig] as string | ((metric: SprintMetric) => string);
                                         const value = typeof accessor === 'function'
