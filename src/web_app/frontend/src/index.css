@@ -827,6 +827,31 @@ code {
   font-size: 13px;
 }
 
+/* ── Plan page ── */
+.plan-days-input {
+  width: 72px;
+  padding: 4px 8px;
+  text-align: center;
+}
+
+.plan-stat {
+  color: var(--text);
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
+
+.plan-estimated {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.plan-total-row td {
+  border-top: 2px solid var(--border);
+  font-weight: 600;
+  padding-top: 10px;
+}
+
 /* ── Pagination ── */
 .pagination {
   display: flex;
