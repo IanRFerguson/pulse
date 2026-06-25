@@ -4,9 +4,15 @@ SELECT
     team_name,
     user_name,
 
+    AVG(working_days) AS avg_working_days,
     AVG(total_sprint_points) AS avg_sprint_points,
     AVG(total_tasks_assigned) AS avg_tasks_assigned,
     AVG(on_time_completion_rate) AS avg_tasks_completed_on_time,
+
+    AVG(average_points_per_work_day) AS avg_points_per_work_day,
+    AVG(average_tasks_per_work_day) AS avg_tasks_per_work_day,
+    AVG(average_points_per_task) AS avg_points_per_task,
+    AVG(on_time_completion_rate) AS avg_on_time_completion_rate,
     
     AVG(sprint_points_1) AS avg_sprint_points_1,
     AVG(sprint_points_2) AS avg_sprint_points_2,
