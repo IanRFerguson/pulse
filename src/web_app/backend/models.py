@@ -116,6 +116,9 @@ class TeamMemberSprint(db.Model):
     """Represents a team member's participation in a sprint."""
 
     __tablename__ = "team_member_sprint"
+    __table_args__ = (
+        db.UniqueConstraint("team_member_id", "sprint_period_id", name="uq_team_member_sprint_member_sprint"),
+    )
 
     id = db.Column(db.Uuid, primary_key=True, default=uuid.uuid4)
     team_member_id = db.Column(

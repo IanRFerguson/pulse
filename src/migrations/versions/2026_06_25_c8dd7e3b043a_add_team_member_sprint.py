@@ -26,10 +26,8 @@ def upgrade() -> None:
         sa.Column("id", sa.Uuid(), nullable=False),
         sa.Column("team_member_id", sa.Uuid(), nullable=False),
         sa.Column("sprint_period_id", sa.Uuid(), nullable=False),
-        sa.Column("working_days", sa.Integer(), nullable=False, system_default=10),
-        sa.Column(
-            "is_on_maintenance", sa.Boolean(), nullable=False, system_default=False
-        ),
+        sa.Column("working_days", sa.Integer(), nullable=False, server_default=sa.text("10")),
+        sa.Column("is_on_maintenance", sa.Boolean(), nullable=False, server_default=sa.text("false")),
         sa.ForeignKeyConstraint(
             ["sprint_period_id"],
             ["sprint_period.id"],
@@ -38,6 +36,7 @@ def upgrade() -> None:
             ["team_member_id"],
             ["team_members.id"],
         ),
+        sa.UniqueConstraint("team_member_id", "sprint_period_id", name="uq_team_member_sprint_member_sprint"),
         sa.PrimaryKeyConstraint("id"),
     )
     # ### end Alembic commands ###

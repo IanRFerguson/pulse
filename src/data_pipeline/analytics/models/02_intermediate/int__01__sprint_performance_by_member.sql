@@ -66,8 +66,8 @@ SELECT
     p.total_tasks_assigned,
     p.tasks_completed_on_time,
 
-    (p.total_sprint_points / spm.working_days) AS average_points_per_work_day,
-    (p.total_tasks_assigned / spm.working_days) AS average_tasks_per_work_day,
+    (p.total_sprint_points / NULLIF(spm.working_days, 0)) AS average_points_per_work_day,
+    (p.total_tasks_assigned / NULLIF(spm.working_days, 0)) AS average_tasks_per_work_day,
 
     ROUND(
         p.total_sprint_points::NUMERIC / NULLIF(p.total_tasks_assigned, 0), 3

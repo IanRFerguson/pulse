@@ -46,7 +46,7 @@ const sprintMetricsMap = {
 function formatValue(value: any, columnName: string) {
     if (value === null || value === undefined) return '-';
     if (columnName === 'On Time %') {
-        return `${(value * 100).toFixed(1)}% `;
+        return `${(value * 100).toFixed(1)}%`;
     }
     if (columnName.toLowerCase().includes("avg") || columnName.toLowerCase().includes("points") || columnName.toLowerCase().includes("tasks")) {
         return (value * 1).toFixed(2);
@@ -116,7 +116,7 @@ export default function SprintMetrics({
                         </thead>
                         <tbody>
                             {paginatedMetrics.map((metric, idx) => (
-                                <tr key={`${metric.sprint_period_id} -${metric.user_name} -${idx} `}>
+                                <tr key={`${metric.sprint_period_id}-${metric.user_name}-${idx}`}>
                                     {columns.map(col => {
                                         const accessor = columnConfig[col as keyof typeof columnConfig] as string | ((metric: SprintMetric) => string);
                                         const value = typeof accessor === 'function'

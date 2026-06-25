@@ -123,7 +123,7 @@ export default function Plan() {
                                                     onChange={(e) =>
                                                         setWorkingDays((prev) => ({
                                                             ...prev,
-                                                            [m.id]: parseInt(e.target.value) || 0,
+                                                            [m.id]: parseInt(e.target.value, 10) || 0,
                                                         }))
                                                     }
                                                 />
