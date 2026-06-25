@@ -13,6 +13,7 @@ services:
     environment:
       - DEBUG=true
       - DOCKER=true
+      - LOCAL=true
 
       # NOTE: If you're running locally uncomment the line below to allow the web-app to connect to the host machine's Postgres database.
       # - DB_HOST=host.docker.internal

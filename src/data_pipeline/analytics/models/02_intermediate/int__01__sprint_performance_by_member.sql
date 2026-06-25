@@ -77,6 +77,7 @@ SELECT
 
     p.total_sprint_points,
     p.total_tasks_assigned,
+    p.tasks_completed_on_time,
     ROUND(
         p.total_sprint_points::NUMERIC / NULLIF(p.total_tasks_assigned, 0), 3
     ) AS average_points_per_task,
