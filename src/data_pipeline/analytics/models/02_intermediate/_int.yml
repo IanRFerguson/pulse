@@ -1,4 +1,15 @@
 models:
+  - name: int__00__sprint_period_metadata
+    tests:
+      - unique:
+          column_name: team_member_sprint_id
+          config:
+            severity: error
+  - name: int__01__sprint_performance_by_member
+  - name: int__01__sprint_performance_by_team
+  - name: int__02__sprint_performance_by_member
+  - name: int__02__sprint_performance_by_team
+  
+  
   - name: int__ic_metrics
   - name: int__maintenance_performance
-  - name: int__sprint_performance

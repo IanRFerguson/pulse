@@ -5,6 +5,7 @@ import type {
   CreateTeamPayload,
   MaintenanceMetric,
   MaintenanceShiftRecord,
+  SprintMember,
   SprintMetric,
   Sprint,
   Team,
@@ -109,6 +110,19 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify(payload),
     }),
+
+  getSprintMembers: (sprintId: string) =>
+    apiFetch<SprintMember[]>(`/api/sprints/${encodeURIComponent(sprintId)}/members`),
+
+  upsertSprintMember: (
+    sprintId: string,
+    teamMemberId: string,
+    payload: { working_days: number; is_on_maintenance: boolean },
+  ) =>
+    apiFetch<{ id: string }>(
+      `/api/sprints/${encodeURIComponent(sprintId)}/members/${encodeURIComponent(teamMemberId)}`,
+      { method: 'PUT', body: JSON.stringify(payload) },
+    ),
 
   getMaintenanceMetrics: () => apiFetch<MaintenanceMetric[]>('/api/maintenance-metrics'),
 

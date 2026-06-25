@@ -27,6 +27,12 @@ export default function NavBar({ theme, isDark, toggleDark }: Props) {
 
       <div className="navbar-links">
         <Link
+          to="/plan"
+          className={`nav-link${location.pathname.startsWith('/plan') ? ' active' : ''}`}
+        >
+          Plan
+        </Link>
+        <Link
           to="/admin"
           className={`nav-link${location.pathname.startsWith('/admin') ? ' active' : ''}`}
         >

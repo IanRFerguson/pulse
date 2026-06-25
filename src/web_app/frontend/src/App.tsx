@@ -4,6 +4,7 @@ import NavBar from './components/NavBar';
 import { useDarkMode } from './hooks/useDarkMode';
 import { useTheme } from './hooks/useTheme';
 import Admin from './pages/Admin';
+import Plan from './pages/Plan';
 import Dashboard from './pages/dashboard/Dashboard';
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Dashboard theme={theme} />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/plan" element={<Plan />} />
         </Routes>
       </main>
     </BrowserRouter>
