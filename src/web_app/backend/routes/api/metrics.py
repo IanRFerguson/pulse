@@ -1,3 +1,5 @@
+import datetime
+
 from flask import jsonify, request
 from sqlalchemy import text
 
@@ -45,7 +47,10 @@ def get_maintenance_metrics():
 
     result = []
     for row in rows:
-        d = dict(row)
+        d = {
+            k: v.isoformat() if isinstance(v, datetime.date) else v
+            for k, v in dict(row).items()
+        }
         result.append(d)
 
     if FlaskConfig.LOCAL:
@@ -80,7 +85,10 @@ def get_sprint_metrics():
 
     result = []
     for row in rows:
-        d = dict(row)
+        d = {
+            k: v.isoformat() if isinstance(v, datetime.date) else v
+            for k, v in dict(row).items()
+        }
         result.append(d)
 
     if FlaskConfig.LOCAL:
