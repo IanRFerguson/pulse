@@ -110,3 +110,36 @@ class SprintPeriod(db.Model):
 
     def __repr__(self):
         return f"<SprintPeriod team_id={self.team_id} start_date={self.start_date} end_date={self.end_date}>"
+
+
+class TeamMemberSprint(db.Model):
+    """Represents a team member's participation in a sprint."""
+
+    __tablename__ = "team_member_sprint"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "team_member_id",
+            "sprint_period_id",
+            name="uq_team_member_sprint_member_sprint",
+        ),
+    )
+
+    id = db.Column(db.Uuid, primary_key=True, default=uuid.uuid4)
+    team_member_id = db.Column(
+        db.Uuid, db.ForeignKey("team_members.id"), nullable=False
+    )
+    sprint_period_id = db.Column(
+        db.Uuid, db.ForeignKey("sprint_period.id"), nullable=False
+    )
+    working_days = db.Column(db.Integer, nullable=False, default=10)
+    is_on_maintenance = db.Column(db.Boolean, nullable=False, default=False)
+
+    team_member = db.relationship(
+        "TeamMember", backref=db.backref("sprint_participations", lazy=True)
+    )
+    sprint_period = db.relationship(
+        "SprintPeriod", backref=db.backref("team_members", lazy=True)
+    )
+
+    def __repr__(self):
+        return f"<TeamMemberSprint team_member_id={self.team_member_id} sprint_period_id={self.sprint_period_id}>"

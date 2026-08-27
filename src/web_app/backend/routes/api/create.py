@@ -4,7 +4,14 @@ from flask import jsonify, request
 
 from common import metrics_logger
 
-from ...models import MaintenanceShift, SprintPeriod, Team, TeamMember, db
+from ...models import (
+    MaintenanceShift,
+    SprintPeriod,
+    Team,
+    TeamMember,
+    TeamMemberSprint,
+    db,
+)
 from . import bp
 
 #####
@@ -161,6 +168,22 @@ def create_sprint():
         end_date=end_date,
     )
     db.session.add(sprint)
+
+    # Create TeamMemberSprint entries for each active team member
+    active_team_members = (
+        db.session.query(TeamMember).filter_by(team_id=team.id, active=True).all()
+    )
+    metrics_logger.info(
+        f"Adding TeamMemberSprint records for {len(active_team_members)} active team members..."
+    )
+    for team_member in active_team_members:
+        team_member_sprint = TeamMemberSprint(
+            team_member_id=team_member.id, sprint_period_id=sprint.id
+        )
+        metrics_logger.debug(f"Adding record for {team_member.user_name}...")
+        db.session.add(team_member_sprint)
+
+    # Add all new records to the database session and commit them in a single transaction
     db.session.commit()
 
     metrics_logger.info(

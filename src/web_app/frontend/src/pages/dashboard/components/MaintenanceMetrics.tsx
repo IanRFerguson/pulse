@@ -12,9 +12,8 @@ export default function MaintenanceMetrics({ metrics }: Props) {
     const [currentPage, setCurrentPage] = useState(1);
 
     // Filter to shifts that have already started (exclude future shifts)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const pastMetrics = metrics.filter((m) => new Date(m.start_date) <= today);
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const pastMetrics = metrics.filter((m) => m.start_date <= todayStr);
 
     // Pagination calculations
     const totalPages = Math.ceil(pastMetrics.length / ROWS_PER_PAGE);
@@ -47,7 +46,7 @@ export default function MaintenanceMetrics({ metrics }: Props) {
                         <tr key={metric.shift_id}>
                             <td>{metric.user_name}</td>
                             <td>
-                                {new Date(metric.start_date).toLocaleDateString()} - {new Date(metric.end_date).toLocaleDateString()}
+                                {metric.start_date} - {metric.end_date}
                             </td>
                             <td>{metric.opened_during_shift_count}</td>
                             <td>{metric.closed_during_shift_count}</td>
