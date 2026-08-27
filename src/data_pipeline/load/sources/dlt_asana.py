@@ -31,7 +31,7 @@ class AsanaSource(DltSource):
         write_disposition = "replace" if self.full_refresh else "merge"
 
         @dlt.resource(write_disposition=write_disposition, primary_key="gid")
-        def project_tasks(project_id: str):
+        def project_tasks(project_id: str, team_name: str):
             """Fetches tasks from a specific Asana project."""
             url = f"https://app.asana.com/api/1.0/projects/{project_id}/tasks"
             headers = {"Authorization": f"Bearer {ASANA_TOKEN}"}
@@ -53,6 +53,9 @@ class AsanaSource(DltSource):
                 if not page_data:
                     break
 
+                for task in page_data:
+                    task["team_name"] = team_name  # Add team name to each task
+
                 yield page_data
 
                 # Check if there is another page
@@ -66,19 +69,25 @@ class AsanaSource(DltSource):
 
         @dlt.source
         def data_engineering_tasks():  # type: ignore[no-untyped-def]
-            yield project_tasks(project_id=DATA_ENGINEERING_PROJECT)
+            yield project_tasks(
+                project_id=DATA_ENGINEERING_PROJECT, team_name="Data Engineering"
+            )
 
         @dlt.source
         def sae_tasks():  # type: ignore[no-untyped-def]
-            yield project_tasks(project_id=SAE_PROJECT)
+            yield project_tasks(
+                project_id=SAE_PROJECT, team_name="Solutions and Analytics Engineering"
+            )
 
         @dlt.source
         def analytics_tasks():  # type: ignore[no-untyped-def]
-            yield project_tasks(project_id=ANALYTICS_PROJECT)
+            yield project_tasks(
+                project_id=ANALYTICS_PROJECT, team_name="Data Analytics"
+            )
 
         @dlt.source
         def product_tasks():  # type: ignore[no-untyped-def]
-            yield project_tasks(project_id=PRODUCT_PROJECT)
+            yield project_tasks(project_id=PRODUCT_PROJECT, team_name="Product")
 
         return [
             data_engineering_tasks(),
