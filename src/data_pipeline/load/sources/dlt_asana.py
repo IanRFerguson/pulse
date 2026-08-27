@@ -13,7 +13,11 @@ except ImportError:
 #####
 
 ASANA_TOKEN = os.environ["SOURCES__ASANA__ACCESS_TOKEN"]
+
 DATA_ENGINEERING_PROJECT = "1200839284702516"
+SAE_PROJECT = "1208934215709928"
+ANALYTICS_PROJECT = "1208934215709924"
+PRODUCT_PROJECT = "1213980868649116"
 
 
 class AsanaSource(DltSource):
@@ -64,7 +68,24 @@ class AsanaSource(DltSource):
         def data_engineering_tasks():  # type: ignore[no-untyped-def]
             yield project_tasks(project_id=DATA_ENGINEERING_PROJECT)
 
-        return [data_engineering_tasks()]
+        @dlt.source
+        def sae_tasks():  # type: ignore[no-untyped-def]
+            yield project_tasks(project_id=SAE_PROJECT)
+
+        @dlt.source
+        def analytics_tasks():  # type: ignore[no-untyped-def]
+            yield project_tasks(project_id=ANALYTICS_PROJECT)
+
+        @dlt.source
+        def product_tasks():  # type: ignore[no-untyped-def]
+            yield project_tasks(project_id=PRODUCT_PROJECT)
+
+        return [
+            data_engineering_tasks(),
+            sae_tasks(),
+            analytics_tasks(),
+            product_tasks(),
+        ]
 
     def load(self):
         source_data = self.sources()
