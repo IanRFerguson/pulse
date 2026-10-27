@@ -12,6 +12,7 @@ dependencies = [
     "alembic>=1.18.4",
     "dlt[filesystem,gcs,gs,parquet]>=1.24.0",
     "google-auth>=2.53.0",
+    "google-cloud-secret-manager>=2.31.0",
 ]
 
 [build-system]
