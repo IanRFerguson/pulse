@@ -4,16 +4,13 @@ from typing import List
 import dlt
 import requests
 
-# NOTE: I hate this but keeping it for development speed
-try:
-    from .base import DltSource
-except ImportError:
-    from base import DltSource
+from src.common.secrets import read_secret
+from src.data_pipeline.load.sources.base import DltSource
 
 #####
 
-FRESHDESK_DOMAIN = os.environ["SOURCES__FRESHDESK__DOMAIN"]
-FRESHDESK_API_KEY = os.environ["SOURCES__FRESHDESK__API_SECRET_KEY"]
+FRESHDESK_DOMAIN = read_secret("pulse-freshdesk-domain")
+FRESHDESK_API_KEY = read_secret("pulse-freshdesk-api-key")
 
 
 class FreshdeskSource(DltSource):

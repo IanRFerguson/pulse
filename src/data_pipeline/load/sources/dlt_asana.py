@@ -4,15 +4,12 @@ from typing import List
 import dlt
 import requests
 
-# NOTE: I hate this but keeping it for development speed
-try:
-    from .base import DltSource
-except ImportError:
-    from base import DltSource
+from src.common.secrets import read_secret
+from src.data_pipeline.load.sources.base import DltSource
 
 #####
 
-ASANA_TOKEN = os.environ["SOURCES__ASANA__ACCESS_TOKEN"]
+ASANA_TOKEN = read_secret("pulse-asana-api-key")
 
 DATA_ENGINEERING_PROJECT = "1200839284702516"
 SAE_PROJECT = "1208934215709928"
