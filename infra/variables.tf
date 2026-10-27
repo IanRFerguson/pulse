@@ -14,6 +14,11 @@ variable "production_docker_image" {
   default     = "us-central1-docker.pkg.dev/ian-is-online/tmc-pulse/pulse:latest"
 }
 
+variable "alert_email" {
+  description = "The email address to send Cloud Run job failure alerts to."
+  type        = string
+}
+
 // Postgres Connection variables
 variable "db_connection_name" {
   description = "The Cloud SQL connection name (project:region:instance)."

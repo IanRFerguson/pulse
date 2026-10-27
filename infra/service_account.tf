@@ -9,6 +9,8 @@ locals {
     "iam.serviceAccountUser",
     "iam.serviceAccountTokenCreator",
     "cloudsql.client",
+    "secretmanager.viewer",
+    "secretmanager.secretAccessor"
   ]
 }
 
