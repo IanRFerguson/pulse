@@ -6,11 +6,12 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from .base import DltSource
+from src.common.secrets import read_secret
+from src.data_pipeline.load.sources.base import DltSource
 
 #####
 
-GITHUB_TOKEN = os.environ["SOURCES__GITHUB__ACCESS_TOKEN"]
+GITHUB_TOKEN = read_secret("pulse-github-pat")
 
 _retry_strategy = Retry(
     total=5,

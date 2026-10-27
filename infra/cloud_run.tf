@@ -52,24 +52,6 @@ resource "google_cloud_run_v2_job" "data_pipeline" {
           name  = "DB_PASSWORD"
           value = var.db_password
         }
-
-        // dlt Secrets variables
-        env {
-          name  = "SOURCES__GITHUB__ACCESS_TOKEN"
-          value = var.github_access_token
-        }
-        env {
-          name  = "SOURCES__ASANA__ACCESS_TOKEN"
-          value = var.asana_access_token
-        }
-        env {
-          name  = "SOURCES__FRESHDESK__DOMAIN"
-          value = var.freshdesk_domain
-        }
-        env {
-          name  = "SOURCES__FRESHDESK__API_SECRET_KEY"
-          value = var.freshdesk_api_secret_key
-        }
       }
     }
   }
